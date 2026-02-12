@@ -32,7 +32,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       path: "/admin",
     },
         {
-      label: "Banner",
+      label: "Manage Banner",
       icon: <LayoutDashboard size={18} />,
       path: "/banner",
     },
@@ -74,7 +74,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
   return (
     <aside
-      className={`h-250 bg-green-500 text-white transition-all duration-300
+      className={` top-0 left-0 h-vh bg-green-500 text-white transition-all duration-300
       ${sidebarOpen ? "w-64" : "w-20"} flex flex-col`}
     >
       {/* Logo */}

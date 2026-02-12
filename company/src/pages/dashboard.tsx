@@ -9,7 +9,7 @@ const Dashboard:React.FC=()=>{
     <div className="m-3">
       <CarouselBanner/>
     </div>
-    <div>
+    <div className="m-3">
       <TotalNav/>
     </div>
    <div className="m-3">
