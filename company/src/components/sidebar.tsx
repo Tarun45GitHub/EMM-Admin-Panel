@@ -40,12 +40,12 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       label: "Users",
       icon: <FileText size={18} />,
       children: [
-        { label: "Soupport", icon: <Users size={18} />, path: "/users" },
-        { label: "National Dis.", icon: <ShoppingCart size={18} />, path: "/orders" },
-        { label: "Super Dis.", icon: <Settings size={18} />, path: "/settings" },
+        { label: "Support", icon: <Users size={18} />, path: "/support" },
+        { label: "National Dis.", icon: <ShoppingCart size={18} />, path: "/N_dis" },
+        { label: "Super Dis.", icon: <Settings size={18} />, path: "/super_dis" },
         { label: "Distributer", icon: <Settings size={18} />, path: "/settings" },
         { label: "Retailer", icon: <Settings size={18} />, path: "/settings" },
-        { label: "Coustomer", icon: <Settings size={18} />, path: "/settings" },
+        { label: "Customer", icon: <Settings size={18} />, path: "/settings" },
 
 
       ],

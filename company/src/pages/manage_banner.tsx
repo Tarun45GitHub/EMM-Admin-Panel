@@ -1,9 +1,9 @@
-import BannerCard from "../components/mannage_banner/banner";
+import BannerCard from "../components/manage_banner/banner";
 import banner1 from "../components/banners/banner1.jpg"
 import banner2 from "../components/banners/banner2.jpg"
 import banner3 from "../components/banners/banner3.jpg"
 import banner4 from "../components/banners/banner4.jpg"
-import InputBanner from "../components/mannage_banner/input_banner";
+import InputBanner from "../components/manage_banner/input_banner";
 
 
 const MannageBanner:React.FC=()=>{
