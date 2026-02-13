@@ -58,9 +58,9 @@ const CascadingDropdown: React.FC = () => {
   const areas = city ? locationData[country][state][city] : [];
 
   return (
-    <div className="  m-5  grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="  m-5  grid grid-cols-1 sm:grid-cols-2 gap-2">
       {/* Country */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-4 w-100">
+      <div className="bg-white p-2 h-full rounded-lg shadow space-y-2 w-100">
         <label className="block text-gray-700 font-medium mb-1 ">
           Country
         </label>
@@ -72,7 +72,7 @@ const CascadingDropdown: React.FC = () => {
             setCity("");
             setArea("");
           }}
-          className="w-full border-gray-300 rounded-md p-2"
+          className="w-full border-gray-300 bg-gray-300 rounded-md p-2"
         >
           <option value="">Select Country</option>
           {Object.keys(locationData).map((c) => (
@@ -84,7 +84,7 @@ const CascadingDropdown: React.FC = () => {
       </div>
 
       {/* State */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-4 w-100">
+      <div className="bg-white p-2 h-20 rounded-lg shadow space-y-2 w-100">
         <label className="block text-gray-700 font-medium mb-1">
           State
         </label>
@@ -96,7 +96,7 @@ const CascadingDropdown: React.FC = () => {
             setArea("");
           }}
           disabled={!country}
-          className="w-full border-gray-300 rounded-md p-2"
+          className="w-full border-gray-300 bg-gray-300 rounded-md p-2"
         >
           <option value="">Select State</option>
           {states.map((s) => (
@@ -108,7 +108,7 @@ const CascadingDropdown: React.FC = () => {
       </div>
 
       {/* City */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-4 w-100">
+      <div className="bg-white p-2 h-20 rounded-lg shadow space-y-2 w-100">
         <label className="block text-gray-700 font-medium mb-1">City</label>
         <select
           value={city}
@@ -117,7 +117,7 @@ const CascadingDropdown: React.FC = () => {
             setArea("");
           }}
           disabled={!state}
-          className="w-full border-gray-300 rounded-md p-2"
+          className="w-full border-gray-300 bg-gray-300 rounded-md p-2"
         >
           <option value="">Select City</option>
           {cities.map((c) => (
@@ -129,7 +129,7 @@ const CascadingDropdown: React.FC = () => {
       </div>
 
       {/* Area */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-4 w-100">
+      <div className="bg-white p-2 h-20 rounded-lg shadow space-y-2 w-100">
         <label className="block text-gray-700 font-medium mb-1">
           Area
         </label>
@@ -137,7 +137,7 @@ const CascadingDropdown: React.FC = () => {
           value={area}
           onChange={(e) => setArea(e.target.value)}
           disabled={!city}
-          className="w-full border-gray-300 rounded-md p-2"
+          className="w-full border-gray-300 bg-gray-300 rounded-lg shadow p-2"
         >
           <option value="">Select Area</option>
           {areas.map((a: string) => (
