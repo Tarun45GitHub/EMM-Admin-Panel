@@ -13,7 +13,7 @@ const Action: React.FC<ActionProps> = ({
   onEdit,
 }) => {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex justify-items-center space-x-2">
       {/* Active / Inactive Toggle */}
       <div
         onClick={onToggle}

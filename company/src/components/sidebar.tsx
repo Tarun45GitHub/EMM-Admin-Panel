@@ -6,9 +6,7 @@ import {
   ShoppingCart,
   Settings,
   ChevronDown,
-  Lock,
   FileText,
-  Layers,
 } from "lucide-react";
 
 type SidebarProps = {
@@ -40,32 +38,32 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       label: "Users",
       icon: <FileText size={18} />,
       children: [
-        { label: "Support", icon: <Users size={18} />, path: "/support" },
-        { label: "National Dis.", icon: <ShoppingCart size={18} />, path: "/N_dis" },
-        { label: "Super Dis.", icon: <Settings size={18} />, path: "/super_dis" },
-        { label: "Distributer", icon: <Settings size={18} />, path: "/settings" },
-        { label: "Retailer", icon: <Settings size={18} />, path: "/settings" },
-        { label: "Customer", icon: <Settings size={18} />, path: "/settings" },
+        { label: "Support", icon: <Users size={18} />, path: "/ss" },
+        { label: "National Dis.", icon: <ShoppingCart size={18} />, path: "/nd" },
+        { label: "Super Dis.", icon: <Settings size={18} />, path: "/sd" },
+        { label: "Distributer", icon: <Settings size={18} />, path: "/d" },
+        { label: "Retailer", icon: <Settings size={18} />, path: "/r" },
+        { label: "Customer", icon: <Settings size={18} />, path: "/c" },
 
 
       ],
     },
-    {
-      label: "Authentication",
-      icon: <Lock size={18} />,
-      children: [
-        { label: "Login", path: "/login" },
-        { label: "Register", path: "/register" },
-      ],
-    },
-    {
-      label: "Components",
-      icon: <Layers size={18} />,
-      children: [
-        { label: "Tables", path: "/tables" },
-        { label: "Forms", path: "/forms" },
-      ],
-    },
+    // {
+    //   label: "Authentication",
+    //   icon: <Lock size={18} />,
+    //   children: [
+    //     { label: "Login", path: "/login" },
+    //     { label: "Register", path: "/register" },
+    //   ],
+    // },
+    // {
+    //   label: "Components",
+    //   icon: <Layers size={18} />,
+    //   children: [
+    //     { label: "Tables", path: "/tables" },
+    //     { label: "Forms", path: "/forms" },
+    //   ],
+    // },
   ];
 
   const toggleMenu = (label: string) => {

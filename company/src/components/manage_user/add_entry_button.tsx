@@ -1,5 +1,7 @@
 import React,{useState} from "react";
 import AddEntryFromModal from "./add_entry_from";
+import toast from "react-hot-toast";
+
 
 const AddEntrybutton:React.FC=()=>{
     const [modalOpen, setModalOpen] = useState(false);
@@ -9,6 +11,7 @@ const AddEntrybutton:React.FC=()=>{
     console.log("Form submitted:", data);
 
     setModalOpen(false);
+    toast.success("Application Submitted")
     // setToast({ show: true, message: "Application submitted!" });
   };
 
@@ -27,11 +30,7 @@ const AddEntrybutton:React.FC=()=>{
         onSubmit={handleFormSubmit}
       />
 
-      {/* <Toast
-        show={toast.show}
-        message={toast.message}
-        onHide={() => setToast({ ...toast, show: false })}
-      /> */}
+      
     </div>
 
     )

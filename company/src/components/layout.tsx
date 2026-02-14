@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Sidebar from "../components/sidebar";
 import Topbar from "../components/topbar";
+import { Toaster } from "react-hot-toast";
 
 const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
       const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
@@ -16,7 +17,9 @@ const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
                <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        
                {/* Page Content */}
-               <div className="page-content">{children}</div>
+               <div className="page-content">
+                <Toaster/>
+                {children}</div>
 
              </div>  
                

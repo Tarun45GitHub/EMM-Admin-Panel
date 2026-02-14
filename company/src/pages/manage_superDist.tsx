@@ -2,9 +2,9 @@ import AddEntrybutton from "../components/manage_user/add_entry_button";
 import CascadingDropdown from "../components/manage_user/cascading_dropdown";
 import EntryTable from "../components/manage_user/entry_table";
 
-const MannageSupport:React.FC=()=>{
-    return (
-        <div className="w-full">
+const SuperDistributer:React.FC=()=>{
+    return(
+        <div>
             <div className="flex overflow-auto ">
             <div className="w-200 flex-auto">
                 <CascadingDropdown/>
@@ -13,10 +13,11 @@ const MannageSupport:React.FC=()=>{
                 <AddEntrybutton/>
             </div>
             </div>
-            <div className="w-full overflow-auto">
+            <div>
                 <EntryTable/>
             </div>
+
         </div>
-    );
+    )
 }
-export default MannageSupport;
+export default SuperDistributer;
