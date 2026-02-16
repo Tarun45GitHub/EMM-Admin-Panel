@@ -1,8 +1,8 @@
 import React from "react";
 import { Bell, Menu, Moon, Sun, Search } from "lucide-react";
-import { useTheme } from "./../hooks/UseThem";
-import UserDropdown from "./header/UserDropdown";
-import WalletBalance from "./header/WalletBalance";
+import { useTheme } from "../../hooks/UseThem";
+import UserDropdown from "../header/UserDropdown";
+import WalletBalance from "../header/WalletBalance";
 
 type TopbarProps = {
   sidebarOpen: boolean;

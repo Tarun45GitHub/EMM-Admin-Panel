@@ -4,7 +4,9 @@ import EntryTable from "../components/manage_user/entry_table"
 
 const Distributer:React.FC=()=>{
     return (
-        <div>
+        <div className="bg-white border-gray-300 text-gray-800
+  dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200
+">
             <div className="flex overflow-auto ">
             <div className="w-200 flex-auto">
                 <CascadingDropdown/>

@@ -1,7 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import Sidebar from "../components/sidebar";
+import AdminSidebar from "./header/Sidebar";
 import Topbar from "../components/topbar";
+import TopBar from "./ui/Topbar2";
 import { Toaster } from "react-hot-toast";
 
 const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
@@ -9,12 +11,12 @@ const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
     return(
        <div className="min-h-screen flex bg-gray-100">
              {/* Sidebar */}
-             <Sidebar sidebarOpen={sidebarOpen} />
+            <Sidebar sidebarOpen={sidebarOpen}/> 
        
              {/* Main Section */}
              <div className="flex-1 flex flex-col">
                {/* Topbar */}
-               <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+               <TopBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        
                {/* Page Content */}
                <div className="page-content">

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-  LayoutDashboard,
+  House,
   Users,
   ShoppingCart,
   Settings,
   ChevronDown,
   FileText,
+  ReceiptText,
+  Search,
+  LogOut,
 } from "lucide-react";
 
 type SidebarProps = {
@@ -15,56 +18,61 @@ type SidebarProps = {
 
 type MenuItem = {
   label: string;
-  icon?: React.ReactNode;
+  Icon?: React.ComponentType<any>;
   path?: string;
   children?: MenuItem[];
 };
 
 export default function Sidebar({ sidebarOpen }: SidebarProps) {
-  const [openMenu, setOpenMenu] = useState<string | null>("Pages");
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const menu: MenuItem[] = [
     {
       label: "Dashboard",
-      icon: <LayoutDashboard size={18} />,
+      Icon: House,
       path: "/admin",
     },
-        {
+    {
       label: "Manage Banner",
-      icon: <LayoutDashboard size={18} />,
+      Icon: FileText,
       path: "/banner",
     },
     {
       label: "Users",
-      icon: <FileText size={18} />,
+      Icon: Users,
       children: [
-        { label: "Support", icon: <Users size={18} />, path: "/ss" },
-        { label: "National Dis.", icon: <ShoppingCart size={18} />, path: "/nd" },
-        { label: "Super Dis.", icon: <Settings size={18} />, path: "/sd" },
-        { label: "Distributer", icon: <Settings size={18} />, path: "/d" },
-        { label: "Retailer", icon: <Settings size={18} />, path: "/r" },
-        { label: "Customer", icon: <Settings size={18} />, path: "/c" },
-
-
+        { label: "Support", path: "/users/support", Icon: Users },
+        { label: "National Dis.", path: "/users/national", Icon: Users },
+        { label: "Super Dis.", path: "/users/superdis", Icon: Users },
+        { label: "Distributor", path: "/users/distributor", Icon: Users },
+        { label: "Retailer", path: "/users/retailer", Icon: Users },
+        { label: "Customer", path: "/users/customer", Icon: Users },
       ],
     },
-    // {
-    //   label: "Authentication",
-    //   icon: <Lock size={18} />,
-    //   children: [
-    //     { label: "Login", path: "/login" },
-    //     { label: "Register", path: "/register" },
-    //   ],
-    // },
-    // {
-    //   label: "Components",
-    //   icon: <Layers size={18} />,
-    //   children: [
-    //     { label: "Tables", path: "/tables" },
-    //     { label: "Forms", path: "/forms" },
-    //   ],
-    // },
+    {
+      label: "Transaction",
+      Icon: ReceiptText,
+      children: [
+        { label: "My Transactions", path: "/transaction/my" },
+        { label: "All Transactions", path: "/transaction/all" },
+      ],
+    },
+    {
+      label: "Transfer",
+      Icon: ShoppingCart,
+      path: "/orders",
+    },
+    {
+      label: "Settings",
+      Icon: Settings,
+      path: "/settings",
+    },
   ];
+
+  const filteredMenu = menu.filter((item) =>
+    item.label.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const toggleMenu = (label: string) => {
     setOpenMenu(openMenu === label ? null : label);
@@ -72,63 +80,80 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
   return (
     <aside
-      className={` top-0 left-0 h-vh bg-green-500 text-white transition-all duration-300
-      ${sidebarOpen ? "w-64" : "w-20"} flex flex-col`}
+      className={`
+        stricty
+        h-screen bg-gradient-to-b from-green-600 to-green-700 text-white
+        transition-all duration-300
+        ${sidebarOpen ? "w-64" : "w-20"}
+        flex flex-col
+      `}
     >
-      {/* Logo */}
-      <div className="h-16 flex items-center px-4 border-b border-green-700">
+      {/* Logo + Toggle */}
+      <div className="h-16 flex items-center px-4 border-b border-green-800 ">
         <h1 className="font-bold text-xl tracking-wide">
-          {sidebarOpen ? "logo" : "V"}
+          {sidebarOpen ? "Admin Panel" : "AP"}
         </h1>
       </div>
 
-      {/* Menu */}
-      <nav className="flex-1 overflow-y-auto py-4">
-        {menu.map((item) => {
-          // Normal link
-          if (item.path) {
-            return (
-              <NavLink
-                key={item.label}
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition
-                   ${
-                     isActive
-                       ? "bg-green-600"
-                       : "hover:bg-green-700 text-indigo-100"
-                   }`
-                }
-              >
-                <span>{item.icon}</span>
-                {sidebarOpen && <span>{item.label}</span>}
-              </NavLink>
-            );
-          }
+      {/* Search Box */}
+      {sidebarOpen && (
+        <div className="p-3">
+          <div className="flex items-center bg-green-500/50 px-3 py-2 rounded-lg">
+            <Search size={18} className="text-green-200" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="ml-2 w-full bg-transparent text-sm text-white placeholder-green-200 focus:outline-none"
+            />
+          </div>
+        </div>
+      )}
 
-          // Dropdown menu
-          return (
-            <div key={item.label} className="mx-2">
+      {/* Menu Items with Scroll */}
+      <nav
+        className="flex-1 overflow-y-auto px-2 py-4 space-y-1
+          [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-green-800
+          [&::-webkit-scrollbar-thumb]:bg-green-500 [&::-webkit-scrollbar-thumb]:rounded"
+      >
+        {filteredMenu.map((item) =>
+          item.path ? (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-lg transition text-sm
+                 ${
+                   isActive
+                     ? "bg-green-500 text-white"
+                     : "hover:bg-green-700 text-green-100"
+                 }`
+              }
+            >
+              {item.Icon && <item.Icon size={18} />}
+              {sidebarOpen && <span>{item.label}</span>}
+            </NavLink>
+          ) : (
+            <div key={item.label} className="mx-1">
               <button
                 onClick={() => toggleMenu(item.label)}
-                className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-indigo-700 transition"
+                className="flex justify-between items-center w-full px-4 py-3 rounded-lg hover:bg-green-700 transition"
               >
                 <div className="flex items-center gap-3">
-                  <span>{item.icon}</span>
-                  {sidebarOpen && <span>{item.label}</span>}
+                  {item.Icon && <item.Icon size={18} />}
+                  {sidebarOpen && <span className="text-sm">{item.label}</span>}
                 </div>
-
                 {sidebarOpen && (
                   <ChevronDown
                     size={18}
-                    className={`transition ${
+                    className={`transition-transform ${
                       openMenu === item.label ? "rotate-180" : ""
                     }`}
                   />
                 )}
               </button>
 
-              {/* Dropdown items */}
               {openMenu === item.label && sidebarOpen && item.children && (
                 <div className="ml-8 mt-1 space-y-1">
                   {item.children.map((child) => (
@@ -139,8 +164,8 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                         `block px-3 py-2 rounded-lg text-sm transition
                          ${
                            isActive
-                             ? "bg-indigo-600"
-                             : "hover:bg-indigo-700 text-indigo-200"
+                             ? "bg-green-800 text-white"
+                             : "hover:bg-green-700 text-green-200"
                          }`
                       }
                     >
@@ -150,8 +175,8 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                 </div>
               )}
             </div>
-          );
-        })}
+          )
+        )}
       </nav>
 
       {/* Footer */}
