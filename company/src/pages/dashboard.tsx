@@ -5,8 +5,8 @@ import Chartpannel from "../components/dashbord/Graph_div";
 
 const Dashboard:React.FC=()=>{
   return(
-   <div>
-    <div className="m-3">
+   <div className="">
+    <div className="m-5">
       <CarouselBanner/>
     </div>
     <div className="m-3">

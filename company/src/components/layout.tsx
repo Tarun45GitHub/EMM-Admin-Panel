@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import Sidebar from "../components/sidebar";
-import AdminSidebar from "./header/Sidebar";
-import Topbar from "../components/topbar";
 import TopBar from "./ui/Topbar2";
 import { Toaster } from "react-hot-toast";
 
@@ -19,7 +17,7 @@ const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
                <TopBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        
                {/* Page Content */}
-               <div className="page-content">
+               <div className="page-content dark:bg-gray-700">
                 <Toaster/>
                 {children}</div>
 
