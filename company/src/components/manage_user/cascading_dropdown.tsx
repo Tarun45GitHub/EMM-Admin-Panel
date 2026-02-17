@@ -1,159 +1,137 @@
-// const locationData = {
-//   India: {
-//     "West Bengal": {
-//       Kolkata: ["Salt Lake", "BBD Bagh", "Park Street"],
-//       Howrah: ["Shibpur", "Benaras Road"],
-//     },
-//     Maharashtra: {
-//       Mumbai: ["Andheri", "Bandra"],
-//       Pune: ["Shivaji Nagar", "Hadapsar"],
-//     },
-//   },
-//   USA: {
-//     California: {
-//       "Los Angeles": ["Hollywood", "Beverly Hills"],
-//       "San Diego": ["La Jolla", "Gaslamp"],
-//     },
-//     Texas: {
-//       Dallas: ["Deep Ellum", "Bishop Arts"],
-//       Austin: ["Downtown", "Zilker Park"],
-//     },
-//   },
-// };
-
-
 import React, { useState } from "react";
 
 const locationData: Record<string, any> = {
-  India: {
-    "West Bengal": {
-      Kolkata: ["Salt Lake", "BBD Bagh", "Park Street"],
-      Howrah: ["Shibpur", "Benaras Road"],
-    },
-    Maharashtra: {
-      Mumbai: ["Andheri", "Bandra"],
-      Pune: ["Shivaji Nagar", "Hadapsar"],
-    },
+  "West Bengal": {
+    Kolkata: ["Salt Lake", "BBD Bagh", "Park Street"],
+    Howrah: ["Shibpur", "Benaras Road"],
   },
-  USA: {
-    California: {
-      "Los Angeles": ["Hollywood", "Beverly Hills"],
-      "San Diego": ["La Jolla", "Gaslamp"],
-    },
-    Texas: {
-      Dallas: ["Deep Ellum", "Bishop Arts"],
-      Austin: ["Downtown", "Zilker Park"],
-    },
+  Maharashtra: {
+    Mumbai: ["Andheri", "Bandra"],
+    Pune: ["Shivaji Nagar", "Hadapsar"],
   },
 };
 
 const CascadingDropdown: React.FC = () => {
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
-  const [area, setArea] = useState("");
+  const [filters, setFilters] = useState({
+    state: "",
+    city: "",
+    area: "",
+  });
 
-  const states = country ? Object.keys(locationData[country] || {}) : [];
-  const cities = state ? Object.keys(locationData[country][state] || {}) : [];
-  const areas = city ? locationData[country][state][city] : [];
+  const states = Object.keys(locationData);
+  const cities = filters.state
+    ? Object.keys(locationData[filters.state] || {})
+    : [];
+  const areas = filters.city ? locationData[filters.state][filters.city] : [];
+
+  const handleClearAll = () => {
+    setFilters({ state: "", city: "", area: "" });
+  };
 
   return (
-    <div className="  m-5  grid grid-cols-1 sm:grid-cols-2 gap-2">
-      {/* Country */}
-      <div className="bg-white p-2 h-full rounded-lg shadow space-y-2 w-100">
-        <label className="block text-gray-700 font-medium mb-1 ">
-          Country
-        </label>
-        <select
-          value={country}
-          onChange={(e) => {
-            setCountry(e.target.value);
-            setState("");
-            setCity("");
-            setArea("");
-          }}
-          className="w-full border-gray-300 bg-gray-300 rounded-md p-2"
-        >
-          <option value="">Select Country</option>
-          {Object.keys(locationData).map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+    <div className="mx-2 p-2 mt-1 w-full">
+      {/* Filters Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+        {/* State Filter */}
+        <div className="flex flex-col">
+          <label className="text-gray-700 dark:text-gray-200 font-medium mb-1">
+            State
+          </label>
+          <select
+            value={filters.state}
+            onChange={(e) =>
+              setFilters({
+                state: e.target.value,
+                city: "",
+                area: "",
+              })
+            }
+            className="border border-gray-300 dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="">All States</option>
+            {states.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* City Filter */}
+        <div className="flex flex-col">
+          <label className="text-gray-700 dark:text-gray-200 font-medium mb-1">
+            City
+          </label>
+          <select
+            value={filters.city}
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                city: e.target.value,
+                area: "",
+              })
+            }
+            disabled={!filters.state}
+            className="border border-gray-300 dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:text-gray-400"
+          >
+            <option value="">All Cities</option>
+            {cities.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Area Filter */}
+        <div className="flex flex-col">
+          <label className="text-gray-700 dark:text-gray-200 font-medium mb-1">
+            Area
+          </label>
+          <select
+            value={filters.area}
+            onChange={(e) =>
+              setFilters({ ...filters, area: e.target.value })
+            }
+            disabled={!filters.city}
+            className="border border-gray-300 dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:text-gray-400"
+          >
+            <option value="">All Areas</option>
+            {areas.map((a: string) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {/* State */}
-      <div className="bg-white p-2 h-20 rounded-lg shadow space-y-2 w-100">
-        <label className="block text-gray-700 font-medium mb-1">
-          State
-        </label>
-        <select
-          value={state}
-          onChange={(e) => {
-            setState(e.target.value);
-            setCity("");
-            setArea("");
-          }}
-          disabled={!country}
-          className="w-full border-gray-300 bg-gray-300 rounded-md p-2"
-        >
-          <option value="">Select State</option>
-          {states.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
+      {/* Selected Tags & Clear */}
+      <div className="mt-4 flex flex-wrap gap-3 items-center">
+        {filters.state && (
+          <span className="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-3 py-1 rounded-full text-sm">
+            State: {filters.state}
+          </span>
+        )}
+        {filters.city && (
+          <span className="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-3 py-1 rounded-full text-sm">
+            City: {filters.city}
+          </span>
+        )}
+        {filters.area && (
+          <span className="bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-3 py-1 rounded-full text-sm">
+            Area: {filters.area}
+          </span>
+        )}
+        {(filters.state || filters.city || filters.area) && (
+          <button
+            onClick={handleClearAll}
+            className="text-sm text-indigo-600 dark:text-indigo-300 hover:underline"
+          >
+            Clear All
+          </button>
+        )}
       </div>
-
-      {/* City */}
-      <div className="bg-white p-2 h-20 rounded-lg shadow space-y-2 w-100">
-        <label className="block text-gray-700 font-medium mb-1">City</label>
-        <select
-          value={city}
-          onChange={(e) => {
-            setCity(e.target.value);
-            setArea("");
-          }}
-          disabled={!state}
-          className="w-full border-gray-300 bg-gray-300 rounded-md p-2"
-        >
-          <option value="">Select City</option>
-          {cities.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Area */}
-      <div className="bg-white p-2 h-20 rounded-lg shadow space-y-2 w-100">
-        <label className="block text-gray-700 font-medium mb-1">
-          Area
-        </label>
-        <select
-          value={area}
-          onChange={(e) => setArea(e.target.value)}
-          disabled={!city}
-          className="w-full border-gray-300 bg-gray-300 rounded-lg shadow p-2"
-        >
-          <option value="">Select Area</option>
-          {areas.map((a: string) => (
-            <option key={a} value={a}>
-              {a}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Selection Display
-      {area && (
-        <p className="text-green-600 font-medium">
-          Selected: {country} / {state} / {city} / {area}
-        </p>
-      )} */}
     </div>
   );
 };

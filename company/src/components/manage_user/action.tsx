@@ -43,3 +43,12 @@ const Action: React.FC<ActionProps> = ({
   );
 };
 export default Action;
+
+
+{/* <td className="px-5 py-2 border text-center ">
+              <Action
+                isActive={true}
+                onToggle={() => handeltoggol(idx)}
+                onEdit={() => handelEdit(idx)}
+              />
+            </td> */}

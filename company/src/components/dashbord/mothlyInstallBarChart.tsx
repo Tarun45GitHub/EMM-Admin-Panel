@@ -35,16 +35,16 @@ const data: MonthlyData[] = [
 const MonthlyInstallBarChart:React.FC=()=>{
   return(
     
-    <div className="w-full h-80 bg-white p-5 rounded-xl shadow-md border ">
-      <h3 className="text-center font-semibold text-lg text-black ">
+    <div className="w-full h-80 bg-white p-5 rounded-xl shadow-md border dark:bg-gray-800 ">
+      <h3 className="text-center font-semibold text-lg text-black dark:text-gray-200 ">
         Monthly Installs
       </h3>
 
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" stroke="#000" />
-          <YAxis stroke="#000" />
+          <XAxis dataKey="month" stroke="#ab0" />
+          <YAxis stroke="#aa0" />
           <Tooltip />
           <Legend />
           <Bar dataKey="installs" fill="#3b82f6" />

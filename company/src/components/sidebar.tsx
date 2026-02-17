@@ -61,7 +61,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
     {
       label: "Transfer",
       Icon: ShoppingCart,
-      path: "/orders",
+      path: "/transfer",
     },
     {
       label: "Settings",
@@ -82,15 +82,15 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
     <aside
       className={`
         sticky top-0 z-50
-        h-screen bg-gradient-to-b from-green-600 to-green-700 text-white 
+        h-screen bg-linear-to-b from-green-600 to-green-700 text-white 
         transition-all duration-300
-        ${sidebarOpen ? "w-64" : "w-20"}
+        ${sidebarOpen ? "w-65" : "w-20"}
         flex flex-col
-        dark:bg-gray-900 dark:bg-gray-200
+        dark:bg-gray-900 
       `}
     >
       {/* Logo + Toggle */}
-      <div className="h-18 flex items-center px-4 border-b border-green-800  dark:bg-gray-900 dark:bg-gray-200 ">
+      <div className="h-18 flex items-center px-4 border-b border-green-800  dark:bg-gray-900  ">
         <h1 className="font-bold text-xl tracking-wide">
           {sidebarOpen ? "Admin Panel" : "AP"}
         </h1>
@@ -98,7 +98,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
       {/* Search Box */}
       {sidebarOpen && (
-        <div className="p-3  dark:bg-gray-900 dark:bg-gray-200">
+        <div className="p-3  dark:bg-gray-900 ">
           <div className="flex items-center bg-green-500/50 px-3 py-2 rounded-lg dark:bg-gray-700">
             <Search size={18} className="text-green-200" />
             <input
@@ -116,7 +116,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       <nav
         className="flex-1 overflow-y-auto px-2 py-4 space-y-1
           [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-green-800
-          [&::-webkit-scrollbar-thumb]:bg-green-500 [&::-webkit-scrollbar-thumb]:rounded  dark:bg-gray-900 dark:bg-gray-200"
+          [&::-webkit-scrollbar-thumb]:bg-green-500 [&::-webkit-scrollbar-thumb]:rounded  dark:bg-gray-900 "
       >
         {filteredMenu.map((item) =>
           item.path ? (
@@ -128,7 +128,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                  ${
                    isActive
                      ? "bg-green-500 text-white "
-                     : "hover:bg-green-700 text-green-100  dark:bg-gray-900 dark:bg-gray-200"
+                     : "hover:bg-green-700 text-green-100  dark:bg-gray-900 "
                  }`
               }
             >
@@ -166,7 +166,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                          ${
                            isActive
                              ? "bg-green-800 text-white"
-                             : "hover:bg-green-700 text-green-200  dark:bg-gray-900 dark:bg-gray-200"
+                             : "hover:bg-green-700 text-green-200  dark:bg-gray-900 "
                          }`
                       }
                     >
@@ -181,7 +181,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-indigo-700 text-sm text-indigo-200  dark:bg-gray-900 dark:bg-gray-200">
+      <div className="p-4 border-t border-indigo-700 text-sm text-indigo-200  dark:bg-gray-950 ">
         {sidebarOpen ? "Admin Panel © 2026" : "©"}
       </div>
     </aside>

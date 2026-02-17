@@ -10,6 +10,9 @@ import NationalDistributer from './pages/manage_NationalDist';
 import SuperDistributer from './pages/manage_superDist';
 import Distributer from './pages/manage_Distributer';
 import Retailer from './pages/manage_Retailer';
+import Transfer from './pages/Transfer';
+import AllTransaction from './pages/AllTransaction';
+import MyTransaction from './pages/MyTransaction';
 
 function App() {
   
@@ -20,12 +23,16 @@ function App() {
         <Route path='/' element={<Login/>}/>
         <Route path='/admin' element={<Layout><Dashboard/></Layout>}/>
         <Route path='/banner' element={<Layout><MannageBanner/></Layout>}/>
-        <Route path='/ss' element={<Layout><MannageSupport/></Layout>}/>
-        <Route path='/nd' element={<Layout><NationalDistributer/></Layout>}/>
-        <Route path='/sd' element={<Layout><SuperDistributer/></Layout>}/>
-        <Route path='/d' element={<Layout><Distributer/></Layout>}/>
-        <Route path='/r' element={<Layout><Retailer/></Layout>}/>
-        <Route path='/c' element={<Layout><Customer/></Layout>}/>
+        <Route path='/users/support' element={<Layout><MannageSupport/></Layout>}/>
+        <Route path='/users/national' element={<Layout><NationalDistributer/></Layout>}/>
+        <Route path='/users/superdis' element={<Layout><SuperDistributer/></Layout>}/>
+        <Route path='/users/distributor' element={<Layout><Distributer/></Layout>}/>
+        <Route path='/users/retailer' element={<Layout><Retailer/></Layout>}/>
+        <Route path='/users/customer' element={<Layout><Customer/></Layout>}/>
+        <Route path='/transaction/all' element={<Layout><AllTransaction/></Layout>}/>
+        <Route path='/transaction/my' element={<Layout><MyTransaction/></Layout>}/>
+        <Route path='/transfer' element={<Layout><Transfer/></Layout>}/>
+
       </Routes>
    </BrowserRouter>
   )

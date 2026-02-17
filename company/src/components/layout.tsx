@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
       const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
     return(
-       <div className="min-h-screen flex bg-gray-100">
+       <div className="h-screen flex bg-gray-200 max-w-screen">
              {/* Sidebar */}
             <Sidebar sidebarOpen={sidebarOpen}/> 
        
@@ -17,7 +17,7 @@ const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
                <TopBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        
                {/* Page Content */}
-               <div className="page-content dark:bg-gray-700">
+               <div className="page-content dark:bg-gray-700 ">
                 <Toaster/>
                 {children}</div>
 

@@ -74,7 +74,7 @@ const CarouselBanner: React.FC = () => {
               />
 
               {/* Dark gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
 
               {/* Glass highlight */}
               <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px]" />
