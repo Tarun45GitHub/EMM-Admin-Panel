@@ -1,15 +1,15 @@
 import React from "react";
 import { Bell, Menu, Moon, Sun, Search } from "lucide-react";
-import { useTheme } from "./../hooks/UseThem";
-import UserDropdown from "./header/UserDropdown";
-import WalletBalance from "./header/WalletBalance";
+import { useTheme } from "../hooks/UseThem";
+import UserDropdown from "../components/header/UserDropdown";
+import WalletBalance from "../components/header/WalletBalance";
 
 type TopbarProps = {
   sidebarOpen: boolean;
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const TopBar: React.FC<TopbarProps> = ({
+const Topbar: React.FC<TopbarProps> = ({
   sidebarOpen,
   setSidebarOpen,
 }: TopbarProps) => {
@@ -30,7 +30,7 @@ const TopBar: React.FC<TopbarProps> = ({
           </button>
 
           {/* Search Input */}
-          <div className="relative hidden sm:block">
+          <div className="relative hidden md:block">
             <Search
               size={18}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -45,12 +45,10 @@ const TopBar: React.FC<TopbarProps> = ({
 
         {/* Right Section (Icons + Wallet + Profile) */}
         <div className="flex items-center gap-4">
-          
-          {/* Wallet Balance */}
-          <div className="hidden sm:block">
+           {/* Wallet Balance */}
+          <div className="hidden md:block">
             <WalletBalance balance={500} />
           </div>
-
           {/* Theme Toggle (Sun / Moon) */}
           <button
             onClick={toggleTheme}
@@ -75,10 +73,11 @@ const TopBar: React.FC<TopbarProps> = ({
           </div>
         </div>
       </div>
-
+       {/* Wallet Balance */}
+          
       {/* Mobile Search (Visible only on small screens) */}
-      <div className="sm:hidden px-4 pb-3">
-        <div className="relative">
+      <div className="w-full md:hidden flex flex-wrap justify-around px-4 pb-3">
+        <div className="relative p-1 w-full">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
@@ -86,9 +85,12 @@ const TopBar: React.FC<TopbarProps> = ({
             className="w-full pl-10 pr-4 py-2 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
+        <div className="p-1">
+            <WalletBalance balance={500} />
+          </div>
       </div>
     </header>
   );
 };
 
-export default TopBar;
+export default Topbar;

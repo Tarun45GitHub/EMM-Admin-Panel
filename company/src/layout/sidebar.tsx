@@ -81,7 +81,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
   return (
     <aside
       className={`
-        sticky top-0 z-50
+       sticky top-0 z-50
         h-screen bg-linear-to-b from-green-600 to-green-700 text-white 
         transition-all duration-300
         ${sidebarOpen ? "w-65" : "w-20"}

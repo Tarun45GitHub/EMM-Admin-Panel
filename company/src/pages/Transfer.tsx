@@ -1,6 +1,10 @@
+import TransferCoin from "../components/transfer/TransferCoin";
+
 const Transfer:React.FC=()=>{
     return(
-        <div></div>
+        <div>
+            <TransferCoin/>
+        </div>
     );
 }
 export default Transfer;

@@ -1,7 +1,7 @@
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
 // import './App.css'
 import Login from './pages/login';
-import Layout from './components/layout';
+import Layout from './layout/layout';
 import MannageBanner from './pages/manage_banner';
 import Dashboard from './pages/dashboard';
 import MannageSupport from './pages/manage_support';

@@ -1,23 +1,23 @@
 import React from "react";
 import { useState } from "react";
-import Sidebar from "../components/sidebar";
-import TopBar from "./ui/Topbar2";
+import Sidebar from "./sidebar";
+import Topbar from "./topbar";
 import { Toaster } from "react-hot-toast";
 
 const Layout:React.FC<{children:React.ReactNode}>=({children})=>{
       const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
     return(
-       <div className="h-screen flex bg-gray-200 max-w-screen">
+       <div className="min-h-screen flex bg-gray-200 max-w-screen">
              {/* Sidebar */}
             <Sidebar sidebarOpen={sidebarOpen}/> 
        
              {/* Main Section */}
              <div className="flex-1 flex flex-col">
                {/* Topbar */}
-               <TopBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+               <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        
                {/* Page Content */}
-               <div className="page-content dark:bg-gray-700 ">
+               <div className="flex-2 dark:bg-gray-700  ">
                 <Toaster/>
                 {children}</div>
 

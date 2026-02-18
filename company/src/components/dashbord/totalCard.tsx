@@ -38,7 +38,7 @@ const TotalCard: React.FC<UserStatCardProps> = ({ title, value }) => {
         {/* Content */}
         <div className="relative text-center text-gray-800 dark:text-gray-200">
           <p className="text-0.3lg font-medium">{title}</p>
-          <p className=" text-2xl font-bold">{value}</p>
+          <p className=" text-2xl font-semibold">{value}</p>
         </div>
       </div>
     </div>

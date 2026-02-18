@@ -4,16 +4,13 @@ import EntryTable from "../components/manage_user/entry_table";
 
 const SuperDistributer:React.FC=()=>{
     return(
-        <div>
-            <div className="flex overflow-auto ">
-            <div className="w-200 flex-auto">
+         <div className="bg-gray-200 b text-gray-800
+                dark:bg-gray-700 dark:text-gray-200  w-full ">
+            <div className="flex flex-col md:flex-row ">
                 <CascadingDropdown/>
-            </div>
-            <div className="w-50 flex-auto  p-5">
                 <AddEntrybutton/>
             </div>
-            </div>
-            <div>
+            <div className="flex-1 min-w-0">
                 <EntryTable/>
             </div>
 

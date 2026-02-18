@@ -4,13 +4,13 @@ import EntryTable from "../components/manage_user/entry_table"
 
 const Distributer:React.FC=()=>{
     return (
-        <div className="bg-gray-200 border-gray-300 text-gray-800
-              dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 w-vw">
-            <div className="w-vw flex flex-col md:flex-row ">
+        <div className="bg-gray-200 b text-gray-800
+                dark:bg-gray-700 dark:text-gray-200  w-full ">
+            <div className="flex flex-col md:flex-row ">
                 <CascadingDropdown/>
                 <AddEntrybutton/>
             </div>
-            <div className="w-vw">
+            <div className="flex-1 min-w-0">
                 <EntryTable/>
             </div>
 
