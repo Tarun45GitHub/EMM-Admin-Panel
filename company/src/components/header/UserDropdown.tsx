@@ -54,7 +54,7 @@ export default function UserDropdown() {
             </li>
             <li>
               <a
-                href="/settings"
+                href="/changepassword"
                 className="block px-4 py-3 hover:bg-slate-100 dark:hover:bg-gray-700"
               >
                Change Password

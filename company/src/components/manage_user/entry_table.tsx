@@ -48,7 +48,7 @@ const EntryTable: React.FC = () => {
         {/* Table Scroll */}
         <div className="w-70 sm:w-130 md:w-150 lg:w-230 xl:w-300 overflow-x-auto scrollbar-custom">
           <table className=" w-full table-auto text-sm border-collapse">
-            <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+            <thead className="bg-gray-100   dark:text-gray-600 ">
               <tr>
                 {[
                   "Column 1", "Column 2", "Column 3", "Column 4",
@@ -56,7 +56,7 @@ const EntryTable: React.FC = () => {
                 ].map((title) => (
                   <th
                     key={title}
-                    className="px-4 py-3 font-semibold border whitespace-nowrap text-left"
+                    className="px-4 py-3 font-semibold border whitespace-nowrap text-center"
                   >
                     {title}
                   </th>

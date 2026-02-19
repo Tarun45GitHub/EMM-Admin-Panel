@@ -50,9 +50,9 @@ const TransferCoin: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="w-full max-w-lg bg-white border border-gray-200 rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-indigo-800 mb-6">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 dark:bg-gray-700">
+      <div className="w-full max-w-lg bg-white border border-gray-200 rounded-xl shadow-lg p-8 dark:bg-gray-800 dark:text-gray-200">
+        <h2 className="text-2xl font-bold text-center text-green-500 mb-6">
           Transfer Digital Coin
         </h2>
 
@@ -71,7 +71,7 @@ const TransferCoin: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-100">
               Name
             </label>
             <input
@@ -85,7 +85,7 @@ const TransferCoin: React.FC = () => {
 
           {/* ID */}
           <div>
-            <label className="block mb-1 font-medium text-gray-700">ID</label>
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-100">ID</label>
             <input
               type="text"
               value={id}
@@ -97,7 +97,7 @@ const TransferCoin: React.FC = () => {
 
           {/* Designation */}
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-100">
               Designation
             </label>
             <select
@@ -106,7 +106,7 @@ const TransferCoin: React.FC = () => {
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
             >
               {designations.map((desg) => (
-                <option key={desg} value={desg}>
+                <option key={desg} value={desg} className="dark:bg-gray-800">
                   {desg}
                 </option>
               ))}
@@ -115,7 +115,7 @@ const TransferCoin: React.FC = () => {
 
           {/* Amount */}
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-100">
               Amount
             </label>
             <input
@@ -129,13 +129,14 @@ const TransferCoin: React.FC = () => {
 
           {/* Remarks */}
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-100">
               Remarks (Optional)
             </label>
             <textarea
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none 
+              focus:ring-2 focus:ring-indigo-400"
               placeholder="Add any remarks (optional)"
             />
           </div>
@@ -144,7 +145,8 @@ const TransferCoin: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg
+             hover:bg-indigo-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Submitting..." : "Submit Transfer"}
           </button>

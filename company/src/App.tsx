@@ -13,6 +13,7 @@ import Retailer from './pages/manage_Retailer';
 import Transfer from './pages/Transfer';
 import AllTransaction from './pages/AllTransaction';
 import MyTransaction from './pages/MyTransaction';
+import ChangePassword from './components/profile/change_password';
 
 function App() {
   
@@ -32,6 +33,8 @@ function App() {
         <Route path='/transaction/all' element={<Layout><AllTransaction/></Layout>}/>
         <Route path='/transaction/my' element={<Layout><MyTransaction/></Layout>}/>
         <Route path='/transfer' element={<Layout><Transfer/></Layout>}/>
+        <Route path='/changepassword' element={<Layout><ChangePassword/></Layout>}/>
+
 
       </Routes>
    </BrowserRouter>

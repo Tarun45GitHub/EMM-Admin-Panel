@@ -16,7 +16,7 @@ const TotalCard: React.FC<UserStatCardProps> = ({ title, value }) => {
           dark:bg-gray-800
           rounded-3xl
           shadow-lg
-          px-4 py-2
+          px-2 py-1
           transform transition-all duration-300
           hover:-translate-y-1 hover:scale-105 hover:shadow-xl
         "
@@ -26,7 +26,7 @@ const TotalCard: React.FC<UserStatCardProps> = ({ title, value }) => {
         <span
           className="
             absolute top-0 left-1/2 -translate-x-1/2
-            w-40 h-40
+            w-30 h-40
             bg-white/30
             rounded-full blur-3xl
             opacity-40
