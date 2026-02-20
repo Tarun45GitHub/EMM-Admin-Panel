@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -8,6 +10,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
+    const navigate = useNavigate();
     e.preventDefault();
     setError("");
 
@@ -23,7 +26,9 @@ const Login: React.FC = () => {
     setTimeout(() => {
       setLoading(false);
       alert("Login Successful ✅");
+     
     }, 1500);
+    navigate("/dashboard");
   };
 
   return (

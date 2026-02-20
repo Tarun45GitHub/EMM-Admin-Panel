@@ -1,10 +1,20 @@
-import React,{lazy,Suspense} from "react"
+import React,{lazy,Suspense,useEffect} from "react"
 const CarouselBanner=lazy(()=>import("../components/dashbord/carousel_banner"))
 import TotalNav from "../components/dashbord/total_card_nav";
 import Chartpannel from "../components/dashbord/Graph_div";
+import { useLoader } from "../components/ui/LoaderContext";
 
 const Dashboard:React.FC=()=>{
-  return(
+ const { showLoader, hideLoader } = useLoader();
+    useEffect(() => {
+     showLoader();
+     const timer = setTimeout(() => {
+       hideLoader();
+     }, 1000);
+ 
+     return () => clearTimeout(timer)
+    }, []);
+   return(
    <div className="">
     <div className="m-5">
       <Suspense fallback={<h2 className="text-center font-bold">This is Loading...</h2>}>
@@ -18,7 +28,8 @@ const Dashboard:React.FC=()=>{
      <Chartpannel/>
    </div>
    </div>
-  );
+   );
+
 };
 export default Dashboard;
 

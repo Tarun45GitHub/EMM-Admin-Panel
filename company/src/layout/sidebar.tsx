@@ -128,7 +128,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
                  ${
                    isActive
                      ? "bg-green-500 text-white "
-                     : "hover:bg-green-700 text-green-100  dark:bg-gray-900 "
+                     : "hover:bg-green-700 text-green-100  dark:bg-gray-900 dark:text-gray-100 "
                  }`
               }
             >

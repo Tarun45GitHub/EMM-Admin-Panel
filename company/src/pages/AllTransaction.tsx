@@ -1,5 +1,7 @@
-import EntryTable from "../components/manage_user/entry_table";
+import CascadingDropdown from "../components/manage_user/cascading_dropdown";
 import TransactionTable from "../components/transfer/Transcationtable";
+import {useEffect } from "react";
+import  { useLoader } from "../components/ui/LoaderContext";
 
 const transactions=[
   {
@@ -40,19 +42,45 @@ const transactions=[
 ]
 
 const AllTransaction:React.FC=()=>{
+   const { showLoader, hideLoader } = useLoader();
+   useEffect(() => {
+    showLoader();
+    const timer = setTimeout(() => {
+      hideLoader();
+    }, 1000);
+
+    return () => clearTimeout(timer)
+   }, []);
+
     return(
-        <div className="min-h-screen w-full">
-            <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
-           <TransactionTable data={transactions}/>
-           <h2 className="text-center p-3 dark:text-gray-200 text-xl">Table 1</h2>
-          <TransactionTable data={transactions}/>
-           <h2 className="text-center p-3 dark:text-gray-200 text-xl">Table 1</h2>
-          <TransactionTable data={transactions}/>
-           <h2 className="text-center p-3 dark:text-gray-200 text-xl">Table 1</h2>
-           <TransactionTable data={transactions}/>
-           <h2 className="text-center p-3 dark:text-gray-200 text-xl">Table 1</h2>
-           <TransactionTable data={transactions}/>
+        <div className="min-h-screen ">
+            <div className="flex flex-col">
+              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
+              <CascadingDropdown/>
+              <TransactionTable data={transactions}/>
+            </div>
+           <div>
+              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
+              <CascadingDropdown/>
+              <TransactionTable data={transactions}/>
+            </div>
+          <div>
+              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
+              <CascadingDropdown/>
+              <TransactionTable data={transactions}/>
+            </div>
+           <div>
+              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
+              <CascadingDropdown/>
+              <TransactionTable data={transactions}/>
+            </div>
+           <div>
+              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
+              <CascadingDropdown/>
+              <TransactionTable data={transactions}/>
+            </div>
         </div>
     );
+   
 }
 export default AllTransaction;

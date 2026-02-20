@@ -4,27 +4,20 @@ import banner2 from "../components/banners/banner2.jpg";
 import banner3 from "../components/banners/banner3.jpg";
 import banner4 from "../components/banners/banner4.jpg";
 import InputBanner from "../components/manage_banner/input_banner";
-import Spinner from "../layout/Spinner";
-import React,{useState,useEffect} from "react";
+import React,{useEffect} from "react";
+import { useLoader } from "../components/ui/LoaderContext";
+
 
 const MannageBanner:React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if(isLoading){
-    return (
-      <div className="flex justify-center items-center h-screen bg-white">
-        <Spinner size={60} colorClass="border-indigo-500" />
-      </div>
-    );
-  }
+  const { showLoader, hideLoader } = useLoader();
+     useEffect(() => {
+      showLoader();
+      const timer = setTimeout(() => {
+        hideLoader();
+      }, 1000);
+  
+      return () => clearTimeout(timer)
+     }, []);
 
   return (
     <div className="space-y-10 p-8">
@@ -73,6 +66,7 @@ const MannageBanner:React.FC = () => {
       </section>
     </div>
   );
+  
 };
 
 export default MannageBanner;

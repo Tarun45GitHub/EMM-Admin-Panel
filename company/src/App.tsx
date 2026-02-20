@@ -14,11 +14,12 @@ import Transfer from './pages/Transfer';
 import AllTransaction from './pages/AllTransaction';
 import MyTransaction from './pages/MyTransaction';
 import ChangePassword from './components/profile/change_password';
-
+import { LoaderProvider } from './components/ui/LoaderContext';
 function App() {
   
 
   return (
+    <LoaderProvider>
    <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login/>}/>
@@ -34,10 +35,9 @@ function App() {
         <Route path='/transaction/my' element={<Layout><MyTransaction/></Layout>}/>
         <Route path='/transfer' element={<Layout><Transfer/></Layout>}/>
         <Route path='/changepassword' element={<Layout><ChangePassword/></Layout>}/>
-
-
       </Routes>
    </BrowserRouter>
+   </LoaderProvider>
   )
 }
 
