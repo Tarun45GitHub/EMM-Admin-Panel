@@ -4,7 +4,7 @@ import TotalCard from "./totalCard";
 const TotalNav:React.FC=()=>{
   return(
     <div className="p-2">
-        <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2  xl:grid-cols-4 gap-10 p-2">
+        <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2  xl:grid-cols-4 gap-10 p-2   ">
             <TotalCard title="Total No. of Support Team" value="5984"/>
             <TotalCard title="Last Month Support Add" value="0345"/>
             <TotalCard title="Last Week Support Add" value="0025"/>

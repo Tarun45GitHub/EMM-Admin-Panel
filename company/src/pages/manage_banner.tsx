@@ -20,33 +20,33 @@ const MannageBanner:React.FC = () => {
      }, []);
 
   return (
-    <div className="space-y-10 p-8">
+    <div className="space-y-10 p-5">
       {/* Header */}
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+      <div className="text-center dark:bg-[#1E293B] rounded-lg">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 pt-3">
           Manage Banners
         </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
+        <p className="mt-2 text-gray-600 dark:text-gray-300 pb-3">
           Customize and update your site banners easily
         </p>
       </div>
 
       {/* Banner Previews */}
-      <section>
+      <section className="">
         <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
           Banner Previews
         </h2>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="transition-transform hover:scale-105 hover:shadow-lg">
+        <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 dark:bg-[#1E293B] rounded-lg">
+          <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
             <BannerCard imageUrl={banner1} />
           </div>
-          <div className="transition-transform hover:scale-105 hover:shadow-lg">
+          <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
             <BannerCard imageUrl={banner2} />
           </div>
-          <div className="transition-transform hover:scale-105 hover:shadow-lg">
+          <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
             <BannerCard imageUrl={banner3} />
           </div>
-          <div className="transition-transform hover:scale-105 hover:shadow-lg">
+          <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
             <BannerCard imageUrl={banner4} />
           </div>
         </div>

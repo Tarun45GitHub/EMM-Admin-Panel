@@ -86,11 +86,11 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
         transition-all duration-300
         ${sidebarOpen ? "w-65" : "w-20"}
         flex flex-col
-        dark:bg-gray-900 
+        dark:bg-[#0F172A] 
       `}
     >
       {/* Logo + Toggle */}
-      <div className="h-18 flex items-center px-4 border-b border-green-800  dark:bg-gray-900  ">
+      <div className="h-18 flex items-center px-4 border-b border-green-800  dark:bg-[#0F172A]   ">
         <h1 className="font-bold text-xl tracking-wide">
           {sidebarOpen ? "Admin Panel" : "AP"}
         </h1>
@@ -98,7 +98,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
 
       {/* Search Box */}
       {sidebarOpen && (
-        <div className="p-3  dark:bg-gray-900 ">
+        <div className="p-3 dark:bg-[#0F172A]  ">
           <div className="flex items-center bg-green-500/50 px-3 py-2 rounded-lg dark:bg-gray-700">
             <Search size={18} className="text-green-200" />
             <input
@@ -116,7 +116,7 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
       <nav
         className="flex-1 overflow-y-auto px-2 py-4 space-y-1
           [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-green-800
-          [&::-webkit-scrollbar-thumb]:bg-green-500 [&::-webkit-scrollbar-thumb]:rounded  dark:bg-gray-900 "
+          [&::-webkit-scrollbar-thumb]:bg-green-500 [&::-webkit-scrollbar-thumb]:rounded dark:bg-[#0F172A]  "
       >
         {filteredMenu.map((item) =>
           item.path ? (

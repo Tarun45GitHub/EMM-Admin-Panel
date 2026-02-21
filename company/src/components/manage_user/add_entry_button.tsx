@@ -17,14 +17,14 @@ const AddEntrybutton:React.FC=()=>{
   };
 
     return (
-        <div className="mt-8 mx-5 ">
+        <div className=" dark:bg-[#1E293B]  rounded-lg p-3 ">
         <button
         onClick={() => setModalOpen(true)}
           className="bg-white text-center w-48 rounded-2xl h-10 relative text-black text-xl font-semibold group"
           type="button"
         >
           <div
-            className="bg-green-400 rounded-xl h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
+            className="bg-green-400 rounded-xl h-8 w-1/4 flex items-center justify-center absolute left-1 top-1 group-hover:w-46 z-10 duration-500"
           >
             <Plus
             size={30}

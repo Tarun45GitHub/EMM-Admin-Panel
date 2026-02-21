@@ -53,30 +53,30 @@ const AllTransaction:React.FC=()=>{
    }, []);
 
     return(
-        <div className="min-h-screen ">
-            <div className="flex flex-col">
-              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
-              <CascadingDropdown/>
+        <div className="min-h-screen overflow-x-hidden  ">
+            <div className="p-2  dark:bg-[#1E293B] m-5 rounded-2xl ">
+              <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
+               <div className="  dark:bg-gray-900 rounded-lg m-4"> <CascadingDropdown/></div>
               <TransactionTable data={transactions}/>
             </div>
-           <div>
-              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
-              <CascadingDropdown/>
+           <div className="p-2  dark:bg-[#1E293B] m-5 rounded-2xl ">
+              <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
+               <div className="  dark:bg-gray-900 rounded-lg m-4"> <CascadingDropdown/></div>
               <TransactionTable data={transactions}/>
             </div>
-          <div>
-              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
-              <CascadingDropdown/>
+           <div className="p-2  dark:bg-[#1E293B] m-5 rounded-2xl ">
+              <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
+               <div className="  dark:bg-gray-900 rounded-lg m-4"> <CascadingDropdown/></div>
               <TransactionTable data={transactions}/>
             </div>
-           <div>
-              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
-              <CascadingDropdown/>
+            <div className="p-2  dark:bg-[#1E293B] m-5 rounded-2xl ">
+              <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
+               <div className="  dark:bg-gray-900 rounded-lg m-4"> <CascadingDropdown/></div>
               <TransactionTable data={transactions}/>
             </div>
-           <div>
-              <h2 className="text-center p-3  dark:text-gray-200 text-xl">Table 1</h2>
-              <CascadingDropdown/>
+           <div className="p-2  dark:bg-[#1E293B] m-5 rounded-2xl ">
+              <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
+               <div className="  dark:bg-gray-900 rounded-lg m-4"> <CascadingDropdown/></div>
               <TransactionTable data={transactions}/>
             </div>
         </div>

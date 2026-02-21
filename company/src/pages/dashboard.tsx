@@ -16,12 +16,12 @@ const Dashboard:React.FC=()=>{
     }, []);
    return(
    <div className="">
-    <div className="m-5">
+    <div className="m-2 p-2 dark:bg-[#1E293B] rounded-lg">
       <Suspense fallback={<h2 className="text-center font-bold">This is Loading...</h2>}>
       <CarouselBanner/>
       </Suspense>
     </div>
-    <div className="m-3">
+    <div className="m-3 dark:bg-[#1E293B] rounded-lg">
       <TotalNav/>
     </div>
    <div className="m-3">

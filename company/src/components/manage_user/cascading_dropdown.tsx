@@ -29,7 +29,7 @@ const CascadingDropdown: React.FC = () => {
   };
 
   return (
-    <div className="mx-2 p-2  w-full">
+    <div className=" w-full">
       {/* Filters Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4 px-5">
         {/* State Filter */}

@@ -42,7 +42,7 @@ const EntryTable: React.FC = () => {
 
   return (
     <div className="w-full p-4 flex justify-center">
-      <div className=" p-5 bg-white dark:bg-gray-900 rounded-xl shadow-lg border
+      <div className="  bg-white dark:bg-gray-900 rounded-xl shadow-lg border
        border-gray-200 dark:border-gray-700 overflow-hidden">
         
         {/* Table Scroll */}

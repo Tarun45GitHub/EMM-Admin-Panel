@@ -29,26 +29,26 @@
 
 /* Overall scrollbar */
 *::-webkit-scrollbar {
-  width: 8px;   /* vertical scrollbar width */
-  height: 8px;  /* horizontal scrollbar height */
+  width: 4px;   /* vertical scrollbar width */
+  height: 4px;  /* horizontal scrollbar height */
 }
 
 /* Track (area scrollbar moves on) */
 *::-webkit-scrollbar-track {
   background: #7a7474;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 /* Thumb (the draggable part) */
 *::-webkit-scrollbar-thumb {
-  background-color: #31ac08;
-  border-radius: 8px;
+  background-color: #3b82f6;
+  border-radius: 4px;
   border: 1px solid #9f9b9b;
 }
 
 /* Thumb hover effect */
 *::-webkit-scrollbar-thumb:hover {
   background-color: 
-  #05d510;
+  #4F46E5;
 }
 

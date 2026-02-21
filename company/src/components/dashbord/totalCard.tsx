@@ -13,8 +13,8 @@ const TotalCard: React.FC<UserStatCardProps> = ({ title, value }) => {
       <div
         className="
           relative overflow-hidden rounded-3xl
-          bg-linear-to-r from-indigo-50 via-white to-indigo-50
-          dark:from-gray-800 dark:via-gray-900 dark:to-gray-800
+          bg-linear-to-r from-indigo-100 via-gray-100 to-indigo-100
+          dark:from-gray-500 dark:via-gray-500 dark:to-gray-500
           shadow-md dark:shadow-xl
           transition-transform transform hover:-translate-y-1 hover:scale-105 duration-300
         "

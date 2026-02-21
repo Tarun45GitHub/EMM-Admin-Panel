@@ -30,7 +30,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <RotateCcw size={20}/>
         </button>
         {/* Page Content */}
-        <div className="flex-2 dark:bg-gray-700 w-full  ">
+        <div className="flex-2 dark:bg-[#0B0E14] w-full  ">
           <Toaster />
           {children}</div>
 
