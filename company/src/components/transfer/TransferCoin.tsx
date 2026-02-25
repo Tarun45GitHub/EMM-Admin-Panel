@@ -51,7 +51,7 @@ const TransferCoin: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 dark:bg-gray-700">
-      <div className="w-full max-w-lg bg-white border border-gray-200 rounded-xl shadow-lg p-8 dark:bg-gray-800 dark:text-gray-200">
+      <div className="w-full max-w-lg  bg-white border border-gray-200 rounded-xl shadow-lg p-8 dark:bg-gray-800 dark:text-gray-200">
         <h2 className="text-2xl font-bold text-center text-green-500 mb-6">
           Transfer Digital Coin
         </h2>

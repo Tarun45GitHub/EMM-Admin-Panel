@@ -3,6 +3,8 @@ import CascadingDropdown from "../components/manage_user/cascading_dropdown";
 import EntryTable from "../components/manage_user/entry_table";
 import { useEffect } from "react";
 import { useLoader } from "../components/ui/LoaderContext";
+import AddCustomerButton from "../components/manage_customer/AddCustomerButtom";
+import CustomerEnrtyTable from "../components/manage_customer/CustomerEntryTable";
 
 const Customer:React.FC=()=>{
     const { showLoader, hideLoader } = useLoader();
@@ -20,11 +22,11 @@ const Customer:React.FC=()=>{
             <div className="flex flex-col justify-between md:flex-row  ">
                <div className=" w-full dark:bg-[#1E293B] rounded-lg m-4"> <CascadingDropdown/></div>
                <div className="dark:bg-[#0B0E14] mt-4 ">
-                <AddEntrybutton />
+                <AddCustomerButton/>
                </div>
             </div>
             <div className="flex-1 min-w-0 dark:bg-[#1E293B] rounded-lg m-4">
-                <EntryTable/>
+                <CustomerEnrtyTable/>
             </div>
         </div>
     )

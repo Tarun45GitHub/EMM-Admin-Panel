@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import AddEntryFromModal from "./add_entry_from";
+import AddEntryFromModal from "./AddEntryForm";
 import toast from "react-hot-toast";
 import { Plus } from "lucide-react";
 

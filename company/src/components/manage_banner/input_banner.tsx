@@ -14,7 +14,7 @@ const InputCard: React.FC<inputCardProps> = ({value=2}) => {
 
   const handleSave = () => {
     if (!file) return;
-
+    console.log(file);
     const url = URL.createObjectURL(file);
     const a = document.createElement("a");
     a.href = url;
@@ -32,7 +32,8 @@ const InputCard: React.FC<inputCardProps> = ({value=2}) => {
       <input
         type="file"
         onChange={handleFileChange}
-        className="block w-full text-gray-700  cursor-pointer bg-gray-300 rounded-md border-dashed border-gray-300 hover:bg-gray-200 transition"
+        className="block w-full text-gray-700  cursor-pointer bg-gray-300 rounded-md
+         border-dashed border-gray-300 hover:bg-gray-200 transition"
       />
 
       {file && (

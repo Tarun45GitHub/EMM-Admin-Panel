@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import Action from "./action";
 import toast from "react-hot-toast";
+import CustomerAction from "./CustomerAction";
 
 type RowData = {
   [key: string]: string | number;
@@ -17,7 +17,7 @@ const data: RowData[] = Array.from({ length: 30 }).map((_, i) => ({
   col8: `R${i + 1}C8`,
 }));
 
-const EntryTable: React.FC = () => {
+const CustomerEnrtyTable: React.FC = () => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 8;
 
@@ -82,7 +82,7 @@ const EntryTable: React.FC = () => {
                   <td className="px-4 py-2 border text-center">{row.col7}</td>
                   <td className="px-4 py-2 border text-center">{row.col8}</td>
                   <td className="px-4 py-2 border text-center">
-                    <Action
+                    <CustomerAction
                       isActive={true}
                       onToggle={() => handleToggle(idx)}
                       onEdit={() => handleEdit(idx)}
@@ -121,4 +121,5 @@ const EntryTable: React.FC = () => {
   );
 };
 
-export default EntryTable;
+export default CustomerEnrtyTable;
+
