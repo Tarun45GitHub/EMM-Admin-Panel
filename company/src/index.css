@@ -52,3 +52,7 @@
   #4F46E5;
 }
 
+/* change calendar icon color */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(50%) sepia(100%) saturate(500%) hue-rotate(190deg) brightness(90%) contrast(90%);
+}

@@ -34,7 +34,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
        border-gray-200 dark:border-gray-700 overflow-hidden">
         
         {/* Table Scroll */}
-        <div className="w-70 sm:w-130 md:w-150 lg:w-230 xl:w-300 overflow-x-auto scrollbar-custom">
+        <div className="w-full overflow-x-auto scrollbar-custom">
            <table className="min-w-full text-sm text-left text-gray-700">
         <thead className="bg-gray-100 text-gray-800 uppercase text-xs font-semibold">
           <tr>
@@ -115,6 +115,6 @@ export default TransactionTable;
 
 
 
-
+// w-70 sm:w-130 md:w-150 lg:w-230 xl:w-300
 
 

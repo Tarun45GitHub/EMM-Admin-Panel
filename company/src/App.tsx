@@ -15,6 +15,8 @@ import AllTransaction from './pages/AllTransaction';
 import MyTransaction from './pages/MyTransaction';
 import ChangePassword from './components/profile/change_password';
 import { LoaderProvider } from './components/ui/LoaderContext';
+import AdminProfile from './components/profile/Admin_Profile';
+import Settings from './components/settings/settings';
 function App() {
   
 
@@ -35,6 +37,9 @@ function App() {
         <Route path='/transaction/my' element={<Layout><MyTransaction/></Layout>}/>
         <Route path='/transfer' element={<Layout><Transfer/></Layout>}/>
         <Route path='/changepassword' element={<Layout><ChangePassword/></Layout>}/>
+        <Route path='/profile' element={<Layout><AdminProfile/></Layout>}/>
+        <Route path='/settings' element={<Layout><Settings/></Layout>}/>
+
       </Routes>
    </BrowserRouter>
    </LoaderProvider>

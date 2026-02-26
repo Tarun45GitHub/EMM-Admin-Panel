@@ -59,23 +59,22 @@ const CustomerAction: React.FC<ActionProps> = ({
 
       {/* Edit Button */}
       <div
-        
+        onClick={()=>setModalOpen(true)}
         className="
           cursor-pointer px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium
           hover:bg-blue-600 transition-all
         "
       >
-        <button 
-        onClick={()=>setModalOpen(true)}>Edit
+        <button>Edit
+        </button>
         <EditCustomerModal
         show={modalOpen}
-        onClose={()=>{setModalOpen(false)}}
+        onClose={()=>setModalOpen(false)}
         formData={formData}
         onChange={handleChange}
         onFileChange={handleFileChange}
         onSave={onEdit}
         />
-        </button>
       </div>
     </div>
   );

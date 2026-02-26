@@ -35,6 +35,7 @@ const CustomerEnrtyTable: React.FC = () => {
 
   const handleEdit = (idx: number) => {
     toast("Edit row " + idx);
+  
   };
 
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
@@ -83,7 +84,7 @@ const CustomerEnrtyTable: React.FC = () => {
                   <td className="px-4 py-2 border text-center">{row.col8}</td>
                   <td className="px-4 py-2 border text-center">
                     <CustomerAction
-                      isActive={true}
+                      isActive={false}
                       onToggle={() => handleToggle(idx)}
                       onEdit={() => handleEdit(idx)}
                     />

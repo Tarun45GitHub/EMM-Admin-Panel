@@ -3,16 +3,15 @@ import { Wallet } from "lucide-react";
 
 type WalletBalanceProps = {
   balance: number | string;
-  currency?: string;
+ 
 };
 
 const WalletBalance: React.FC<WalletBalanceProps> = ({
   balance,
-  currency = "EMM",
 }) => {
   return (
     <div
-      className=" w-45 max-w-xs p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+      className=" w-35 max-w-xs p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
         rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
     >
       {/* Header with Lucide Icon */}
@@ -24,7 +23,7 @@ const WalletBalance: React.FC<WalletBalanceProps> = ({
         />
 
         <h2 className="text-base font-semibold text-gray-700 dark:text-gray-200">
-          Wallet : {balance}{" "}{currency}
+          Wallet : {balance}
         </h2>
         
       </div>
