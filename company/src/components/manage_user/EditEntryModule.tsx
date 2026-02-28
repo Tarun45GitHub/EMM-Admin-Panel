@@ -1,4 +1,5 @@
 import React from "react";
+import EntryTableEditModel from "./Entry_table_Edit_model";
 
 interface ParentOption {
   id: string;
@@ -25,11 +26,11 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-6">
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-auto border border-gray-200">
+    <div className=" overflow-auto fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-5">
+      <div className="w-full mt-150  max-w-7xl bg-white rounded-xl shadow-2xl overflow-auto border border-gray-200">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-t-xl">
+        <div className="flex  items-center justify-between px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-t-xl">
           <h2 className="text-2xl font-semibold">Edit User Details</h2>
           <button 
             onClick={onClose} 
@@ -210,6 +211,9 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
           >
             Save Changes
           </button>
+        </div>
+        <div >
+          <EntryTableEditModel/>
         </div>
 
       </div>

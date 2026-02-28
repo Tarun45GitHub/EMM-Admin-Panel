@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import EditCustomerModal from "./EditCustomerModel";
+import EditCustomerModalPage1 from "./EditCustomerModelPage1";
 
 
 
@@ -15,9 +16,10 @@ type ActionProps = {
 const CustomerAction: React.FC<ActionProps> = ({
   isActive,
   onToggle,
-  onEdit,
+  onEdit
 }) => {
-    const [modalOpen, setModalOpen] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    // console.log(showEditModal)
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
@@ -32,6 +34,7 @@ const CustomerAction: React.FC<ActionProps> = ({
 
    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
      setFormData({ ...formData, [e.target.name]: e.target.value });
+     
    };
    
      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +62,7 @@ const CustomerAction: React.FC<ActionProps> = ({
 
       {/* Edit Button */}
       <div
-        onClick={()=>setModalOpen(true)}
+        onClick={()=>setShowEditModal(true)}
         className="
           cursor-pointer px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium
           hover:bg-blue-600 transition-all
@@ -67,15 +70,16 @@ const CustomerAction: React.FC<ActionProps> = ({
       >
         <button>Edit
         </button>
-        <EditCustomerModal
-        show={modalOpen}
-        onClose={()=>setModalOpen(false)}
-        formData={formData}
-        onChange={handleChange}
-        onFileChange={handleFileChange}
-        onSave={onEdit}
-        />
       </div>
+      <EditCustomerModal
+      show={showEditModal}
+      onClose={()=>{setShowEditModal(false)}}
+      onChange={handleChange}
+      onFileChange={handleFileChange}
+      formData={formData}
+      onSave={onEdit}
+      />
+      
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import EMITable from "./EmiTable";
 
 interface EditCustomerModalProps {
   show: boolean;
@@ -9,14 +8,6 @@ interface EditCustomerModalProps {
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSave: () => void;
 }
-const sampleData = [
-  { id: "TXN001", date: "2026-01-15", description: "Order #1234", amount: 120.5, status: "Paid" },
-  { id: "TXN002", date: "2026-01-18", description: "Order #1235", amount: 89.99, status: "Pending" },
-  { id: "TXN003", date: "2026-01-22", description: "Order #1236", amount: 45.0, status: "Failed" },
-  { id: "TXN004", date: "2026-01-25", description: "Order #1237", amount: 59.9, status: "Paid" },
-  { id: "TXN005", date: "2026-01-28", description: "Order #1238", amount: 200.0, status: "Paid" },
-  { id: "TXN006", date: "2026-01-30", description: "Order #1239", amount: 300.0, status: "Pending" },
-];
 
 const TextInput = ({
   label,
@@ -65,7 +56,7 @@ const commentTags = [
   "Resolved","Info"
 ];
 
-const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
+const EditCustomerModalPage1: React.FC<EditCustomerModalProps> = ({
   show,
   onClose,
   formData,
@@ -90,8 +81,8 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
   };
 
   return (
-    <div className="fixed overflow-auto inset-0 z-50 flex items-center justify-center p-5 bg-black/50 backdrop-blur-sm">
-      <div className="w-full mt-150 max-w-4xl bg-white rounded-xl shadow-lg overflow-auto">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-5">
+      <div className="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-auto">
 
         {/* HEADER */}
         <div className="px-6 py-4 border-b">
@@ -215,13 +206,10 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({
             Save
           </button>
         </div>
-        <EMITable
-        data={sampleData}
-        />
 
       </div>
     </div>
   );
 };
 
-export default EditCustomerModal;
+export default EditCustomerModalPage1;
