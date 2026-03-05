@@ -12,24 +12,24 @@ const Settings: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-600 p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6 dark:text-gray-200">
+      <h1 className="text-2xl font-bold text-gray-900 mb-6 dark:text-gray-200">
         Help & Support
       </h1>
        {/* FAQ / Helpful Articles */}
-      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6">
-        <h2 className="text-xl font-semibold">FAQs</h2>
+      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6 dark:bg-gray-900">
+        <h2 className="text-xl font-semibold dark:text-gray-200">FAQs</h2>
 
         <div className="space-y-2">
-          <details className="border rounded px-3 py-2">
+          <details className="border rounded px-3 py-2  dark:text-gray-200">
             <summary className="font-medium cursor-pointer">
               How do I reset my password?
             </summary>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-500 mt-1">
               Go to settings → security → reset password.
             </p>
           </details>
 
-          <details className="border rounded px-3 py-2">
+          <details className="border rounded px-3 py-2  dark:text-gray-200">
             <summary className="font-medium cursor-pointer">
               How can I contact support?
             </summary>
@@ -38,7 +38,7 @@ const Settings: React.FC = () => {
             </p>
           </details>
 
-          <details className="border rounded px-3 py-2">
+          <details className="border rounded px-3 py-2  dark:text-gray-200">
             <summary className="font-medium cursor-pointer">
               Where can I watch video tutorials?
             </summary>
@@ -50,13 +50,13 @@ const Settings: React.FC = () => {
       </section>
 
       {/* General Query Section */}
-      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6">
-        <h2 className="text-xl font-semibold">General Query</h2>
-        <p className="text-sm text-gray-600">
+      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6 dark:bg-gray-900">
+        <h2 className="text-xl font-semibold dark:text-gray-200">General Query</h2>
+        <p className="text-sm text-gray-500">
           Have a question? Send us your query and our support team will get
           back to you.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 dark:text-gray-200">
           <textarea
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -75,9 +75,9 @@ const Settings: React.FC = () => {
       </section>
 
       {/* Video Solutions Section */}
-      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6">
-        <h2 className="text-xl font-semibold">Video Solutions</h2>
-        <p className="text-sm text-gray-600">
+      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6 dark:bg-gray-900">
+        <h2 className="text-xl font-semibold dark:text-gray-200">Video Solutions</h2>
+        <p className="text-sm text-gray-500">
           Watch tutorials and how-to videos that answer common questions.
         </p>
 
@@ -103,9 +103,9 @@ const Settings: React.FC = () => {
         </div>
       </section>
        {/* Chat Support Section */}
-      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6">
-        <h2 className="text-xl font-semibold">Chat Support</h2>
-        <p className="text-sm text-gray-600">
+      <section className="bg-white p-6 rounded-lg shadow space-y-3 mb-6 dark:bg-gray-900">
+        <h2 className="text-xl font-semibold dark:text-gray-200">Chat Support</h2>
+        <p className="text-sm text-gray-500">
           Start a live chat with our support team for real-time help.
         </p>
         <button

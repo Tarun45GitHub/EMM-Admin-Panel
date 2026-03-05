@@ -18,9 +18,10 @@ const Distributer:React.FC=()=>{
         <div className=" text-gray-800
              dark:text-gray-200  w-full ">
             <div className="flex flex-col justify-between md:flex-row  ">
-               <div className=" w-full dark:bg-[#1E293B] rounded-lg mt-4"> <TableHeader onFilterChange={()=>{}}/></div>
-               <div className="dark:bg-[#0B0E14] mt-6 ">
-                <AddEntrybutton />
+               <div className="w-full flex justify-between dark:bg-[#1E293B] rounded-lg mx-5 mt-5 p-2 ">
+                 <TableHeader onFilterChange={()=>{}}/>
+              
+                <AddEntrybutton value={"Distributor"} />
                </div>
             </div>
             <div className="flex-1 min-w-0 dark:bg-[#1E293B] rounded-lg m-4">

@@ -80,10 +80,9 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   };
 
   return (
-    <div className="fixed overflow-auto inset-0 z-50 flex items-center justify-center p-5 bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg overflow-auto">
-
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-lg overflow-auto w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl">
+        
         {/* Header */}
         <div className="px-6 py-4 border-b">
           <h2 className="text-2xl font-semibold text-gray-800">
@@ -142,6 +141,8 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
               preview={signaturePreview}
               onClick={() => signatureRef.current?.click()}
             />
+
+            {/* Hidden File Inputs */}
             <input
               ref={imageRef}
               type="file"

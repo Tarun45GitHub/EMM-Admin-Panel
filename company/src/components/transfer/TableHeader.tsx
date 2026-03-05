@@ -66,8 +66,8 @@ const TableHeader: React.FC<Props> = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="dark:bg-gray-900 rounded-lg p-4">
-    <div className="bg-white p-4 rounded-lg shadow flex flex-row gap-5 dark:bg-gray-800
+    <div className="dark:bg-gray-900 rounded-lg ">
+    <div className="bg-white px-3 rounded-lg shadow flex flex-row gap-5 dark:bg-gray-800
      dark:text-gray-200">
       {/* Category dropdown */}
       <div className="flex flex-row gap-2">
@@ -104,7 +104,7 @@ const TableHeader: React.FC<Props> = ({ onFilterChange }) => {
       </div>
 
       {/* Search input */}
-      <div className="flex flex-col grow ">
+      <div className="flex flex-col grow  ">
         <label className="text-sm text-gray-600 dark:text-gray-200">Search</label>
         <input
           type="text"

@@ -57,7 +57,7 @@ const AddCustomerButton:React.FC = () => {
             </Plus>
             
           </div>
-          <p className="translate-x-2">Add Entry</p>
+          <p className="translate-x-2"> Customer</p>
         </button>
          <AddCustomerModal
         show={showModal}

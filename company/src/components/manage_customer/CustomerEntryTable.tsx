@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import CustomerAction from "./CustomerAction";
+import CustomerToggleButton from "./CustomerToggleButton";
 
 type RowData = {
   [key: string]: string | number;
@@ -53,7 +54,7 @@ const CustomerEnrtyTable: React.FC = () => {
               <tr>
                 {[
                   "Column 1", "Column 2", "Column 3", "Column 4",
-                  "Column 5", "Column 6", "Column 7", "Column 8", "Action",
+                  "Column 5", "Column 6", "Column 7", "Column 8", "Action","View",
                 ].map((title) => (
                   <th
                     key={title}
@@ -82,6 +83,9 @@ const CustomerEnrtyTable: React.FC = () => {
                   <td className="px-4 py-2 border text-center">{row.col6}</td>
                   <td className="px-4 py-2 border text-center">{row.col7}</td>
                   <td className="px-4 py-2 border text-center">{row.col8}</td>
+                  <td className="px-4 py-2 border text-center">
+                    <CustomerToggleButton/>
+                  </td>
                   <td className="px-4 py-2 border text-center">
                     <CustomerAction
                       isActive={false}

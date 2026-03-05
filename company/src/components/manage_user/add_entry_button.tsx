@@ -3,13 +3,20 @@ import AddEntryFromModal from "./AddEntryForm";
 import toast from "react-hot-toast";
 import { Plus } from "lucide-react";
 
+type ActionProps={
+  value:String
+}
 
-const AddEntrybutton:React.FC=()=>{
+
+const AddEntrybutton:React.FC<ActionProps>=({value})=>{
     const [modalOpen, setModalOpen] = useState(false);
 //   const [toast, setToast] = useState({ show: false, message: "" });
 
+
+
   const handleFormSubmit = (data: any) => {
     console.log("Form submitted:", data);
+    
 
     setModalOpen(false);
     toast.success("Application Submitted")
@@ -20,7 +27,7 @@ const AddEntrybutton:React.FC=()=>{
         <div className=" dark:bg-[#1E293B]  rounded-lg p-3 ">
         <button
         onClick={() => setModalOpen(true)}
-          className="bg-white text-center w-48 rounded-2xl h-10 relative text-black text-xl font-semibold group"
+          className="bg-white text-center w-55 rounded-2xl h-10 relative text-black text-xl font-semibold group"
           type="button"
         >
           <div
@@ -40,7 +47,7 @@ const AddEntrybutton:React.FC=()=>{
             </Plus>
             
           </div>
-          <p className="translate-x-2">Add Entry</p>
+          <p className="translate-x-2">{value}</p>
         </button>
 
       <AddEntryFromModal

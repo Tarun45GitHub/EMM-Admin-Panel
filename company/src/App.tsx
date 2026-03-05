@@ -10,13 +10,14 @@ import NationalDistributer from './pages/manage_NationalDist';
 import SuperDistributer from './pages/manage_superDist';
 import Distributer from './pages/manage_Distributer';
 import Retailer from './pages/manage_Retailer';
-import Transfer from './pages/Transfer';
+import TransferPage from './pages/Transfer';
 import AllTransaction from './pages/AllTransaction';
 import MyTransaction from './pages/MyTransaction';
 import ChangePassword from './components/profile/change_password';
 import { LoaderProvider } from './components/ui/LoaderContext';
 import AdminProfile from './components/profile/Admin_Profile';
 import Settings from './components/settings/settings';
+import CustomerEdit from './components/customerEdit/EditCustomer';
 function App() {
   
 
@@ -35,10 +36,12 @@ function App() {
         <Route path='/users/customer' element={<Layout><Customer/></Layout>}/>
         <Route path='/transaction/all' element={<Layout><AllTransaction/></Layout>}/>
         <Route path='/transaction/my' element={<Layout><MyTransaction/></Layout>}/>
-        <Route path='/transfer' element={<Layout><Transfer/></Layout>}/>
+        <Route path='/transfer' element={<Layout><TransferPage/></Layout>}/>
         <Route path='/changepassword' element={<Layout><ChangePassword/></Layout>}/>
         <Route path='/profile' element={<Layout><AdminProfile/></Layout>}/>
         <Route path='/settings' element={<Layout><Settings/></Layout>}/>
+        <Route path='/customer/edit' element={<Layout><CustomerEdit/></Layout>}/>
+
 
       </Routes>
    </BrowserRouter>
