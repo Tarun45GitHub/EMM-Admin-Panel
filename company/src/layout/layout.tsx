@@ -9,7 +9,7 @@ import { RotateCcw } from "lucide-react";
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   return (
-    <div className="min-h-screen flex bg-gray-200 max-w-screen">
+    <div className="min-h-screen flex bg-gray-200 ">
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} />
 

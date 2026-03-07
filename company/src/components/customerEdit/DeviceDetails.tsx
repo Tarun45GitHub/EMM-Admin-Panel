@@ -45,7 +45,7 @@ const DeviceDetails: React.FC = () => {
   };
 
   return (
-    <div className="md:w-  flex items-center justify-center bg-gray-100 p-6">
+    <div className="w-full   flex items-center justify-center bg-gray-100 p-6">
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-8 space-y-4"

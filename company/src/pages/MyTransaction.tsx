@@ -1,4 +1,4 @@
-import CascadingDropdown from "../components/manage_user/cascading_dropdown";
+// import CascadingDropdown from "../components/manage_user/cascading_dropdown";
 import TransactionTable from "../components/transfer/Transcationtable";
 import { useEffect } from "react";
 import { useLoader } from "../components/ui/LoaderContext";
@@ -53,11 +53,13 @@ const MyTransaction:React.FC=()=>{
         return () => clearTimeout(timer)
        }, []);
     return(
-        <div className="flex justify-center mt-10 overflow-x-hidden">
+        <div className="flex w-full flex-wrap justify-center mt-6 px-2 sm:px-4">
              <div className="p-2  dark:bg-[#1E293B] m-3 rounded-2xl ">
               <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
                <div className="  dark:bg-gray-900 rounded-lg m-4"> <TableHeader onFilterChange={()=>{}}/></div>
-              <TransactionTable data={transactions}/>
+                <div className="overflow-x-auto">
+                  <TransactionTable data={transactions} />
+                </div>
             </div>
         </div>
     );

@@ -45,18 +45,15 @@ const TableHeader: React.FC<Props> = ({ onFilterChange }) => {
   const [to, setTo] = useState("");
   const [subOptions, setSubOptions] = useState<{ label: string; value: string }[]>([]);
 
-  // update subcategories when category changes
   useEffect(() => {
     setSubOptions(subcategoriesMap[category] || []);
     setSubcategory("");
   }, [category]);
 
-  // notify parent whenever filters change
   useEffect(() => {
     onFilterChange({ category, subcategory, search, from, to });
   }, [category, subcategory, search, from, to]);
 
-  // clear all filters
   const clearAllFilters = () => {
     setCategory("");
     setSubcategory("");
@@ -66,87 +63,88 @@ const TableHeader: React.FC<Props> = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="dark:bg-gray-900 rounded-lg ">
-    <div className="bg-white px-3 rounded-lg shadow flex flex-row gap-5 dark:bg-gray-800
-     dark:text-gray-200">
-      {/* Category dropdown */}
-      <div className="flex flex-row gap-2">
-      <div className="flex flex-col">
-        <label className="text-sm text-gray-600 dark:text-gray-300">Category</label>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="border px-3 py-2 rounded"
-        >
-          {categories.map((cat) => (
-            <option key={cat.value} value={cat.value} className="dark:bg-gray-700">
-              {cat.label}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg shadow p-4">
 
-      {/* Subcategory dropdown */}
-      <div className="flex flex-col">
-        <label className="text-sm text-gray-600 dark:text-gray-200">Subcategory</label>
-        <select
-          value={subcategory}
-          onChange={(e) => setSubcategory(e.target.value)}
-          className="border px-3 py-2 rounded"
-        >
-          {subOptions.map((sub) => (
-            <option key={sub.value} value={sub.value} className="dark:bg-gray-700">
-              {sub.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      </div>
+      {/* Responsive Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
 
-      {/* Search input */}
-      <div className="flex flex-col grow  ">
-        <label className="text-sm text-gray-600 dark:text-gray-200">Search</label>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
-          className="border px-3 py-2 rounded"
-        />
-      </div>
-      <div className="flex flex-row gap-2 ">
-      {/* Date from input */}
-      <div className="flex flex-col">
-        <label className="text-sm text-gray-600 dark:text-gray-200">From</label>
-        <input
-          type="date"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-          className="border px-3 py-2 rounded"
-        />
-      </div>
+        {/* Category */}
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 dark:text-gray-300">Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border px-3 py-2 rounded w-full dark:bg-gray-700"
+          >
+            {categories.map((cat) => (
+              <option key={cat.value} value={cat.value}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Date to input */}
-      <div className="flex flex-col">
-        <label className="text-sm text-gray-600 dark:text-gray-200">To</label>
-        <input
-          type="date"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-          className="border px-3 py-2 rounded dark:texr"
-        />
+        {/* Subcategory */}
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 dark:text-gray-300">Subcategory</label>
+          <select
+            value={subcategory}
+            onChange={(e) => setSubcategory(e.target.value)}
+            className="border px-3 py-2 rounded w-full dark:bg-gray-700"
+          >
+            {subOptions.map((sub) => (
+              <option key={sub.value} value={sub.value}>
+                {sub.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Search */}
+        <div className="flex flex-col sm:col-span-2">
+          <label className="text-sm text-gray-600 dark:text-gray-300">Search</label>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+            className="border px-3 py-2 rounded w-full"
+          />
+        </div>
+
+        {/* From Date */}
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 dark:text-gray-300">From</label>
+          <input
+            type="date"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+            className="border px-3 py-2 rounded w-full"
+          />
+        </div>
+
+        {/* To Date */}
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 dark:text-gray-300">To</label>
+          <input
+            type="date"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            className="border px-3 py-2 rounded w-full"
+          />
+        </div>
+
+        {/* Clear Button */}
+        <div className="flex items-end">
+          <button
+            onClick={clearAllFilters}
+            className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Clear
+          </button>
+        </div>
+
       </div>
-      </div>
-      <div className="flex justify-center p-4">
-      {/* Clear filters button */}
-      <button
-        onClick={clearAllFilters}
-        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-      >
-        Clear Filters
-      </button>
-      </div>
-    </div>
     </div>
   );
 };

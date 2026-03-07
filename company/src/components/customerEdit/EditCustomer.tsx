@@ -28,15 +28,15 @@ const emiData = [
 
 const CustomerEdit:React.FC=()=>{
     return(
-        <div className="p-5">
-            <div className="flex flex-row justify-around">
-                <div className="flex flex-col justify-around ">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-3 ">
-                        <div className=""><PersonalDetails/></div>
-                        <div className=""><RetailerDetails/> </div>
-                        <div className=""><DeviceDetails/> </div>
+        <div className="min-w-full p-5">
+            <div className="flex flex-col-reverse sm:flex-row justify-around">
+                <div className="flex flex-col ">
+                    <div className="grid grid-cols-1  lg:grid-cols-3 lg:gap-3 ">
+                        <div className="px-1"><PersonalDetails/></div>
+                        <div className="px-1"><RetailerDetails/> </div>
+                        <div className="px-1"><DeviceDetails/> </div>
                     </div>
-                    <div className=""><EmiTable data={emiData}/> </div>
+                    <div className="flex items-center justify-center"><EmiTable data={emiData}/> </div>
                 </div>
                 <div className=""><CommandButtons/> </div>
             </div>

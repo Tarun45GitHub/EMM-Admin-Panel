@@ -2,7 +2,7 @@ import React from "react";
 
 const CommandButtons: React.FC = () => {
   return (
-    <div className=" bg-gray-100 flex flex-col items-center justify-center p-3 ">
+    <div className=" bg-gray-100 flex flex-col items-center  justify-center p-6 mx-5 ">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
         Command 
       </h2>

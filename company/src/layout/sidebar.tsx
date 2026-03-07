@@ -189,10 +189,10 @@ export default function Sidebar({ sidebarOpen }: SidebarProps) {
     </aside>
      <aside
       className={`
-       fixed  inset-y-0 left-0 z-50 
-        h-screen bg-linear-to-b from-green-600 to-green-700 text-white 
+       fixed top-25   inset-y-0 left-0 z-50 
+       bg-linear-to-b from-green-600 to-green-700 text-white 
         transition-all duration-300
-        ${sidebarOpen ? "w-65" : "hidden"}
+        ${sidebarOpen ? "w-50" : "hidden"}
         flex flex-col
         dark:bg-[#0F172A] 
         md:hidden

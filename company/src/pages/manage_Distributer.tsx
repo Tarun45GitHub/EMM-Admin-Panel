@@ -17,8 +17,8 @@ const Distributer:React.FC=()=>{
     return (
         <div className=" text-gray-800
              dark:text-gray-200  w-full ">
-            <div className="flex flex-col justify-between md:flex-row  ">
-               <div className="w-full flex justify-between dark:bg-[#1E293B] rounded-lg mx-5 mt-5 p-2 ">
+            <div className="  ">
+               <div className=" flex flex-col lg:flex-row justify-between items-center dark:bg-[#1E293B] rounded-lg mx-5 mt-5 p-2 ">
                  <TableHeader onFilterChange={()=>{}}/>
               
                 <AddEntrybutton value={"Distributor"} />

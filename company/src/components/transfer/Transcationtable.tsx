@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 
-
 interface Transaction {
   id: string;
   date: string;
@@ -22,72 +21,83 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
   const pageRows = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     return data.slice(start, start + rowsPerPage);
-  }, [page]);
-
+  }, [page, data]);
 
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
   const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
   return (
-    <div className="w-full p-4 flex justify-center">
-      <div className=" p-5 bg-white dark:bg-gray-900 rounded-xl shadow-lg border
-       border-gray-200 dark:border-gray-700 overflow-hidden">
-        
-        {/* Table Scroll */}
+    <div className="p-2 md:p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+
+        {/* Scroll Container */}
         <div className="w-full overflow-x-auto scrollbar-custom">
-           <table className="min-w-full text-sm text-left text-gray-700">
-        <thead className="bg-gray-100 text-gray-800 uppercase text-xs font-semibold">
-          <tr>
-            <th className="px-6 py-3 whitespace-nowrap">Transaction ID</th>
-            <th className="px-6 py-3 whitespace-nowrap">Date</th>
-            <th className="px-6 py-3 whitespace-nowrap">Description</th>
-            <th className="px-6 py-3 text-right whitespace-nowrap">Amount</th>
-            <th className="px-6 py-3 whitespace-nowrap">Status</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {pageRows.map((tx, index) => (
-            <tr
-              key={tx.id}
-              className={`border-b ${
-                index % 2 === 0 ? "bg-gray-50 dark:bg-gray-800 dark:text-gray-200" : "bg-white dark:bg-gray-900 dark:text-gray-200"
-              }`}
-            >
-              <td className="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
-                {tx.id}
-              </td>
-              <td className="px-6 py-4">{tx.date}</td>
-              <td className="px-6 py-4">{tx.description}</td>
-              <td className="px-6 py-4 text-right font-semibold">
-                ${tx.amount.toFixed(2)}
-              </td>
+          <table className="min-w-22.5 w-full text-sm text-left text-gray-700 dark:text-gray-200">
 
-              <td className="px-6 py-4">
-                <span
-                  className={`px-2 py-1 text-xs font-bold rounded-full ${
-                    tx.status === "Paid"
-                      ? "bg-green-100 text-green-800"
-                      : tx.status === "Pending"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-800"
+            <thead className="bg-gray-100 dark:bg-gray-800 text-xs font-semibold uppercase">
+              <tr>
+                <th className="px-3 py-2 md:px-6 md:py-3">Transaction ID</th>
+                <th className="px-3 py-2 md:px-6 md:py-3">Date</th>
+                <th className="px-3 py-2 md:px-6 md:py-3">Description</th>
+                <th className="px-3 py-2 md:px-6 md:py-3 text-right">Amount</th>
+                <th className="px-3 py-2 md:px-6 md:py-3">Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {pageRows.map((tx, index) => (
+                <tr
+                  key={tx.id}
+                  className={`border-b ${
+                    index % 2 === 0
+                      ? "bg-gray-50 dark:bg-gray-800"
+                      : "bg-white dark:bg-gray-900"
                   }`}
                 >
-                  {tx.status}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  <td className="px-3 py-2 md:px-6 md:py-4 font-medium">
+                    {tx.id}
+                  </td>
+
+                  <td className="px-3 py-2 md:px-6 md:py-4">
+                    {tx.date}
+                  </td>
+
+                  <td className="px-3 py-2 md:px-6 md:py-4">
+                    {tx.description}
+                  </td>
+
+                  <td className="px-3 py-2 md:px-6 md:py-4 text-right font-semibold">
+                    ${tx.amount.toFixed(2)}
+                  </td>
+
+                  <td className="px-3 py-2 md:px-6 md:py-4">
+                    <span
+                      className={`px-2 py-1 text-xs font-bold rounded-full ${
+                        tx.status === "Paid"
+                          ? "bg-green-100 text-green-800"
+                          : tx.status === "Pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {tx.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-6 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+
           <button
             onClick={handlePrev}
             disabled={page === 1}
-            className="px-4 py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-4 py-2 bg-white dark:bg-gray-900 border rounded-md text-sm hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             Prev
           </button>
@@ -99,10 +109,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
           <button
             onClick={handleNext}
             disabled={page === totalPages}
-            className="px-4 py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-4 py-2 bg-white dark:bg-gray-900 border rounded-md text-sm hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
           >
             Next
           </button>
+
         </div>
       </div>
     </div>
@@ -110,11 +121,3 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
 };
 
 export default TransactionTable;
-
-
-
-
-
-// w-70 sm:w-130 md:w-150 lg:w-230 xl:w-300
-
-

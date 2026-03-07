@@ -17,7 +17,7 @@ interface Props {
 const EmiTable: React.FC<Props> = ({ data }) => {
   return (
     <div className="p-2">
-      <div className=" scrollbar-custom bg-white shadow-md rounded-lg">
+      <div className="w-70 sm:w-110 md:w-130 lg:w-200 xl:w-250 overflow-x-auto scrollbar-custom">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-indigo-600 text-white font-semibold">
             <tr>

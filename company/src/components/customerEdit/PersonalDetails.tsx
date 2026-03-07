@@ -44,10 +44,10 @@ const PersonalDetails: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center bg-gray-100 p-2">
+    <div className="w-full p-6 h-full flex items-center justify-center bg-gray-100 ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-4 space-y-5"
+        className="bg-white shadow-lg rounded-lg w-full  p-4 space-y-5"
       >
         <h2 className="text-2xl font-bold text-gray-800 text-center">
           Edit Personal Details
