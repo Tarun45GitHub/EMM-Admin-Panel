@@ -1,61 +1,28 @@
 import React, { useRef, useState } from "react";
 
-interface AddCustomerModalProps {
+interface Props {
   show: boolean;
   onClose: () => void;
   formData: any;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSave: () => void;
 }
 
-const InputField = ({
+const Input = ({
   label,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) => (
   <div className="flex flex-col gap-1">
-    <label className="text-sm font-medium text-gray-600">{label}</label>
+    <label className="text-sm text-gray-600">{label}</label>
     <input
-      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-400 transition"
       {...props}
+      className="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
     />
   </div>
 );
 
-const UploadBox = ({
-  label,
-  preview,
-  onClick,
-}: {
-  label: string;
-  preview: string | null;
-  onClick: () => void;
-}) => (
-  <div>
-    <p className="text-sm font-medium text-gray-600 mb-1">{label}</p>
-    <div
-      onClick={onClick}
-      className="flex flex-col items-center justify-center p-5 border-2 border-dashed rounded-lg cursor-pointer hover:border-indigo-300 bg-white transition"
-    >
-      {preview ? (
-        <img
-          src={preview}
-          alt="preview"
-          className="w-full h-24 object-cover rounded-md"
-        />
-      ) : (
-        <>
-          <div className="text-2xl">+</div>
-          <p className="text-xs text-gray-400 mt-1">
-            Click to upload PNG/JPG up to 5MB
-          </p>
-        </>
-      )}
-    </div>
-  </div>
-);
-
-const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
+const AddCustomerModal: React.FC<Props> = ({
   show,
   onClose,
   formData,
@@ -63,16 +30,17 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   onFileChange,
   onSave,
 }) => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [signaturePreview, setSignaturePreview] = useState<string | null>(null);
-  const imageRef = useRef<HTMLInputElement>(null);
-  const signatureRef = useRef<HTMLInputElement>(null);
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [sign, setSign] = useState<string | null>(null);
+
+  const photoRef = useRef<HTMLInputElement>(null);
+  const signRef = useRef<HTMLInputElement>(null);
 
   if (!show) return null;
 
   const handleFile = (
     e: React.ChangeEvent<HTMLInputElement>,
-    setter: (v: string | null) => void
+    setter: (v: string) => void
   ) => {
     onFileChange(e);
     const file = e.target.files?.[0];
@@ -80,127 +48,130 @@ const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-lg overflow-auto w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl">
-        
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-3 z-50">
+
+      <div className="bg-white w-full max-w-2xl rounded-xl shadow-lg">
+
         {/* Header */}
-        <div className="px-6 py-4 border-b">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            New <span className="text-indigo-500">Customer</span>
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Fill in the details to create a new customer
-          </p>
+        <div className="flex justify-between items-center border-b px-4 py-3">
+          <h2 className="text-lg font-semibold">Add Customer</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-red-500 text-xl"
+          >
+            ✕
+          </button>
         </div>
 
         {/* Body */}
-        <div className="px-6 py-6 space-y-6">
+        <div className="p-4 space-y-4">
 
           {/* Personal Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputField
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Input
               label="Full Name"
               name="name"
               value={formData.name}
               onChange={onChange}
-              placeholder="Arjun Sharma"
             />
-            <InputField
-              label="Phone Number"
+            <Input
+              label="Phone"
               name="phone"
               value={formData.phone}
               onChange={onChange}
-              placeholder="+91 98765 43210"
             />
-            <InputField
+            <Input
               label="Alternate Phone"
               name="altPhone"
               value={formData.altPhone}
               onChange={onChange}
-              placeholder="Optional"
             />
-            <InputField
-              label="Email Address"
+            <Input
+              label="Email"
               name="email"
               value={formData.email}
               onChange={onChange}
-              placeholder="name@example.com"
               type="email"
             />
           </div>
 
-          {/* Uploads */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <UploadBox
-              label="Customer Photo"
-              preview={imagePreview}
-              onClick={() => imageRef.current?.click()}
-            />
-            <UploadBox
-              label="Signature"
-              preview={signaturePreview}
-              onClick={() => signatureRef.current?.click()}
-            />
+          {/* Upload */}
+          <div className="grid grid-cols-2 gap-3">
+            <div
+              onClick={() => photoRef.current?.click()}
+              className="border-2 border-dashed rounded-md p-3 text-center cursor-pointer"
+            >
+              {photo ? (
+                <img src={photo} className="h-20 mx-auto object-cover" />
+              ) : (
+                <p className="text-sm text-gray-400">Upload Photo</p>
+              )}
+            </div>
 
-            {/* Hidden File Inputs */}
+            <div
+              onClick={() => signRef.current?.click()}
+              className="border-2 border-dashed rounded-md p-3 text-center cursor-pointer"
+            >
+              {sign ? (
+                <img src={sign} className="h-20 mx-auto object-cover" />
+              ) : (
+                <p className="text-sm text-gray-400">Upload Signature</p>
+              )}
+            </div>
+
             <input
-              ref={imageRef}
+              ref={photoRef}
               type="file"
               name="image"
-              accept="image/*"
               className="hidden"
-              onChange={(e) => handleFile(e, setImagePreview)}
+              onChange={(e) => handleFile(e, setPhoto)}
             />
             <input
-              ref={signatureRef}
+              ref={signRef}
               type="file"
               name="signature"
-              accept="image/*"
               className="hidden"
-              onChange={(e) => handleFile(e, setSignaturePreview)}
+              onChange={(e) => handleFile(e, setSign)}
             />
           </div>
 
           {/* Device Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <InputField
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Input
               label="Model"
               name="model"
               value={formData.model}
               onChange={onChange}
-              placeholder="iPhone 15 Pro"
             />
-            <InputField
+            <Input
               label="IMEI 1"
               name="imei1"
               value={formData.imei1}
               onChange={onChange}
-              placeholder="123456789012345"
             />
-            <InputField
+            <Input
               label="IMEI 2"
               name="imei2"
               value={formData.imei2}
               onChange={onChange}
-              placeholder="123456789012346"
             />
           </div>
 
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 px-6 py-4 border-t">
+        <div className="flex justify-end gap-2 border-t p-4">
           <button
             onClick={onClose}
-            className="px-5 py-2 text-sm font-medium text-gray-600 border rounded-lg hover:bg-gray-100 transition"
+            className="px-4 py-2 text-sm border rounded-md"
           >
             Cancel
           </button>
           <button
             onClick={onSave}
-            className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition"
+            className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-md"
           >
-            Add Customer
+            Save
           </button>
         </div>
 

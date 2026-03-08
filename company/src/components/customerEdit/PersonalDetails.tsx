@@ -44,19 +44,19 @@ const PersonalDetails: React.FC = () => {
   };
 
   return (
-    <div className="w-full p-6 h-full flex items-center justify-center bg-gray-100 ">
+    <div className="w-full p-6 h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg w-full  p-4 space-y-5"
+        className="bg-white shadow-lg rounded-lg w-full  p-4 space-y-5 dark:bg-gray-800"
       >
-        <h2 className="text-2xl font-bold text-gray-800 text-center">
+        <h2 className="text-2xl font-bold text-gray-800 text-center dark:text-gray-200">
           Edit Personal Details
         </h2>
 
         {/* First, Middle, Last Name */}
         <div className="grid grid-cols-1 gap-2">
           <div className="relative ">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700 dark:text-gray-200 ">
               First Name
             </label>
             <FiEdit className="absolute right-3 top-9 text-indigo-500 cursor-pointer" />
@@ -65,12 +65,12 @@ const PersonalDetails: React.FC = () => {
               type="text"
               value={formData.firstName}
               onChange={handleChange}
-              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-gray-400"
             />
           </div>
 
           <div className="relative">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
               Middle Name
             </label>
             <FiEdit className="absolute right-3 top-9 text-indigo-500 cursor-pointer" />
@@ -79,12 +79,12 @@ const PersonalDetails: React.FC = () => {
               type="text"
               value={formData.middleName}
               onChange={handleChange}
-              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400  dark:text-gray-400"
             />
           </div>
 
           <div className="relative">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
               Last Name
             </label>
             <FiEdit className="absolute right-3 top-9 text-indigo-500 cursor-pointer" />
@@ -93,7 +93,7 @@ const PersonalDetails: React.FC = () => {
               type="text"
               value={formData.lastName}
               onChange={handleChange}
-              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400  dark:text-gray-400"
             />
           </div>
         </div>
@@ -101,31 +101,31 @@ const PersonalDetails: React.FC = () => {
         {/* Contact Info */}
         <div className="grid grid-cols-1 gap-2">
           <div className="relative">
-            <label className="block mb-1 font-medium text-gray-700">Email</label>
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">Email</label>
             <FiEdit className="absolute right-3 top-9 text-indigo-500 cursor-pointer" />
             <input
               name="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400  dark:text-gray-400"
             />
           </div>
 
           <div className="relative">
-            <label className="block mb-1 font-medium text-gray-700">Phone</label>
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">Phone</label>
             <FiEdit className="absolute right-3 top-9 text-indigo-500 cursor-pointer" />
             <input
               name="phone"
               type="tel"
               value={formData.phone}
               onChange={handleChange}
-              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400  dark:text-gray-400"
             />
           </div>
 
           <div className="relative">
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
               Alternate Phone
             </label>
             <FiEdit className="absolute right-3 top-9 text-indigo-500 cursor-pointer" />
@@ -134,7 +134,7 @@ const PersonalDetails: React.FC = () => {
               type="tel"
               value={formData.altPhone}
               onChange={handleChange}
-              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400  dark:text-gray-400"
             />
           </div>
         </div>
@@ -142,7 +142,7 @@ const PersonalDetails: React.FC = () => {
         {/* File Uploads */}
         <div className="grid grid-cols-1 gap-2">
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
               Profile Image
             </label>
             <input
@@ -155,7 +155,7 @@ const PersonalDetails: React.FC = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium text-gray-700">
+            <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
               Signature
             </label>
             <input
@@ -163,7 +163,8 @@ const PersonalDetails: React.FC = () => {
               type="file"
               accept="image/*"
               onChange={handleChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-2 file:rounded-md file:border-0 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-2 file:rounded-md file:border-0 file:bg-indigo-50 file:text-indigo-700
+               hover:file:bg-indigo-100 "
             />
           </div>
         </div>

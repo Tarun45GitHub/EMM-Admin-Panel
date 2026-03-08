@@ -54,7 +54,7 @@ const AllTransaction:React.FC=()=>{
 
     return(
         <div className="min-h-screen overflow-x-hidden  ">
-            <div className="p-2  dark:bg-[#1E293B]  rounded-2xl ">
+            <div className="p-2  dark:bg-[#1E293B] m-5  rounded-2xl ">
               <h2 className="text-center px-3 dark:text-gray-200 text-xl">Table 1</h2>
                <div className="  dark:bg-gray-900 rounded-lg mx-5 ">
                 <TableHeader onFilterChange={()=>{}}/></div>

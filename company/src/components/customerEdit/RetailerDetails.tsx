@@ -34,18 +34,18 @@ const RetailerDetails: React.FC = () => {
   };
 
   return (
-    <div className="w-full   flex items-center justify-center bg-gray-100 p-6">
+    <div className="w-full   flex items-center justify-center bg-gray-100 p-6 dark:bg-gray-700">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-8 space-y-6"
+        className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-8 space-y-6 dark:bg-gray-800"
       >
-        <h2 className="text-2xl font-bold text-gray-800 text-center">
+        <h2 className="text-2xl font-bold text-gray-800 text-center dark:text-gray-200">
           Retailer Details
         </h2>
 
         {/* Activate By */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Activate By
           </label>
           <FiEdit
@@ -58,13 +58,13 @@ const RetailerDetails: React.FC = () => {
             type="text"
             value={formData.activateBy}
             onChange={handleChange}
-            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
         {/* Activate On */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Activate On
           </label>
           {/* <FiEdit
@@ -77,13 +77,30 @@ const RetailerDetails: React.FC = () => {
             type="date"
             value={formData.activateOn}
             onChange={handleChange}
-            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
         {/* Location */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
+            State
+          </label>
+          <FiEdit
+            className="absolute right-3 top-9 text-indigo-500 hover:text-indigo-700 cursor-pointer"
+            onClick={() => locationRef.current?.focus()}
+          />
+          <input
+            ref={locationRef}
+            name="state"
+            type="text"
+            value={formData.location}
+            onChange={handleChange}
+            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-gray-300"
+          />
+        </div>
+        <div className="relative">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Location
           </label>
           <FiEdit
@@ -96,13 +113,13 @@ const RetailerDetails: React.FC = () => {
             type="text"
             value={formData.location}
             onChange={handleChange}
-            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
         {/* Retailer ID */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Retailer ID
           </label>
           <FiEdit
@@ -115,7 +132,7 @@ const RetailerDetails: React.FC = () => {
             type="text"
             value={formData.retailerId}
             onChange={handleChange}
-            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 

@@ -5,7 +5,7 @@ import { useLoader } from "../components/ui/LoaderContext";
 
 
 const TransferPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"transfer" | "reclaim">("transfer");
+  const [activeTab, setActiveTab] = useState<"transfer" | "withdraw">("transfer");
 
   const { showLoader, hideLoader } = useLoader();
            useEffect(() => {
@@ -18,7 +18,7 @@ const TransferPage: React.FC = () => {
            }, []);
 
   return (
-    <div className="min-h-screen p-6 flex flex-col items-center">
+    <div className="h-full p-6 flex flex-col items-center">
       {/* Buttons */}
       <div className="flex gap-4 mb-6 ">
         <button
@@ -33,21 +33,21 @@ const TransferPage: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab("reclaim")}
+          onClick={() => setActiveTab("withdraw")}
           className={`py-2 px-5 rounded-lg font-semibold transition ${
-            activeTab === "reclaim"
+            activeTab === "withdraw"
               ? "bg-indigo-600 text-white"
               : "bg-white text-indigo-600 border border-indigo-600 hover:bg-indigo-50"
           }`}
         >
-          Reclaim
+          withdraw
         </button>
       </div>
 
       {/* Content */}
       <div className="w-full max-w-2xl">
         {activeTab === "transfer" && <Transfer />}
-        {activeTab === "reclaim" && <Reclaim />}
+        {activeTab === "withdraw" && <Reclaim />}
       </div>
     </div>
   );

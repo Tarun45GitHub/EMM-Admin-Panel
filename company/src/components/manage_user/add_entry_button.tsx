@@ -24,10 +24,10 @@ const AddEntrybutton:React.FC<ActionProps>=({value})=>{
   };
 
     return (
-        <div className=" dark:bg-[#1E293B]  rounded-lg p-3 ">
+        <div className=" dark:bg-[#1E293B]  rounded-lg pt-5 ">
         <button
         onClick={() => setModalOpen(true)}
-          className="bg-white text-center w-55 rounded-2xl h-10 relative text-black text-xl font-semibold group"
+          className="bg-white text-center w-50 rounded-2xl h-10 relative text-black text-xl font-semibold group"
           type="button"
         >
           <div

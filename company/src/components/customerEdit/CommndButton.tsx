@@ -2,12 +2,12 @@ import React from "react";
 
 const CommandButtons: React.FC = () => {
   return (
-    <div className=" bg-gray-100 flex flex-col items-center  justify-center p-6 mx-5 ">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+    <div className=" bg-gray-100 flex flex-col items-center  justify-center p-6 mx-5 dark:bg-gray-700 ">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 dark:text-gray-200">
         Command 
       </h2>
 
-      <div className="grid grid-cols-1 gap-4 p-2">
+      <div className="grid grid-cols-1 gap-4 p-2 ">
         {/* 15 Stylish Buttons */}
         <button className="bg-indigo-600 text-white py-2 px-3 rounded-lg shadow-md hover:bg-indigo-700 transition">
           Primary Action
@@ -29,7 +29,7 @@ const CommandButtons: React.FC = () => {
           Gradient
         </button>
 
-        <button className="border border-indigo-600 text-indigo-600 py-2 px-3 rounded-lg hover:bg-indigo-50">
+        <button className="border bg-gray-950 border-indigo-600 text-indigo-600 py-2 px-3 rounded-lg hover:bg-indigo-50">
           Outline
         </button>
 

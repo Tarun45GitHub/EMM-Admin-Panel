@@ -30,7 +30,7 @@ const EmiTable: React.FC<Props> = ({ data }) => {
               <th className="px-4 py-3 text-left">Pending EMI</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 text-gray-700">
+          <tbody className="divide-y divide-gray-200 text-gray-800 dark:text-gray-200">
             {data.map((item) => (
               <tr key={item.id}>
                 <td className="px-4 py-3">{item.id}</td>

@@ -46,7 +46,7 @@ const ChangePassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center
+    <div className="h-full flex items-center justify-center
       dark:bg-gray-700 p-4 ">
       <div className="w-full max-w-md backdrop-blur-lg bg-white/70 border border-white/40 shadow-2xl rounded-2xl p-8 transition-all duration-300 dark:bg-gray-800">
 

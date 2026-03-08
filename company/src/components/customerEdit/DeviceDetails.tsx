@@ -45,18 +45,18 @@ const DeviceDetails: React.FC = () => {
   };
 
   return (
-    <div className="w-full   flex items-center justify-center bg-gray-100 p-6">
+    <div className="w-full   flex items-center justify-center bg-gray-100 p-6 dark:bg-gray-700">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-8 space-y-4"
+        className="bg-white shadow-lg rounded-lg w-full max-w-3xl p-8 space-y-4 dark:bg-gray-800"
       >
-        <h2 className="text-2xl font-bold text-gray-800 text-center">
+        <h2 className="text-2xl font-bold text-gray-800 text-center dark:text-gray-200">
           Device Details
         </h2>
 
         {/* Model Name */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Model Name
           </label>
           <FiEdit
@@ -69,13 +69,14 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.modelName}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 
+            focus:ring-indigo-400  dark:text-gray-300"
           />
         </div>
 
         {/* IMEI1 */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             IMEI 1
           </label>
           <FiEdit
@@ -88,13 +89,14 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.imei1}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 
+            focus:ring-indigo-400  dark:text-gray-300"
           />
         </div>
 
         {/* IMEI2 */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             IMEI 2
           </label>
           <FiEdit
@@ -107,13 +109,14 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.imei2}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2
+             focus:ring-indigo-400  dark:text-gray-300"
           />
         </div>
 
         {/* SIM Details */}
         <div className="relative">
-          <label className="block  font-medium text-gray-700">
+          <label className="block  font-medium text-gray-700  dark:text-gray-200">
             SIM Details
           </label>
           <FiEdit
@@ -126,13 +129,14 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.simDetails}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2
+             focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
         {/* Secret Code */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Secret Code
           </label>
           <FiEdit
@@ -145,13 +149,14 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.secretCode}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2
+             focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
         {/* Status */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700  dark:text-gray-200">
             Status
           </label>
           <FiEdit
@@ -164,13 +169,14 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.status}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2
+             focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
         {/* Actual Status */}
         <div className="relative">
-          <label className="block mb-1 font-medium text-gray-700">
+          <label className="block mb-1 font-medium text-gray-700 dark:text-gray-200">
             Actual Status
           </label>
           <FiEdit
@@ -183,7 +189,8 @@ const DeviceDetails: React.FC = () => {
             type="text"
             value={formData.actualStatus}
             onChange={handleChange}
-            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="border rounded-lg p-1 w-full focus:outline-none focus:ring-2
+             focus:ring-indigo-400 dark:text-gray-300"
           />
         </div>
 
