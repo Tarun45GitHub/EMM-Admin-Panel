@@ -33,6 +33,7 @@ type ActionProps = {
   isActive: boolean;
   onToggle: () => void;
   onClick:()=>void;
+  onEdit:()=>void;
 };
 
 const Action: React.FC<ActionProps> = ({ isActive, onToggle }) => {

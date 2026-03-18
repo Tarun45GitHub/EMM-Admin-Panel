@@ -86,10 +86,12 @@ const EntryTable: React.FC = () => {
                   ))}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Action
-                          isActive={true}
-                          onToggle={() => handleToggle(idx)}
-                          onClick={()=>{}}
-                        />
+                      isActive={true}
+                      onToggle={() => handleToggle(idx)}
+                      onEdit={() => handleEdit(idx)}
+                      onClick={function (): void {
+                        throw new Error("Function not implemented.");
+                      } }                    />
                   </td>
                 </tr>
               ))}
@@ -120,8 +122,9 @@ const EntryTable: React.FC = () => {
                 <Action
                   isActive={true}
                   onToggle={() => handleToggle(idx)}
-                  onClick={() => handleEdit(idx)}
-                />
+                  onClick={() => handleEdit(idx)} onEdit={function (): void {
+                    throw new Error("Function not implemented.");
+                  } }                />
               </div>
             </div>
           ))}
