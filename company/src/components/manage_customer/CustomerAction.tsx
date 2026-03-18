@@ -1,64 +1,37 @@
-import React, { useState } from "react";
-import toast from "react-hot-toast";
-import { redirect } from "react-router-dom";
-
-
-
+import React from "react";
+import { Link } from "react-router-dom";
+import { Edit3 } from "lucide-react";
 
 // Props for the action component
 type ActionProps = {
-  isActive: boolean;
-  onToggle: () =>void;
-  onEdit: () => void;
+  onEdit?: () => void;
+  editUrl?: string;
 };
 
 const CustomerAction: React.FC<ActionProps> = ({
-  onEdit
+  onEdit,
+  editUrl = "/customer/edit"
 }) => {
-    const [showEditModal, setShowEditModal] = useState(false);
-    // console.log(showEditModal)
-    const [formData, setFormData] = useState({
-        name: "",
-        phone: "",
-        altPhone: "",
-        model: "",
-        imei1: "",
-        imei2: "",
-        image: null,
-        signature: null,
-      });
-      
-
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-     setFormData({ ...formData, [e.target.name]: e.target.value });
-     
-   };
-   
-     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-     if (e.target.files) {
-       setFormData({ ...formData, [e.target.name]: e.target.files[0] });
-     }
-   };
-   
   return (
-    <div className="flex justify-items-center space-x-2">
-      {/* Edit Button */}
-      <div
-        onClick={()=>setShowEditModal(true)}
+    <div className="flex items-center gap-2">
+      {/* Edit Action */}
+      <Link
+        to={editUrl}
+        onClick={onEdit}
         className="
-          cursor-pointer px-3 py-1 bg-blue-500 text-white rounded-md text-sm font-medium
-          hover:bg-blue-600 transition-all
+          flex items-center gap-1.5 px-3 py-1.5 
+          bg-blue-50 dark:bg-blue-900/20 
+          text-blue-600 dark:text-blue-400 
+          rounded-lg text-xs font-semibold
+          hover:bg-blue-100 dark:hover:bg-blue-900/30 
+          transition-all duration-200
         "
       >
-        <button>
-          <a href="/customer/edit">Edit</a>
-        </button>
-      </div>
-      
-      
+        <Edit3 size={14} />
+        Edit
+      </Link>
     </div>
   );
 };
+
 export default CustomerAction;
-
-
