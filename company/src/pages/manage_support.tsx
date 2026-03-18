@@ -1,6 +1,6 @@
 import AddEntrybutton from "../components/manage_user/add_entry_button";
 // import CascadingDropdown from "../components/manage_user/cascading_dropdown";
-import EntryTable from "../components/manage_user/entryTable";
+import EntryTable from "../components/manage_user/EntryTable";
 import { useEffect } from "react";
 import { useLoader } from "../components/ui/LoaderContext";
 import TableHeader from "../components/transfer/TableHeader";

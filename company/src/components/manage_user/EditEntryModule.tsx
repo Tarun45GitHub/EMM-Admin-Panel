@@ -213,7 +213,13 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
           </button>
         </div>
         <div >
-          <EntryTableEditModel/>
+          <EntryTableEditModel show={false} onClose={function (): void {
+            throw new Error("Function not implemented.");
+          } } onSave={function (): void {
+            throw new Error("Function not implemented.");
+          } } formData={undefined} onChange={() => {
+            throw new Error("Function not implemented.");
+          } }/>
         </div>
 
       </div>

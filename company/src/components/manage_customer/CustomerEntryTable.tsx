@@ -29,10 +29,6 @@ const CustomerEnrtyTable: React.FC = () => {
     return data.slice(start, start + rowsPerPage);
   }, [page]);
 
-  const handleToggle = (idx: number) => {
-    toast.success("Toggled successfully!");
-    console.log("toggle row", idx);
-  };
 
   const handleEdit = (idx: number) => {
     toast("Edit row " + idx);
@@ -88,8 +84,6 @@ const CustomerEnrtyTable: React.FC = () => {
                   </td>
                   <td className="px-4 py-2 border text-center">
                     <CustomerAction
-                      isActive={false}
-                      onToggle={() => handleToggle(idx)}
                       onEdit={() => handleEdit(idx)}
                     />
                   </td>

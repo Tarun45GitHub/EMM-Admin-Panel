@@ -86,10 +86,10 @@ const EntryTable: React.FC = () => {
                   ))}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Action
-                      isActive={true}
-                      onToggle={() => handleToggle(idx)}
-                      onEdit={() => handleEdit(idx)}
-                    />
+                          isActive={true}
+                          onToggle={() => handleToggle(idx)}
+                          onClick={()=>{}}
+                        />
                   </td>
                 </tr>
               ))}
@@ -120,7 +120,7 @@ const EntryTable: React.FC = () => {
                 <Action
                   isActive={true}
                   onToggle={() => handleToggle(idx)}
-                  onEdit={() => handleEdit(idx)}
+                  onClick={() => handleEdit(idx)}
                 />
               </div>
             </div>

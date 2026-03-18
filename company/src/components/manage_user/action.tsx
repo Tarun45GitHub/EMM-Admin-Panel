@@ -31,15 +31,11 @@ const parentsList = [
 // Props for the action component
 type ActionProps = {
   isActive: boolean;
-  onToggle: () =>void;
-  onEdit: () => void;
+  onToggle: () => void;
+  onClick:()=>void;
 };
 
-const Action: React.FC<ActionProps> = ({
-  isActive,
-  onToggle,
-  onEdit,
-}) => {
+const Action: React.FC<ActionProps> = ({ isActive, onToggle }) => {
       const [modalOpen, setModalOpen] = useState(false);
       
 
@@ -82,8 +78,8 @@ const Action: React.FC<ActionProps> = ({
         onClose={() => setModalOpen(false)}
         parents={parentsList} 
         formData={Appl}
-        onChange={(e) => {}}
-        onSave={()=>handleFormSubmit}
+        onChange={() => {}}
+        onSave={() => handleFormSubmit({})}
           />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Filter, Calendar, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 interface Props {
   onFilterChange: (filters: any) => void;
