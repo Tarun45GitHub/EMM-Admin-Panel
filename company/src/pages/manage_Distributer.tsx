@@ -1,5 +1,5 @@
 import AddEntrybutton from "../components/manage_user/add_entry_button"
-import EntryTable from "../components/manage_user/entry_table"
+import EntryTable from "../components/manage_user/EntryTable"
 import { useEffect } from "react"
 import { useLoader } from "../components/ui/LoaderContext"
 import TableHeader from "../components/transfer/TableHeader"

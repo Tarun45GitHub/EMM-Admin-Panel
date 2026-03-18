@@ -30,7 +30,7 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
       <div className="w-full mt-150  max-w-7xl bg-white rounded-xl shadow-2xl overflow-auto border border-gray-200">
         
         {/* Header */}
-        <div className="flex  items-center justify-between px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-t-xl">
+        <div className="flex  items-center justify-between px-8 py-4 bg-linear-to-r from-indigo-600 to-indigo-500 text-white rounded-t-xl">
           <h2 className="text-2xl font-semibold">Edit User Details</h2>
           <button 
             onClick={onClose} 

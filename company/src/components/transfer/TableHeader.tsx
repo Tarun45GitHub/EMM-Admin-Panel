@@ -1,149 +1,119 @@
 import React, { useState, useEffect } from "react";
-
-type FilterValues = {
-  category: string;
-  subcategory: string;
-  search: string;
-  from: string;
-  to: string;
-};
-
-const categories = [
-  { label: "All", value: "" },
-  { label: "Product", value: "product" },
-  { label: "Order", value: "order" },
-  { label: "User", value: "user" },
-];
-
-const subcategoriesMap: Record<string, { label: string; value: string }[]> = {
-  product: [
-    { label: "All", value: "" },
-    { label: "Electronics", value: "electronics" },
-    { label: "Apparel", value: "apparel" },
-  ],
-  order: [
-    { label: "All", value: "" },
-    { label: "Pending", value: "pending" },
-    { label: "Completed", value: "completed" },
-  ],
-  user: [
-    { label: "All", value: "" },
-    { label: "Admin", value: "admin" },
-    { label: "Customer", value: "customer" },
-  ],
-};
+import { Search, Filter, Calendar, X } from "lucide-react";
 
 interface Props {
-  onFilterChange: (filters: FilterValues) => void;
+  onFilterChange: (filters: any) => void;
 }
 
+const categoriesMap: Record<string, string[]> = {
+  Electronics: ["Laptops", "Smartphones", "Accessories", "Audio"],
+  Fashion: ["Men's Wear", "Women's Wear", "Footwear", "Watches"],
+  Home: ["Furniture", "Appliances", "Decor", "Kitchen"],
+  Beauty: ["Skincare", "Makeup", "Fragrance", "Haircare"],
+};
+
 const TableHeader: React.FC<Props> = ({ onFilterChange }) => {
+  const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
-  const [search, setSearch] = useState("");
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-  const [subOptions, setSubOptions] = useState<{ label: string; value: string }[]>([]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const hasFilters = search || category || subcategory || fromDate || toDate;
 
   useEffect(() => {
-    setSubOptions(subcategoriesMap[category] || []);
-    setSubcategory("");
-  }, [category]);
+    onFilterChange({ search, category, subcategory, fromDate, toDate });
+  }, [search, category, subcategory, fromDate, toDate, onFilterChange]);
 
-  useEffect(() => {
-    onFilterChange({ category, subcategory, search, from, to });
-  }, [category, subcategory, search, from, to]);
-
-  const clearAllFilters = () => {
+  const handleClear = () => {
+    setSearch("");
     setCategory("");
     setSubcategory("");
-    setSearch("");
-    setFrom("");
-    setTo("");
+    setFromDate("");
+    setToDate("");
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg shadow p-4">
-
-      {/* Responsive Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
-
-        {/* Category */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600 dark:text-gray-300">Category</label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="border px-3 py-2 rounded w-full dark:bg-gray-700"
-          >
-            {categories.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
+    <div className="w-full bg-white dark:bg-[#1E293B] p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+      <div className="flex flex-col md:flex-row md:items-center gap-3">
+        {/* Search */}
+        <div className="flex-1 min-w-0 relative group">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search size={16} className="text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="block w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-[#0F172A] border border-gray-100 dark:border-gray-700 rounded-xl text-sm text-gray-700 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all"
+          />
         </div>
 
-        {/* Subcategory */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600 dark:text-gray-300">Subcategory</label>
+        {/* Filters Group */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Level 1: Category */}
+          <select
+            value={category}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setSubcategory("");
+            }}
+            className="flex-1 sm:flex-none px-3 py-2 bg-gray-50 dark:bg-[#0F172A] border border-gray-100 dark:border-gray-700 rounded-xl text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-all cursor-pointer min-w-[120px]"
+          >
+            <option value="">Category</option>
+            {Object.keys(categoriesMap).map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+
+          {/* Level 2: Subcategory */}
           <select
             value={subcategory}
             onChange={(e) => setSubcategory(e.target.value)}
-            className="border px-3 py-2 rounded w-full dark:bg-gray-700"
+            disabled={!category}
+            className="flex-1 sm:flex-none px-3 py-2 bg-gray-50 dark:bg-[#0F172A] border border-gray-100 dark:border-gray-700 rounded-xl text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
           >
-            {subOptions.map((sub) => (
-              <option key={sub.value} value={sub.value}>
-                {sub.label}
-              </option>
+            <option value="">Subcategory</option>
+            {category && categoriesMap[category].map((sub) => (
+              <option key={sub} value={sub}>{sub}</option>
             ))}
           </select>
-        </div>
 
-        {/* Search */}
-        <div className="flex flex-col sm:col-span-2">
-          <label className="text-sm text-gray-600 dark:text-gray-300">Search</label>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="border px-3 py-2 rounded w-full"
-          />
-        </div>
+          {/* Date Range Group */}
+          <div className="flex items-center gap-1.5 bg-gray-50 dark:bg-[#0F172A] border border-gray-100 dark:border-gray-700 rounded-xl px-2 py-1 flex-1 sm:flex-none justify-between sm:justify-start">
+            <div className="flex items-center gap-1 min-w-0">
+              <span className="text-[10px] font-bold text-gray-400 uppercase ml-1 shrink-0">From</span>
+              <input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                className="bg-transparent border-none p-1 text-sm text-gray-700 dark:text-gray-200 focus:outline-none cursor-pointer w-full min-w-[100px] [color-scheme:light] dark:[color-scheme:dark]"
+              />
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-gray-200 dark:bg-gray-700" />
+            <div className="flex items-center gap-1 min-w-0">
+              <span className="text-[10px] font-bold text-gray-400 uppercase shrink-0">To</span>
+              <input
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                className="bg-transparent border-none p-1 text-sm text-gray-700 dark:text-gray-200 focus:outline-none cursor-pointer w-full min-w-[100px] [color-scheme:light] dark:[color-scheme:dark]"
+              />
+            </div>
+          </div>
 
-        {/* From Date */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600 dark:text-gray-300">From</label>
-          <input
-            type="date"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            className="border px-3 py-2 rounded w-full"
-          />
+          {/* Clear Button */}
+          {hasFilters && (
+            <button
+              onClick={handleClear}
+              className="flex items-center justify-center gap-1.5 px-3 py-2 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20 rounded-xl text-xs font-bold hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-all animate-in fade-in zoom-in duration-200"
+            >
+              <X size={14} />
+              Reset
+            </button>
+          )}
         </div>
-
-        {/* To Date */}
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600 dark:text-gray-300">To</label>
-          <input
-            type="date"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            className="border px-3 py-2 rounded w-full"
-          />
-        </div>
-
-        {/* Clear Button */}
-        <div className="flex items-end">
-          <button
-            onClick={clearAllFilters}
-            className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Clear
-          </button>
-        </div>
-
       </div>
     </div>
   );

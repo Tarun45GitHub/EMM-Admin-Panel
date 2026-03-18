@@ -1,50 +1,73 @@
-import React from "react";
-// import { FiBarChart2 } from "react-icons/fi"; // optional, for icon
+import { TrendingUp, TrendingDown } from "lucide-react";
 
-type UserStatCardProps = {
+interface StatCardProps {
   title: string;
   value: string;
-  // icon?: React.ReactNode;
-};
+  change: string;
+  positive?: boolean;
+  Icon: any;
+}
 
-const TotalCard: React.FC<UserStatCardProps> = ({ title, value }) => {
+export default function TotalCard({
+  title,
+  value,
+  change,
+  positive = true,
+  Icon,
+}: StatCardProps) {
   return (
-    <div className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto px-2">
+    <div
+      className="
+        flex items-center justify-between
+        rounded-2xl
+        bg-white
+        dark:bg-gray-900
+        p-3
+        shadow-sm
+        hover:shadow-md
+        transition
+        w-full
+      "
+    >
+      {/* Left content */}
+      <div className="flex flex-col gap-1">
+        <span className="text-gray-500 text-sm font-medium dark:text-gray-400">
+          {title}
+        </span>
+
+        <div className="flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+            {value}
+          </h2>
+
+          <div
+            className={`flex items-center gap-1 text-sm font-semibold
+              ${positive ? "text-green-500" : "text-red-500"}
+            `}
+          >
+            {positive ? (
+              <TrendingUp size={16} />
+            ) : (
+              <TrendingDown size={16} />
+            )}
+            {change}%
+          </div>
+        </div>
+      </div>
+
+      {/* Icon Box */}
       <div
         className="
-          relative overflow-hidden rounded-3xl
-          bg-linear-to-r from-indigo-100 via-gray-100 to-indigo-100
-          dark:from-gray-500 dark:via-gray-500 dark:to-gray-500
-          shadow-md dark:shadow-xl
-          transition-transform transform hover:-translate-y-1 hover:scale-105 duration-300
+          w-12 h-12
+          flex items-center justify-center
+          rounded-xl
+          bg-linear-to-r from-pink-500 to-purple-600
+          text-white
+          shadow-md
         "
       >
-        {/* Decorative Top Blur */}
-        <div
-          className="
-            absolute -top-8 -left-8 w-32 h-full
-            bg-indigo-200/40 dark:bg-indigo-800/40
-            rounded-full blur-2xl
-            pointer-events-none
-          "
-        />
-
-        <div className="relative p-1 text-center">
-          <div className="flex justify-center items-center mb-1 text-indigo-600 dark:text-indigo-400 text-3xl">
-            {/* {icon ?? <FiBarChart2 />} */}
-          </div>
-
-          <p className=" font-semibold text-gray-700 dark:text-gray-200 ">
-            {title}
-          </p>
-
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
-            {value}
-          </p>
-        </div>
+        <Icon size={22} />
       </div>
     </div>
   );
-};
-
-export default TotalCard;
+}

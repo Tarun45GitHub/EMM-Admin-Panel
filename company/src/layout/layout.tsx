@@ -11,7 +11,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="min-h-screen flex bg-gray-200 ">
       {/* Sidebar */}
-      <Sidebar sidebarOpen={sidebarOpen} />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Main Section */}
       <div className="flex-1 flex flex-col">

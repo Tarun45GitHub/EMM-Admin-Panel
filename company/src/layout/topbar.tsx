@@ -1,5 +1,5 @@
 import React from "react";
-import { Bell, Menu, Moon, Sun, Search } from "lucide-react";
+import { Bell, Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "../hooks/UseThem";
 import UserDropdown from "../components/header/UserDropdown";
 import WalletBalance from "../components/header/WalletBalance";
@@ -9,118 +9,70 @@ type TopbarProps = {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Topbar: React.FC<TopbarProps> = ({
-  sidebarOpen,
-  setSidebarOpen,
-}) => {
+const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 shadow-md">
+    <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-xs">
 
-      {/* Top Row */}
-      <div className="flex items-center justify-between px-3 py-2 md:px-6">
+      {/* Green accent strip at the top */}
+      <div className="h-0.5 w-full bg-linear-to-r from-green-500 via-green-400 to-emerald-500" />
 
-        {/* Left Section */}
-        <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex items-center justify-between px-3 py-2 md:px-5">
 
-          {/* Sidebar Toggle */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-          >
-            <Menu size={22} />
-          </button>
+        {/* Left — sidebar toggle */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 rounded-lg text-gray-500 dark:text-gray-400
+            hover:bg-green-50 dark:hover:bg-green-900/20
+            hover:text-green-700 dark:hover:text-green-400
+            transition-colors duration-150"
+          aria-label="Toggle sidebar"
+        >
+          <Menu size={21} />
+        </button>
 
-          {/* Desktop Search */}
-          <div className="relative hidden md:block">
-            <Search
-              size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-            />
+        {/* Right actions */}
+        <div className="flex items-center gap-1 md:gap-2">
 
-            <input
-              type="text"
-              placeholder="Search..."
-              className="
-                w-40 md:w-56 lg:w-64
-                pl-10 pr-4 py-2
-                rounded-xl
-                border border-gray-200 dark:border-gray-700
-                bg-gray-100 dark:bg-gray-800
-                text-sm text-gray-700 dark:text-gray-200
-                placeholder-gray-400
-                focus:outline-none focus:ring-2 focus:ring-indigo-500
-              "
-            />
-          </div>
-        </div>
-
-        {/* Right Section */}
-        <div className="flex items-center gap-2 md:gap-4">
-
-          {/* Wallet (Desktop Only) */}
-          <div className="hidden md:block">
+          {/* Wallet balance */}
+          <div className="hidden sm:block">
             <WalletBalance balance={500} />
           </div>
 
-          {/* Theme Toggle */}
+          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="p-2 rounded-lg text-gray-500 dark:text-gray-400
+              hover:bg-green-50 dark:hover:bg-green-900/20
+              hover:text-green-700 dark:hover:text-green-400
+              transition-colors duration-150"
+            aria-label="Toggle theme"
           >
             {theme === "dark" ? (
-              <Sun size={20} className="text-yellow-400" />
+              <Sun size={19} className="text-amber-400" />
             ) : (
-              <Moon size={20} className="text-gray-600 dark:text-gray-300" />
+              <Moon size={19} />
             )}
           </button>
 
-          {/* Notification */}
-          <button className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition text-gray-700 dark:text-gray-200">
-            <Bell size={20} />
-            <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
+          {/* Notification bell */}
+          <button
+            className="relative p-2 rounded-lg text-gray-500 dark:text-gray-400
+              hover:bg-green-50 dark:hover:bg-green-900/20
+              hover:text-green-700 dark:hover:text-green-400
+              transition-colors duration-150"
+            aria-label="Notifications"
+          >
+            <Bell size={19} />
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900 animate-pulse" />
           </button>
 
-          {/* User Profile */}
+          {/* User avatar + dropdown */}
           <UserDropdown />
 
         </div>
       </div>
-
-      {/* Mobile Section */}
-      <div className="md:hidden px-3 pb-3 flex flex-row gap-2 ">
-
-        {/* Mobile Search */}
-        <div className="relative w-full">
-          <Search
-            size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-
-          <input
-            type="text"
-            placeholder="Search..."
-            className="
-              w-full
-              pl-10 pr-4 py-2
-              rounded-xl
-              border border-gray-200 dark:border-gray-700
-              bg-gray-100 dark:bg-gray-800
-              text-sm text-gray-700 dark:text-gray-200
-              placeholder-gray-400
-              focus:outline-none focus:ring-2 focus:ring-indigo-500
-            "
-          />
-        </div>
-
-        {/* Wallet Mobile */}
-        <div className="flex gap-2">
-        <div><WalletBalance balance={500} /></div>
-        <div className="hidden"><WalletBalance balance={500} /></div>
-        </div>
-      </div>
-
     </header>
   );
 };

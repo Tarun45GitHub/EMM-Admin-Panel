@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function UserDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -13,67 +13,94 @@ export default function UserDropdown() {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <div className="relative " ref={ref}>
-      {/* Trigger */}
+    <div className="relative" ref={ref}>
+
+      {/* Trigger button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-xl px-2 py-1 bg-white text-gray-800
-                        dark:bg-gray-900 dark:text-gray-200
-                        hover:bg-gray-300 dark:hover:bg-gray-600"
+        className="flex items-center gap-2 px-2 py-1.5 rounded-lg
+          text-gray-700 dark:text-gray-200
+          hover:bg-green-50 dark:hover:bg-green-900/20
+          hover:text-green-700 dark:hover:text-green-400
+          transition-colors duration-150"
+        aria-expanded={open}
+        aria-haspopup="true"
       >
         <img
           src="https://i.pravatar.cc/80?img=12"
-          alt="profile"
-          className="h-10 w-10 rounded-full object-cover"
+          alt="Admin avatar"
+          className="h-8 w-8 rounded-full object-cover ring-2 ring-green-200 dark:ring-green-800/60"
         />
         <div className="hidden md:flex items-center gap-1">
-          <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-            Tarun
-          </span>
-          <ChevronDown className="text-slate-500 dark:text-slate-400" size={18} />
+          <span className="text-sm font-semibold">Tarun</span>
+          <ChevronDown
+            size={15}
+            className={`text-gray-400 dark:text-gray-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          />
         </div>
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown panel */}
       {open && (
-        <div className="absolute right-0 mt-2 w-48 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg animate-fadeIn">
-          <ul className="flex flex-col text-sm text-slate-700 dark:text-slate-300">
+        <div className="absolute right-0 mt-2 w-48
+          rounded-xl border border-gray-100 dark:border-gray-700
+          bg-white dark:bg-gray-900
+          shadow-lg shadow-gray-200/60 dark:shadow-black/30
+          overflow-hidden z-50">
+
+          {/* User info header */}
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">Tarun</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 truncate">Admin</p>
+          </div>
+
+          <ul className="py-1 text-sm text-gray-600 dark:text-gray-300">
             <li>
-              <a
-                href="/profile"
-                className="block  px-4 py-3 hover:bg-slate-100 dark:hover:bg-gray-700"
+              <Link
+                to="/profile"
+                onClick={() => setOpen(false)}
+                className="flex items-center px-4 py-2.5
+                  hover:bg-green-50 dark:hover:bg-green-900/20
+                  hover:text-green-700 dark:hover:text-green-400
+                  transition-colors duration-150"
               >
                 Profile
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/changepassword"
-                className="block px-4 py-3 hover:bg-slate-100 dark:hover:bg-gray-700"
+              <Link
+                to="/changepassword"
+                onClick={() => setOpen(false)}
+                className="flex items-center px-4 py-2.5
+                  hover:bg-green-50 dark:hover:bg-green-900/20
+                  hover:text-green-700 dark:hover:text-green-400
+                  transition-colors duration-150"
               >
-               Change Password
-              </a>
+                Change Password
+              </Link>
             </li>
             <li>
-              <a
-                href="/settings"
-                className="block px-4 py-3 hover:bg-slate-100 dark:hover:bg-gray-700"
+              <Link
+                to="/settings"
+                onClick={() => setOpen(false)}
+                className="flex items-center px-4 py-2.5
+                  hover:bg-green-50 dark:hover:bg-green-900/20
+                  hover:text-green-700 dark:hover:text-green-400
+                  transition-colors duration-150"
               >
                 Settings
-              </a>
+              </Link>
             </li>
-            <li>
-              <hr className="my-1 border-slate-200 dark:border-gray-700" />
-            </li>
-            <li>
+            <li className="border-t border-gray-100 dark:border-gray-700 mt-1 pt-1">
               <button
-                className="w-full text-left px-4 py-3 hover:bg-slate-100 dark:hover:bg-gray-700"
+                className="w-full text-left px-4 py-2.5
+                  text-red-500 dark:text-red-400
+                  hover:bg-red-50 dark:hover:bg-red-900/20
+                  transition-colors duration-150"
                 onClick={() => alert("Logged out!")}
               >
                 Logout

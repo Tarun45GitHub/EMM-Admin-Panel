@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from "react-router-dom";
@@ -8,7 +8,14 @@ import banner2 from "../banners/banner2.jpg";
 import banner3 from "../banners/banner3.jpg";
 import banner4 from "../banners/banner4.jpg";
 
-const slides = [
+interface Slide {
+  img: string;
+  title: string;
+  subtitle: string;
+  link: string;
+}
+
+const slides: Slide[] = [
   {
     img: banner1,
     title: "Banner 1",
@@ -35,9 +42,31 @@ const slides = [
   },
 ];
 
-const CarouselBanner: React.FC = () => {
+const CarouselStyles = () => (
+  <style>
+    {`
+      .carousel .control-dots .dot {
+        width: 10px;
+        height: 10px;
+        margin: 0 6px;
+        background: rgba(255,255,255,0.6);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      }
+      .carousel .control-dots .dot.selected {
+        background: white;
+        transform: scale(1.2);
+      }
+      .carousel .legend {
+        display: none !important;
+      }
+    `}
+  </style>
+);
+
+const CarouselBanner: React.FC = memo(() => {
   return (
-    <div className="w-full">
+    <div className="w-full p-3  bg-gray-700 rounded-lg">
+      <CarouselStyles />
       <Carousel
         showThumbs={false}
         autoPlay
@@ -66,6 +95,7 @@ const CarouselBanner: React.FC = () => {
               <img
                 src={slide.img}
                 alt={slide.title}
+                loading={index === 0 ? "eager" : "lazy"}
                 className="
                   w-full h-full object-cover
                   transform-gpu transition-all duration-700
@@ -116,28 +146,9 @@ const CarouselBanner: React.FC = () => {
           </div>
         ))}
       </Carousel>
-
-      {/* CSS fix for dots + remove legend */}
-      <style>
-        {`
-          .carousel .control-dots .dot {
-            width: 10px;
-            height: 10px;
-            margin: 0 6px;
-            background: rgba(255,255,255,0.6);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-          }
-          .carousel .control-dots .dot.selected {
-            background: white;
-            transform: scale(1.2);
-          }
-          .carousel .legend {
-            display: none !important;
-          }
-        `}
-      </style>
     </div>
   );
-};
+});
 
 export default CarouselBanner;
+

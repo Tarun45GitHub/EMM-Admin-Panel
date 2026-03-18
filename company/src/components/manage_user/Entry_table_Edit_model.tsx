@@ -81,13 +81,13 @@ const EntryTableEditModel: React.FC = () => {
                   <td className="px-4 py-2 border text-center">{row.col6}</td>
                   <td className="px-4 py-2 border text-center">{row.col7}</td>
                   <td className="px-4 py-2 border text-center">{row.col8}</td>
-                  <td className="px-4 py-2 border text-center">
+                  {/* <td className="px-4 py-2 border text-center">
                     <Action
                       isActive={true}
                       onToggle={() => handleToggle(idx)}
                       onEdit={() => handleEdit(idx)}
                     />
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
