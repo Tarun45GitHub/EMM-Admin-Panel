@@ -85,6 +85,7 @@ const EntryTable: React.FC = () => {
                     </td>
                   ))}
                   <td className="px-6 py-4 whitespace-nowrap">
+
                     <Action
                       isActive={true}
                       onToggle={() => handleToggle(idx)}
