@@ -22,10 +22,10 @@ const MannageSupport: React.FC = () => {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Inventory</h1>
-          <p className="text-gray-500 dark:text-gray-400">Manage your product inventory</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Support</h1>
+          <p className="text-gray-500 dark:text-gray-400">Manage your Support team</p>
         </div>
-        <AddEntrybutton value={"Add Product"} />
+        <AddEntrybutton value={"Add Support"} />
       </div>
 
       {/* Filter and Actions Section */}

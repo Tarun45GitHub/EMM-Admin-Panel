@@ -1,9 +1,6 @@
 import AddEntrybutton from "../components/manage_user/add_entry_button";
-// import CascadingDropdown from "../components/manage_user/cascading_dropdown";
-// import EntryTable from "../components/manage_user/entry_table";
 import { useEffect } from "react";
 import { useLoader } from "../components/ui/LoaderContext";
-// import AddCustomerButton from "../components/manage_customer/AddCustomerButtom";
 import CustomerEnrtyTable from "../components/manage_customer/CustomerEntryTable";
 import TableHeader from "../components/transfer/TableHeader";
 
@@ -18,19 +15,26 @@ const Customer:React.FC=()=>{
           return () => clearTimeout(timer)
          }, []);
     return (
-         <div className=" text-gray-800
-             dark:text-gray-200  w-full ">
-             <div className="  ">
-               <div className=" flex flex-col lg:flex-row justify-between items-center dark:bg-[#1E293B] rounded-lg m-3 px-2 ">
-                 <TableHeader onFilterChange={()=>{}}/>
-              
-                <AddEntrybutton value={"Cust."} />
-               </div>
-            </div>
-            <div className="flex-1 min-w-0 dark:bg-[#1E293B] rounded-lg m-4">
-                <CustomerEnrtyTable/>
-            </div>
+        <div className="w-full min-h-screen bg-white dark:bg-[#0F172A] p-4 md:p-8 space-y-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Customer</h1>
+          <p className="text-gray-500 dark:text-gray-400">Manage your Customer team</p>
         </div>
+        <AddEntrybutton value={"Add Product"} />
+      </div>
+
+      {/* Filter and Actions Section */}
+      <div className="w-full">
+        <TableHeader onFilterChange={() => {}} />
+      </div>
+
+      {/* Table Section */}
+      <div className="bg-white dark:bg-[#1E293B] rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800">
+        <CustomerEnrtyTable />
+      </div>
+    </div>
     )
 }
 export default Customer;

@@ -15,19 +15,26 @@ const SuperDistributer:React.FC=()=>{
           return () => clearTimeout(timer)
          }, []);
     return(
-         <div className=" text-gray-800
-             dark:text-gray-200  w-full ">
-            <div className="  ">
-               <div className=" flex flex-col lg:flex-row justify-between items-center dark:bg-[#1E293B] rounded-lg m-3 px-2">
-                 <TableHeader onFilterChange={()=>{}}/>
-              
-                <AddEntrybutton value={"Super Dist"} />
-               </div>
-            </div>
-            <div className="flex-1 min-w-0 dark:bg-[#1E293B] rounded-lg m-4">
-                <EntryTable/>
-            </div>
+       <div className="w-full min-h-screen bg-white dark:bg-[#0F172A] p-4 md:p-8 space-y-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Super Distributer</h1>
+          <p className="text-gray-500 dark:text-gray-400">Manage your Super Distributer team</p>
         </div>
+        <AddEntrybutton value={"Add Super Dist."} />
+      </div>
+
+      {/* Filter and Actions Section */}
+      <div className="w-full">
+        <TableHeader onFilterChange={() => {}} />
+      </div>
+
+      {/* Table Section */}
+      <div className="bg-white dark:bg-[#1E293B] rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800">
+        <EntryTable />
+      </div>
+    </div>
     )
 }
 export default SuperDistributer;

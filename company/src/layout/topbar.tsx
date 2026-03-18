@@ -16,7 +16,7 @@ const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-xs">
 
       {/* Green accent strip at the top */}
-      <div className="h-0.5 w-full bg-linear-to-r from-green-500 via-green-400 to-emerald-500" />
+      <div className=" w-full bg-linear-to-r from-green-500 via-green-400 to-emerald-500" />
 
       <div className="flex items-center justify-between px-3 py-2 md:px-5">
 
