@@ -95,13 +95,13 @@ const CarouselBanner: React.FC = memo(() => {
         swipeable
         emulateTouch
         stopOnHover
-        renderArrowPrev={(onClickHandler, hasPrev) => null}
-        renderArrowNext={(onClickHandler, hasNext) => null}
+        renderArrowPrev={(_onClickHandler, _hasPrev) => null}
+        renderArrowNext={(_onClickHandler, _hasNext) => null}
       >
         {slides.map((slide, index) => (
           <div key={index} className="relative w-full group">
             {/* Main Container */}
-            <div className="relative w-full h-[220px] sm:h-[300px] md:h-[380px] lg:h-[420px] overflow-hidden rounded-2xl md:rounded-[32px] bg-gray-900">
+            <div className="relative w-full h-55 sm:h-75 md:h-95 lg:h-105 overflow-hidden rounded-2xl md:rounded-[32px] bg-gray-900">
               {/* Background Image with Overlay */}
               <div className="absolute inset-0">
                 <img
