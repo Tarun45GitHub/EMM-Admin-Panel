@@ -60,15 +60,15 @@ const PersonalDetails: React.FC = () => {
     // Save to backend API
   };
 
-  const formatPhoneNumber = (phone: string) => {
-    // Add formatting for phone numbers
-    const cleaned = phone.replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (match) {
-      return `(${match[1]}) ${match[2]}-${match[3]}`;
-    }
-    return phone;
-  };
+  // const formatPhoneNumber = (phone: string) => {
+  //   // Add formatting for phone numbers
+  //   const cleaned = phone.replace(/\D/g, '');
+  //   const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  //   if (match) {
+  //     return `(${match[1]}) ${match[2]}-${match[3]}`;
+  //   }
+  //   return phone;
+  // };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 h-full">

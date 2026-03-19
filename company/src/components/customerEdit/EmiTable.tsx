@@ -76,8 +76,8 @@ const EmiTable: React.FC<Props> = ({ data }) => {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {data.map((item, index) => {
-              const totalPaid = calculateTotalPaid(item);
+            {data.map((item, _index) => {
+              // const totalPaid = calculateTotalPaid(item);
               const outstanding = calculateOutstanding(item);
               const progress = ((item.tenure - item.pendingEmi) / item.tenure) * 100;
               const isCompleted = item.pendingEmi === 0;
