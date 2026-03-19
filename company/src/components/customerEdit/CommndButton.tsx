@@ -1,74 +1,103 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  FiPower,
+  FiRefreshCw,
+  FiWifi,
+  FiSmartphone,
+  FiLock,
+  FiSettings
+} from "react-icons/fi";
 
 const CommandButtons: React.FC = () => {
+  const [loading, setLoading] = useState<string | null>(null);
+  const [simOn, setSimOn] = useState(true);
+  const [dataOn, setDataOn] = useState(true);
+
+  const runCommand = (cmd: string) => {
+    setLoading(cmd);
+    setTimeout(() => setLoading(null), 1500);
+  };
+
+  const Button = ({ icon: Icon, label, onClick, color }: any) => (
+    <button
+      onClick={onClick}
+      className={`flex items-center justify-center gap-2 w-full py-3 rounded-lg text-white ${color} active:scale-95 transition`}
+    >
+      <Icon />
+      {loading === label ? "Processing..." : label}
+    </button>
+  );
+
+  const Toggle = ({ label, state, setState }: any) => (
+    <div className="flex justify-between items-center bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+      <span>{label}</span>
+      <button
+        onClick={() => setState(!state)}
+        className={`w-12 h-6 rounded-full ${
+          state ? "bg-green-500" : "bg-gray-400"
+        } relative transition`}
+      >
+        <div
+          className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition ${
+            state ? "right-0.5" : "left-0.5"
+          }`}
+        />
+      </button>
+    </div>
+  );
+
   return (
-    <div className=" bg-gray-100 flex flex-col items-center  justify-center p-6 mx-5 dark:bg-gray-700 ">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 dark:text-gray-200">
-        Command 
-      </h2>
+    <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg space-y-5">
 
-      <div className="grid grid-cols-1 gap-4 p-2 ">
-        {/* 15 Stylish Buttons */}
-        <button className="bg-indigo-600 text-white py-2 px-3 rounded-lg shadow-md hover:bg-indigo-700 transition">
-          Primary Action
-        </button>
+      {/* Power Controls */}
+      <section>
+        <h3 className="text-sm font-semibold mb-2">⚡ Power</h3>
+        <div className="space-y-2">
+          <Button
+            icon={FiPower}
+            label="Power Off"
+            color="bg-red-600 hover:bg-red-700"
+            onClick={() => runCommand("power")}
+          />
+          <Button
+            icon={FiRefreshCw}
+            label="Restart Device"
+            color="bg-indigo-600 hover:bg-indigo-700"
+            onClick={() => runCommand("restart")}
+          />
+        </div>
+      </section>
 
-        <button className="bg-green-500 text-white py-2 px-3 rounded-lg shadow-lg hover:scale-105 transform transition">
-          Success
-        </button>
+      {/* Network Controls */}
+      <section>
+        <h3 className="text-sm font-semibold mb-2">📡 Network</h3>
+        <div className="space-y-3">
+          <Toggle label="SIM Card" state={simOn} setState={setSimOn} />
+          <Toggle label="Mobile Data" state={dataOn} setState={setDataOn} />
+        </div>
+      </section>
 
-        <button className="bg-red-500 text-white py-2 px-3 rounded-lg hover:bg-red-600">
-          Alert
-        </button>
+      {/* Security */}
+      <section>
+        <h3 className="text-sm font-semibold mb-2">🔒 Security</h3>
+        <Button
+          icon={FiLock}
+          label="Lock Device"
+          color="bg-yellow-600 hover:bg-yellow-700"
+          onClick={() => runCommand("lock")}
+        />
+      </section>
 
-        <button className="bg-yellow-400 text-gray-800 py-2 px-3 rounded-lg shadow-md hover:shadow-lg transition">
-          Warning
-        </button>
-
-        <button className="bg-linear-to-r from-purple-500 to-pink-500 text-white py-2 px-3 rounded-lg hover:from-pink-500 hover:to-purple-500">
-          Gradient
-        </button>
-
-        <button className="border bg-gray-950 border-indigo-600 text-indigo-600 py-2 px-3 rounded-lg hover:bg-indigo-50">
-          Outline
-        </button>
-
-        <button className="bg-teal-500 text-white py-2 px-3 rounded-full hover:bg-teal-600 transition">
-          Rounded
-        </button>
-
-        <button className="bg-blue-500 text-white py-2 px-3 rounded-lg hover:ring-4 hover:ring-blue-300">
-          Hover Ring
-        </button>
-
-        <button className="bg-pink-500 text-white py-2 px-3 rounded-lg hover:scale-110 transition">
-          Pulse
-        </button>
-
-        <button className="bg-gray-800 text-white py-2 px-3 rounded-lg hover:bg-gray-900">
-          Dark Mode
-        </button>
-
-        <button className="bg-indigo-400 text-white py-2 px-3 rounded-lg shadow-lg hover:shadow-xl">
-          Soft Glow
-        </button>
-
-        <button className="bg-cyan-500 text-white py-2 px-3 rounded-lg hover:bg-cyan-600">
-          Info
-        </button>
-
-        <button className="bg-lime-500 text-gray-800 py-2 px-3 rounded-lg hover:bg-lime-600">
-          Fun Action
-        </button>
-
-        <button className="bg-purple-700 text-white py-2 px-3 rounded-lg hover:bg-purple-800">
-          Magical
-        </button>
-
-        <button className="bg-orange-500 text-white py-2 px-3 rounded-lg hover:bg-orange-600">
-          Orange Command
-        </button>
-      </div>
+      {/* Utilities */}
+      <section>
+        <h3 className="text-sm font-semibold mb-2">🛠 Utilities</h3>
+        <Button
+          icon={FiSettings}
+          label="Factory Reset"
+          color="bg-gray-700 hover:bg-gray-800"
+          onClick={() => runCommand("reset")}
+        />
+      </section>
     </div>
   );
 };

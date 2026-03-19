@@ -1,8 +1,8 @@
-import AddEntrybutton from "../components/manage_user/add_entry_button";
 import { useEffect } from "react";
 import { useLoader } from "../components/ui/LoaderContext";
 import CustomerEnrtyTable from "../components/manage_customer/CustomerEntryTable";
 import TableHeader from "../components/transfer/TableHeader";
+import AddCustomerButton from "../components/manage_customer/AddCustomerButtom";
 
 const Customer:React.FC=()=>{
     const { showLoader, hideLoader } = useLoader();
@@ -22,7 +22,7 @@ const Customer:React.FC=()=>{
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Customer</h1>
           <p className="text-gray-500 dark:text-gray-400">Manage your Customer team</p>
         </div>
-        <AddEntrybutton value={"Add Product"} />
+        <AddCustomerButton  />
       </div>
 
       {/* Filter and Actions Section */}
