@@ -32,8 +32,8 @@ const COLUMNS = [
 const EntryTable: React.FC = () => {
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(8);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: 'asc' | 'desc';
@@ -78,7 +78,7 @@ const EntryTable: React.FC = () => {
     console.log("toggle row", idx);
   }, []);
 
-  const handleEdit = useCallback((idx: number) => {
+  const handleEdit = useCallback((_idx: number) => {
     toast.success("Edit mode activated");
   }, []);
 
@@ -102,30 +102,30 @@ const EntryTable: React.FC = () => {
     });
   }, []);
 
-  const handleSelectAll = useCallback((checked: boolean) => {
-    if (checked) {
-      setSelectedRows(pageRows.map((_, idx) => (page - 1) * rowsPerPage + idx));
-    } else {
-      setSelectedRows([]);
-    }
-  }, [pageRows, page, rowsPerPage]);
+  // const handleSelectAll = useCallback((checked: boolean) => {
+  //   if (checked) {
+  //     setSelectedRows(pageRows.map((_, idx) => (page - 1) * rowsPerPage + idx));
+  //   } else {
+  //     setSelectedRows([]);
+  //   }
+  // }, [pageRows, page, rowsPerPage]);
 
-  const handleSelectRow = useCallback((rowIndex: number, checked: boolean) => {
-    const globalIndex = (page - 1) * rowsPerPage + rowIndex;
-    if (checked) {
-      setSelectedRows(prev => [...prev, globalIndex]);
-    } else {
-      setSelectedRows(prev => prev.filter(idx => idx !== globalIndex));
-    }
-  }, [page, rowsPerPage]);
+  // const handleSelectRow = useCallback((rowIndex: number, checked: boolean) => {
+  //   const globalIndex = (page - 1) * rowsPerPage + rowIndex;
+  //   if (checked) {
+  //     setSelectedRows(prev => [...prev, globalIndex]);
+  //   } else {
+  //     setSelectedRows(prev => prev.filter(idx => idx !== globalIndex));
+  //   }
+  // }, [page, rowsPerPage]);
 
-  const handleBulkAction = useCallback((action: string) => {
-    if (selectedRows.length === 0) {
-      toast.error("Please select at least one row");
-      return;
-    }
-    toast.success(`${action} ${selectedRows.length} rows`);
-  }, [selectedRows.length]);
+  // const handleBulkAction = useCallback((action: string) => {
+  //   if (selectedRows.length === 0) {
+  //     toast.error("Please select at least one row");
+  //     return;
+  //   }
+  //   toast.success(`${action} ${selectedRows.length} rows`);
+  // }, [selectedRows.length]);
 
   if (data.length === 0) {
     return (
