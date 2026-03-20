@@ -32,15 +32,15 @@ const EmiTable: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-3">
+      {/* <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           EMI Records
         </h3>
         <div className="text-sm text-gray-500 dark:text-gray-400">
           {data.length} active records
         </div>
-      </div>
+      </div> */}
 
       <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -146,13 +146,13 @@ const EmiTable: React.FC<Props> = ({ data }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-lg">
             <div className="text-sm font-medium opacity-90">Total Paid</div>
-            <div className="text-2xl font-bold">
+            <div className="text-lg font-bold">
               {formatCurrency(data.reduce((sum, item) => sum + calculateTotalPaid(item), 0))}
             </div>
           </div>
           <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white p-4 rounded-lg">
             <div className="text-sm font-medium opacity-90">Total Outstanding</div>
-            <div className="text-2xl font-bold">
+            <div className="text-xl font-bold">
               {formatCurrency(data.reduce((sum, item) => sum + calculateOutstanding(item), 0))}
             </div>
           </div>

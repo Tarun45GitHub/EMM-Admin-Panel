@@ -26,68 +26,77 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
   if (!show) return null;
 
   return (
-    <div className=" overflow-auto fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-5">
-      <div className="w-full mt-150  max-w-7xl bg-white rounded-xl shadow-2xl overflow-auto border border-gray-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 ">
+      <div className="w-full max-w-6xl bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200">
         
         {/* Header */}
-        <div className="flex  items-center justify-between px-8 py-4 bg-linear-to-r from-indigo-600 to-indigo-500 text-white rounded-t-xl">
-          <h2 className="text-2xl font-semibold">Edit User Details</h2>
+        <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-blue bg-opacity-20 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold">Edit User Details</h2>
+          </div>
           <button 
             onClick={onClose} 
-            className="text-2xl font-bold hover:text-gray-200 transition"
+            className="w-8 h-8 bg-blue bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
+            aria-label="Close"
           >
-            &times;
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
         {/* Form */}
-        <div className="px-8 py-6 space-y-6">
-
+        <div className="px-6 py-6 space-y-6 max-h-[70vh] overflow-y-auto">
+          
+          {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            {/* Username */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Username</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Username</label>
               <input
                 type="text"
                 name="userName"
                 value={formData.userName}
                 onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full text-gray-400 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter username"
               />
             </div>
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Email</label>
               <input
                 type="email"
                 name="emailid"
                 value={formData.emailid}
                 onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="user@example.com"
               />
             </div>
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Password</label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="••••••••"
               />
             </div>
-
           </div>
 
-          {/* Names */}
+          {/* Name Fields */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {["first_name", "middle_name", "last_name"].map((field, idx) => (
-              <div key={idx}>
-                <label className="block text-sm font-medium text-gray-700">
+              <div key={idx} className="space-y-2">
+                <label className="block text-sm font-medium text-black">
                   {field.replace("_", " ").toUpperCase()}
                 </label>
                 <input
@@ -95,41 +104,44 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                   name={field}
                   value={formData[field]}
                   onChange={onChange}
-                  className="mt-2 w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  placeholder={`Enter ${field.replace("_", " ")}`}
                 />
               </div>
             ))}
           </div>
 
-          {/* Address / Shop */}
+          {/* Address Information */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Shop / Company</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Shop / Company</label>
               <input
                 type="text"
                 name="shop_company"
                 value={formData.shop_company}
                 onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3"
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter shop/company name"
               />
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Address</label>
+            <div className="md:col-span-2 space-y-2">
+              <label className="block text-sm font-medium text-black">Address</label>
               <input
                 type="text"
                 name="Address"
                 value={formData.Address}
                 onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3"
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter complete address"
               />
             </div>
           </div>
 
-          {/* State, City, Pincode */}
+          {/* Location Details */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {["state", "city", "pincode"].map((field, idx) => (
-              <div key={idx}>
-                <label className="block text-sm font-medium text-gray-700">
+              <div key={idx} className="space-y-2">
+                <label className="block text-sm font-medium text-black">
                   {field.charAt(0).toUpperCase() + field.slice(1)}
                 </label>
                 <input
@@ -137,58 +149,74 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                   name={field}
                   value={formData[field]}
                   onChange={onChange}
-                  className="mt-2 w-full border border-gray-300 rounded-lg p-3"
+                  className="w-full px-3  py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  placeholder={`Enter ${field}`}
                 />
               </div>
             ))}
           </div>
 
-          {/* Wallet & PIN */}
+          {/* Financial Information */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">iOS Wallet Balance</label>
-              <input
-                type="number"
-                name="walletIOS"
-                value={formData.walletIOS}
-                onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3"
-              />
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">iOS Wallet Balance</label>
+              <div className="relative">
+                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <input
+                  type="number"
+                  name="walletIOS"
+                  value={formData.walletIOS}
+                  onChange={onChange}
+                  className="w-full pl-8 pr-3 py-2 border text-gray-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Android Wallet Balance</label>
-              <input
-                type="number"
-                name="walletAndroid"
-                value={formData.walletAndroid}
-                onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3"
-              />
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Android Wallet Balance</label>
+              <div className="relative">
+                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <input
+                  type="number"
+                  name="walletAndroid"
+                  value={formData.walletAndroid}
+                  onChange={onChange}
+                  className="w-full pl-8 pr-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">PIN</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">PIN</label>
               <input
                 type="password"
                 name="pin"
                 value={formData.pin}
                 onChange={onChange}
-                className="mt-2 w-full border border-gray-300 rounded-lg p-3"
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="••••"
+                maxLength={4}
+                pattern="[0-9]{4}"
               />
             </div>
           </div>
 
-          {/* Parent Select */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Parent Node</label>
+          {/* Parent Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-black">Parent Node</label>
             <select
               name="parent"
               value={formData.parent}
               onChange={onChange}
-              className="mt-2 w-full border border-gray-300 rounded-lg p-3 focus:border-indigo-500 text-gray-700"
+              className="w-full px-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white"
             >
               <option value="">Select Parent</option>
               {parents.map((p) => (
-                <option key={p.id} value={p.id}>
+                <option key={p.id} value={p.id} className="bg-blue text-gray-200">
                   {p.label}
                 </option>
               ))}
@@ -198,28 +226,29 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end px-8 py-5 bg-gray-50 space-x-3 rounded-b-xl">
+        <div className="flex justify-end px-6 py-4 bg-gray-50 space-x-3 rounded-b-xl">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium"
           >
             Cancel
           </button>
           <button
             onClick={onSave}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
             Save Changes
           </button>
         </div>
-        <div >
-          <EntryTableEditModel show={false} onClose={function (): void {
-            throw new Error("Function not implemented.");
-          } } onSave={function (): void {
-            throw new Error("Function not implemented.");
-          } } formData={undefined} onChange={() => {
-            throw new Error("Function not implemented.");
-          } }/>
+        
+        <div className="hidden">
+          <EntryTableEditModel 
+            show={false} 
+            onClose={() => {}} 
+            onSave={() => {}} 
+            formData={undefined} 
+            onChange={() => {}} 
+          />
         </div>
 
       </div>

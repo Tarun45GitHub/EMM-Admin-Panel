@@ -80,7 +80,7 @@ const CommandButtons: React.FC = () => {
       </div>
 
       {/* Sticky Bottom Actions (IMPORTANT UX) */}
-      <div className="p-3 border-t dark:border-gray-700 bg-white dark:bg-gray-800">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => runCommand("restart")}
@@ -103,7 +103,7 @@ const CommandButtons: React.FC = () => {
 const Section = ({ title, children }: any) => (
   <div>
     <h3 className="text-xs font-semibold mb-3 text-gray-500">{title}</h3>
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-3 min-w-40">
       {children}
     </div>
   </div>

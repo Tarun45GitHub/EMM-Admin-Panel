@@ -43,7 +43,7 @@ const CustomerEnrtyTable: React.FC = () => {
       <div className="  bg-white dark:bg-gray-900 rounded-xl shadow-lg border
        border-gray-200 dark:border-gray-700 overflow-hidden">
         
-        {/* Table Scroll */}
+         {/* Table Scroll */}
         <div className="w-70 sm:w-130 md:w-150 lg:w-230 xl:w-300 overflow-x-auto scrollbar-custom">
           <table className=" w-full table-auto text-sm border-collapse">
             <thead className="bg-gray-100   dark:text-gray-600 ">
