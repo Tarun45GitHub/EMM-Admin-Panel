@@ -24,7 +24,7 @@ const COLORS = ["#22c55e", "#f87171", "#9ca3af"];
 const LifecyclePieChart: React.FC = () => {
   return (
     <div >
-    <div className="w-full h-80 bg-white p-5 rounded-xl shadow-md border dark:bg-gray-800  ">
+    <div className="w-full h-80 bg-white pb-10 pt-3 rounded-xl shadow-md border dark:bg-gray-800   ">
       <h3 className="text-center text-lg text-black dark:text-gray-200 ">
         Lifecycle Status
       </h3>

@@ -35,7 +35,7 @@ const data: MonthlyData[] = [
 const MonthlyInstallBarChart:React.FC=()=>{
   return(
     
-    <div className="w-full h-80 bg-white p-5 rounded-xl shadow-md border dark:bg-gray-800 ">
+    <div className="w-full h-80 bg-white pb-10 rounded-xl shadow-md border dark:bg-gray-800 ">
       <h3 className="text-center font-semibold text-lg text-black dark:text-gray-200 ">
         Monthly Installs
       </h3>

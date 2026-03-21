@@ -118,7 +118,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
 
         {/* Scroll Container */}
         <div className="w-full flex justify-center py-3">
-          <div className="w-80 sm:w-150 md:w-200 lg:w-150 xl:w-280 overflow-x-auto scrollbar-custom">
+          <div className="w-70 sm:w-150 md:w-200 lg:w-150 xl:w-280 overflow-x-auto scrollbar-custom">
             <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200">
 
               <thead className="bg-gray-50 dark:bg-gray-800 text-xs font-semibold uppercase tracking-wider sticky top-0 z-10">
