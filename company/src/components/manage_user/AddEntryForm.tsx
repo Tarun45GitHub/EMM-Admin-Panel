@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import LoginDetails from "./EntryFormPage1";
 import PersonalDatails from "./EntryFormPage2";
 import BusinessDetails from "./EntryFormPage3";
+import api from "../../api/Axios";
 
 export interface ApplicationData {
-  userName: string;
+  email: string;
   password: string;
   confirmPassword?: string;
   first_name: string;
-  middle_name: string;
   last_name: string;
-  phone: string;
-  emailid: string;
-  state: string;
-  city: string;
-  Address: string;
-  shop_company: string;
-  owner_name: string;
-  GST: string;
+  mobile_number: string;
+  state_id: string;
+  city_id: string;
+  address: string;
+  company_name: string;
+  gstin: string;
+  wallet: string;
+  group: string;
 }
 
 interface MultiStepApplicationModalProps {
@@ -34,19 +34,18 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState<ApplicationData>({
-    userName: "",
+    email: "",
     password: "",
     first_name: "",
-    middle_name: "",
     last_name: "",
-    phone: "",
-    emailid: "",
-    state: "",
-    city: "",
-    Address: "",
-    shop_company: "",
-    owner_name: "",
-    GST: "",
+    mobile_number: "",
+    state_id: "",
+    city_id: "",
+    address: "",
+    company_name: "",
+    gstin: "",
+    wallet: "",
+    group: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +54,47 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
-  const handleFinish = () => onSubmit(formData);
+  
+  const handleFinish = async () => {
+    try {
+      // Prepare payload matching the API requirements
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        mobile_number: formData.mobile_number,
+        email: formData.email,
+        password: formData.password,
+        company_name: formData.company_name,
+        gstin: formData.gstin,
+        wallet: parseFloat(formData.wallet) || 0,
+        state_id: parseInt(formData.state_id) || 1,
+        city_id: parseInt(formData.city_id) || 1,
+        address: formData.address,
+        group: formData.group,
+      };
+      const myToken = window.localStorage.token;
+
+        if (!myToken) {
+          console.warn("Token missing. Redirecting to login...");
+          // window.location.href = "/login"; 
+          return;
+        }
+
+      const response = await api.post('/crm/users/add/', payload, {
+        headers: {
+           "Authorization": `Bearer ${myToken}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        onSubmit(formData);
+      }
+    } catch (error) {
+      console.log('Error submitting form:', error);
+      alert('Failed to submit form. Please try again.');
+    }
+  };
 
   if (!show) return null;
 

@@ -22,7 +22,7 @@ const Distributer:React.FC=()=>{
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Distributer</h1>
           <p className="text-gray-500 dark:text-gray-400">Manage your Distributer Team </p>
         </div>
-        <AddEntrybutton value={"Add Product"} />
+        <AddEntrybutton value={"Add user"} />
       </div>
 
       {/* Filter and Actions Section */}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLoader } from "../components/ui/LoaderContext";
 import axios from "axios";
 
 
@@ -125,7 +124,5 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-function showLoader() {
-  throw new Error("Function not implemented.");
-}
+
 

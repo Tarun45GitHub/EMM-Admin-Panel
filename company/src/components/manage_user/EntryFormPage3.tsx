@@ -10,36 +10,38 @@ const BusinessDetails: React.FC<Props> = ({ data, handleChange }) => {
   return (
     <div className="space-y-4">
       <input
-        name="Address"
-        placeholder="Address"
-        value={data.Address}
+        name="company_name"
+        placeholder="Company Name"
+        value={data.company_name}
         onChange={handleChange}
         className="w-full border rounded px-3 py-2"
       />
 
       <input
-        name="shop_company"
-        placeholder="Shop / Company"
-        value={data.shop_company}
+        name="gstin"
+        placeholder="GSTIN"
+        value={data.gstin}
         onChange={handleChange}
         className="w-full border rounded px-3 py-2"
       />
 
-      <input
-        name="owner_name"
-        placeholder="Owner Name"
-        value={data.owner_name}
-        onChange={handleChange}
-        className="w-full border rounded px-3 py-2"
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <input
+          name="wallet"
+          placeholder="Wallet Balance"
+          value={data.wallet}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2"
+        />
 
-      <input
-        name="GST"
-        placeholder="GST Number"
-        value={data.GST}
-        onChange={handleChange}
-        className="w-full border rounded px-3 py-2"
-      />
+        <input
+          name="group"
+          placeholder="Group (e.g., Distributor)"
+          value={data.group}
+          onChange={handleChange}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
     </div>
   );
 };

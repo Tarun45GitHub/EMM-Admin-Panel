@@ -1,47 +1,47 @@
-import React,{Suspense,useEffect, useState} from "react"
+import React,{Suspense} from "react"
 import TotalNav from "../components/dashbord/total_card_nav";
 import Chartpannel from "../components/dashbord/Graph_div";
-import { useLoader } from "../components/ui/LoaderContext";
-import axios from "axios";
+// import { useLoader } from "../components/ui/LoaderContext";
+// import axios from "axios";
 import CarouselBanner from "../components/dashbord/carousel_banner";
 
 const Dashboard:React.FC=()=>{
-  const { showLoader, hideLoader } = useLoader();
+  // const { showLoader, hideLoader } = useLoader();
   // const [data, setData] = useState<any>(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        showLoader();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       showLoader();
 
-        // Use .getItem() - it's more reliable
-        const myToken = window.localStorage.token;
+  //       // Use .getItem() - it's more reliable
+  //       const myToken = window.localStorage.token;
 
-        if (!myToken) {
-          console.warn("Token missing. Redirecting to login...");
-          // window.location.href = "/login"; 
-          return;
-        }
+  //       if (!myToken) {
+  //         console.warn("Token missing. Redirecting to login...");
+  //         // window.location.href = "/login"; 
+  //         return;
+  //       }
 
-        const response = await axios.get("https://backend.bharatemm.com/api/crm/dashboard/", {
-          headers: {
-            "Authorization": `Bearer ${myToken}`,
-            "Content-Type": "application/json"
-          }
-        });
-        const data=response?.data?.data;
+  //       const response = await axios.get("https://backend.bharatemm.com/api/crm/dashboard/", {
+  //         headers: {
+  //           "Authorization": `Bearer ${myToken}`,
+  //           "Content-Type": "application/json"
+  //         }
+  //       });
+  //       const data=response?.data?.data;
 
 
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          console.error("Token is invalid or expired.");
-          // Optional: clear storage and logout user
-        }
-      } finally {
-        hideLoader();
-      }
-    };
-   // fetchData();
-  }, []);
+  //     } catch (error: any) {
+  //       if (error.response?.status === 401) {
+  //         console.error("Token is invalid or expired.");
+  //         // Optional: clear storage and logout user
+  //       }
+  //     } finally {
+  //       hideLoader();
+  //     }
+  //   };
+  //  // fetchData();
+  // }, []);
    return(
    <div className="dark:bg-[#1E293B]">
     <div className="p-5  rounded-lg">

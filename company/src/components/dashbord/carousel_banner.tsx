@@ -3,7 +3,6 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import api from "axios"
 
 import banner1 from "../banners/banner1.jpg";
 import banner2 from "../banners/banner2.jpg";
