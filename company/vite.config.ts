@@ -7,4 +7,13 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://backend.bharatemm.com',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 })

@@ -33,15 +33,15 @@ const data: MonthlyData[] = [
 
 
 const MonthlyInstallBarChart:React.FC=()=>{
-  return(
-    
-    <div className="w-full h-80 bg-white pb-10 rounded-xl shadow-md border dark:bg-gray-800 ">
-      <h3 className="text-center font-semibold text-lg text-black dark:text-gray-200 ">
+  return (
+    <div className="w-full h-80 bg-white pb-10 rounded-xl shadow-md border dark:bg-gray-800">
+      <h3 className="text-center font-semibold text-lg text-black dark:text-gray-200 mb-4">
         Monthly Installs
       </h3>
 
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+      {/* Added minWidth and minHeight to satisfy the ResizeObserver */}
+      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+        <BarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" stroke="#ab0" />
           <YAxis stroke="#aa0" />
@@ -51,7 +51,6 @@ const MonthlyInstallBarChart:React.FC=()=>{
         </BarChart>
       </ResponsiveContainer>
     </div>
-   
   );
 };
 export default MonthlyInstallBarChart;

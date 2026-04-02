@@ -1,24 +1,38 @@
 import BannerCard from "../components/manage_banner/banner";
-import banner1 from "../components/banners/banner1.jpg";
-import banner2 from "../components/banners/banner2.jpg";
-import banner3 from "../components/banners/banner3.jpg";
-import banner4 from "../components/banners/banner4.jpg";
 import InputBanner from "../components/manage_banner/input_banner";
-import React,{useEffect} from "react";
+import React,{useEffect,useState} from "react";
 import { useLoader } from "../components/ui/LoaderContext";
+import NotFound from "./NotFound";
+import axios from "axios";
 
 
 const MannageBanner:React.FC = () => {
+  const [data, setData] = useState< null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { showLoader, hideLoader } = useLoader();
-     useEffect(() => {
-      showLoader();
-      const timer = setTimeout(() => {
-        hideLoader();
-      }, 1000);
-  
-      return () => clearTimeout(timer)
-     }, []);
+  useEffect(() => {
+    const fetchData=async()=>{
+      try {
+        showLoader();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const response = await axios.get("api/crm/banners")
+        if (!response) throw new Error('Failed to fetch data');
+        setData(response.data.data[0].image)
+        console.log(response.data.data[0].image);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      } finally{
+        hideLoader()
+      }
+    }
+    fetchData();
+  }, [])
 
+  if(error){
+    return(
+      <NotFound/>
+    );
+  }
   return (
     <div className="space-y-10 p-5">
       {/* Header */}
@@ -38,16 +52,16 @@ const MannageBanner:React.FC = () => {
         </h2>
         <div className="grid gap-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 dark:bg-[#1E293B] rounded-lg">
           <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
-            <BannerCard imageUrl={banner1} />
+            <BannerCard imageUrl={data} />
           </div>
           <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
-            <BannerCard imageUrl={banner2} />
+            <BannerCard imageUrl={data} />
           </div>
           <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
-            <BannerCard imageUrl={banner3} />
+            <BannerCard imageUrl={data} />
           </div>
           <div className="transition-transform hover:scale-105 hover:shadow-lg p-3">
-            <BannerCard imageUrl={banner4} />
+            <BannerCard imageUrl={data} />
           </div>
         </div>
       </section>

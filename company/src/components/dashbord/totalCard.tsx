@@ -58,7 +58,7 @@ export default function TotalCard({
       {/* Icon Box */}
       <div
         className="
-          w-12 h-12
+          w-10 h-10
           flex items-center justify-center
           rounded-xl
           bg-linear-to-r from-pink-500 to-purple-600
@@ -66,7 +66,7 @@ export default function TotalCard({
           shadow-md
         "
       >
-        <Icon size={22} />
+        <Icon size={20} />
       </div>
     </div>
   );

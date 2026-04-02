@@ -18,6 +18,8 @@ import { LoaderProvider } from './components/ui/LoaderContext';
 import AdminProfile from './components/profile/Admin_Profile';
 import Settings from './components/settings/settings';
 import CustomerEdit from './components/customerEdit/EditCustomer';
+import NotFound from './pages/NotFound'
+
 function App() {
   
 
@@ -26,7 +28,7 @@ function App() {
    <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login/>}/>
-        <Route path='/admin' element={<Layout><Dashboard/></Layout>}/>
+        <Route path='/dashboard' element={<Layout><Dashboard/></Layout>}/>
         <Route path='/banner' element={<Layout><MannageBanner/></Layout>}/>
         <Route path='/users/support' element={<Layout><MannageSupport/></Layout>}/>
         <Route path='/users/national' element={<Layout><NationalDistributer/></Layout>}/>
@@ -41,8 +43,7 @@ function App() {
         <Route path='/profile' element={<Layout><AdminProfile/></Layout>}/>
         <Route path='/settings' element={<Layout><Settings/></Layout>}/>
         <Route path='/customer/edit' element={<Layout><CustomerEdit/></Layout>}/>
-
-
+        <Route path='/notFound' element={<NotFound/>} />
       </Routes>
    </BrowserRouter>
    </LoaderProvider>

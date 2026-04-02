@@ -1,35 +1,53 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLoader } from "../components/ui/LoaderContext";
+import axios from "axios";
+
 
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading,setLoading]=useState(false)
   const [error, setError] = useState<string>("");
 
+  const navigate = useNavigate();
+
+
   const handleSubmit = async (e: React.FormEvent) => {
-    const navigate = useNavigate();
     e.preventDefault();
     setError("");
 
     // Basic validation
-    if (!email || !password) {
+    if (!username|| !password) {
       setError("Please fill in all fields.");
       return;
     }
+    //console.log(data);
+    try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    const response=await axios.post("https://backend.bharatemm.com/api/crm/login/",{"username":username,"password":password});
+      if(!response) throw new Error('Failed to login');
+      console.log(response.data.data.user.username);
+      // setData(response.data.data);
+      localStorage.setItem("token",response.data.data.access_token);
+      // localStorage.setItem("refresh_token",response.data.data.refresh_token);
+      localStorage.setItem("username",response.data.data.user.username);
 
-    setLoading(true);
 
-    // Fake API call (replace with your backend)
-    setTimeout(() => {
-      setLoading(false);
-      alert("Login Successful ✅");
-     
-    }, 1500);
-    navigate("/dashboard");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An unknown error occurred while login');
+    }
+    finally{
+      navigate("/dashboard");
+
+    }
+
   };
+
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -48,13 +66,13 @@ const Login: React.FC = () => {
           {/* Email */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
-              Email
+              Username
             </label>
             <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
@@ -87,7 +105,7 @@ const Login: React.FC = () => {
           {/* Login Button */}
           <button
             type="submit"
-            disabled={loading}
+            // disabled={loading}
             className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
@@ -107,3 +125,7 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+function showLoader() {
+  throw new Error("Function not implemented.");
+}
+
