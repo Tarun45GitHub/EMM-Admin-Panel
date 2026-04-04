@@ -203,7 +203,7 @@ const MyTransaction: React.FC = () => {
 
           <div className="">
             <div className="">
-              <TransactionTable data={transactions} />
+              <TransactionTable />
             </div>
           </div>
         </div>

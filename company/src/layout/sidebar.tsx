@@ -25,7 +25,7 @@ type MenuItem = {
 };
 
 const MENU: MenuItem[] = [
-  { label: "Dashboard", Icon: House, path: "/admin" },
+  { label: "Dashboard", Icon: House, path: "/dashboard" },
   { label: "Manage Banner", Icon: FileText, path: "/banner" },
   {
     label: "Users",

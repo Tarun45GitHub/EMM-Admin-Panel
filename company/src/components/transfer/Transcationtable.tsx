@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import api from "../../api/Axios";
 
 interface Transaction {
   id: string;
@@ -9,27 +10,81 @@ interface Transaction {
 }
 
 interface TransactionTableProps {
-  data: Transaction[];
+  // Optional: Allow passing initial page size, default is 10
+  initialPageSize?: number;
+  // Optional: Callback when transactions are loaded
+  onTransactionsLoaded?: (transactions: Transaction[]) => void;
 }
 
-const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
+interface ApiResponse {
+  results: Transaction[];
+  count: number;
+  next: string | null;
+  previous: string | null;
+}
+
+const TransactionTable: React.FC<TransactionTableProps> = ({ 
+  initialPageSize = 10,
+  onTransactionsLoaded 
+}) => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [rowsPerPage, _setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(initialPageSize);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const fetchTransactions = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError("Token not found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+      const response = await api.get<ApiResponse>('/crm/wallet/transactions/', {
+        params: {
+          page: page,
+          page_size: rowsPerPage
+        },
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+          'Content-Type': 'application/json',
+        }
+      });
 
-  const pageRows = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    return data.slice(start, start + rowsPerPage);
-  }, [page, data, rowsPerPage]);
+      setTransactions(response.data.results || []);
+      setTotalCount(response.data.count || 0);
+      
+      if (onTransactionsLoaded) {
+        onTransactionsLoaded(response.data.results);
+      }
+    } catch (err: any) {
+      console.error('Error fetching transactions:', err);
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Failed to fetch transactions. Please try again.';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, rowsPerPage, onTransactionsLoaded]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
+
+  const totalPages = Math.ceil(totalCount / rowsPerPage);
 
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
   const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
-  // const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setRowsPerPage(parseInt(e.target.value));
-  //   setPage(1); // Reset to first page when changing rows per page
-  // };
+  const handleRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(parseInt(e.target.value));
+    setPage(1); // Reset to first page when changing rows per page
+  };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -64,7 +119,49 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
     });
   };
 
-  if (data.length === 0) {
+  // Loading state
+  if (loading) {
+    return (
+      <div className="p-4 md:p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+          <div className="p-8 text-center">
+            <div className="flex justify-center items-center space-x-2">
+              <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-gray-600 dark:text-gray-400">Loading transactions...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="p-4 md:p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+          <div className="p-8 text-center">
+            <div className="w-16 h-16 mx-auto mb-4 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Error Loading Transactions</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+            <button
+              onClick={fetchTransactions}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (transactions.length === 0) {
     return (
       <div className="p-4 md:p-6">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
@@ -93,10 +190,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Transaction History</h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">View and manage your transaction records</p>
             </div>
-            {/* <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm text-gray-600 dark:text-gray-400">Total Transactions</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{data.length}</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">{totalCount}</p>
               </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="rowsPerPage" className="text-sm text-gray-700 dark:text-gray-300">Rows per page:</label>
@@ -112,7 +209,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
                   <option value={50}>50</option>
                 </select>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
 
@@ -132,7 +229,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
               </thead>
 
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {pageRows.map((tx, index) => (
+                {transactions.map((tx, index) => (
                   <tr
                     key={tx.id}
                     className={`hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 ${
@@ -195,8 +292,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
             <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
               <span>
                 Showing <span className="font-medium">{(page - 1) * rowsPerPage + 1}</span> to{' '}
-                <span className="font-medium">{Math.min(page * rowsPerPage, data.length)}</span> of{' '}
-                <span className="font-medium">{data.length}</span> transactions
+                <span className="font-medium">{Math.min(page * rowsPerPage, totalCount)}</span> of{' '}
+                <span className="font-medium">{totalCount}</span> transactions
               </span>
             </div>
 
@@ -213,7 +310,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
                 Previous
               </button>
 
-              {/* <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   const pageNum = Math.max(1, Math.min(page - 2 + i, totalPages));
                   return (
@@ -230,7 +327,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ data }) => {
                     </button>
                   );
                 })}
-              </div> */}
+              </div>
 
               <button
                 onClick={handleNext}

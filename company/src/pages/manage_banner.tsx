@@ -1,9 +1,10 @@
 import BannerCard from "../components/manage_banner/banner";
-import InputBanner from "../components/manage_banner/input_banner";
+import InputBanner from "../components/manage_banner/InputBanner";
 import React,{useEffect,useState} from "react";
 import { useLoader } from "../components/ui/LoaderContext";
 import NotFound from "./NotFound";
 import axios from "axios";
+import api from "../api/Axios";
 
 
 const MannageBanner:React.FC = () => {
@@ -15,7 +16,7 @@ const MannageBanner:React.FC = () => {
       try {
         showLoader();
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        const response = await axios.get("api/crm/banners")
+        const response = await api.get("/crm/banners")
         if (!response) throw new Error('Failed to fetch data');
         setData(response.data.data[0].image)
         console.log(response.data.data[0].image);
@@ -71,11 +72,8 @@ const MannageBanner:React.FC = () => {
         <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
           Edit Banners
         </h2>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="">
           <InputBanner value={1} />
-          <InputBanner value={2} />
-          <InputBanner value={3} />
-          <InputBanner value={4} />
         </div>
       </section>
     </div>

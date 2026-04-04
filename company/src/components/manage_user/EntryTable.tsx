@@ -1,51 +1,101 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import Action from "./action";
 import toast from "react-hot-toast";
+import api from "../../api/Axios";
 
-type RowData = {
-  [key: string]: string | number;
-};
+export interface UserData {
+  id: number;
+  first_name: string;
+  last_name: string;
+  mobile_number: string;
+  email: string;
+  company_name: string;
+  gstin?: string;
+  wallet?: number;
+  state_id?: number;
+  city_id?: number;
+  address?: string;
+  group?: string;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
 
-const data: RowData[] = Array.from({ length: 30 }).map((_, i) => ({
-  col1: `R${i + 1}C1`,
-  col2: `R${i + 1}C2`,
-  col3: `R${i + 1}C3`,
-  col4: `R${i + 1}C4`,
-  col5: `R${i + 1}C5`,
-  col6: `R${i + 1}C6`,
-  col7: `R${i + 1}C7`,
-  col8: `R${i + 1}C8`,
-}));
+interface ApiResponse {
+  results: UserData[];
+  count: number;
+  next: string | null;
+  previous: string | null;
+}
 
+export interface FilterState {
+  search?: string;
+  state_id?: number | string;
+  city_id?: number | string;
+  is_active?: boolean;
+  from_date?: string;
+  to_date?: string;
+  group?: string;
+}
 
 const COLUMNS = [
-  { key: "col1", label: "Column 1" },
-  { key: "col2", label: "Column 2" },
-  { key: "col3", label: "Column 3" },
-  { key: "col4", label: "Column 4" },
-  { key: "col5", label: "Column 5" },
-  { key: "col6", label: "Column 6" },
-  { key: "col7", label: "Column 7" },
-  { key: "col8", label: "Column 8" },
+  { key: "id", label: "ID" },
+  { key: "first_name", label: "Name" },
+  { key: "mobile_number", label: "Mobile" },
+  { key: "email", label: "Email" },
+  { key: "company_name", label: "Company" },
+  { key: "group", label: "Group" },
+  { key: "wallet", label: "Wallet" },
+  { key: "is_active", label: "Status" },
 ];
 
-const EntryTable: React.FC = () => {
+interface EntryTableProps {
+  filters?: FilterState;
+  onUserEdit?: (user: UserData) => void;
+  // Props for external data mode (when data is fetched by parent)
+  data?: UserData[];
+  loading?: boolean;
+  page?: number;
+  totalCount?: number;
+  pageSize?: number;
+  onPageChange?: (page: number) => void;
+}
+
+const EntryTable: React.FC<EntryTableProps> = ({ 
+  filters = {}, 
+  onUserEdit,
+  data,
+  loading: externalLoading,
+  page: externalPage,
+  totalCount: externalTotalCount,
+  pageSize: externalPageSize,
+  onPageChange
+}) => {
   const [page, setPage] = useState(1);
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [rowsPerPage, setRowsPerPage] = useState(8);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: 'asc' | 'desc';
   } | null>(null);
 
+  // Determine if we're in external data mode
+  const isExternalMode = data !== undefined;
+  const currentPage = isExternalMode && externalPage !== undefined ? externalPage : page;
+  const currentRowsPerPage = isExternalMode && externalPageSize !== undefined ? externalPageSize : rowsPerPage;
+  const currentTotalCount = isExternalMode && externalTotalCount !== undefined ? externalTotalCount : totalCount;
+  const currentLoading = isExternalMode && externalLoading !== undefined ? externalLoading : loading;
+
   // Calculate responsive rows per page
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width < 640) setRowsPerPage(5); // Mobile
-      else if (width < 1024) setRowsPerPage(6); // Tablet
-      else setRowsPerPage(8); // Desktop
+      if (width < 640) setRowsPerPage(5);
+      else if (width < 1024) setRowsPerPage(6);
+      else setRowsPerPage(8);
     };
     
     handleResize();
@@ -53,42 +103,134 @@ const EntryTable: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const fetchUsers = useCallback(async () => {
+    // Skip fetching if in external mode
+    if (isExternalMode) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem('token');
+      
+      const params: Record<string, string | number | boolean> = {
+        page: page,
+        page_size: rowsPerPage,
+      };
+
+      // Add filters to params
+      if (filters.search) params.search = filters.search;
+      if (filters.state_id) params.state_id = filters.state_id;
+      if (filters.city_id) params.city_id = filters.city_id;
+      if (filters.is_active !== undefined) params.is_active = filters.is_active;
+      if (filters.from_date) params.from_date = filters.from_date;
+      if (filters.to_date) params.to_date = filters.to_date;
+      if (filters.group) params.group = filters.group;
+
+      const response = await api.get<ApiResponse>('/crm/users/', {
+        params,
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      setUsers(response.data.results || []);
+      setTotalCount(response.data.count || 0);
+    } catch (err: any) {
+      console.error('Error fetching users:', err);
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Failed to fetch users. Please try again.';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, rowsPerPage, filters, isExternalMode]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  // Update users when external data changes
+  useEffect(() => {
+    if (isExternalMode && data) {
+      setUsers(data);
+    }
+  }, [data, isExternalMode]);
+
+  // Update totalCount when external totalCount changes
+  useEffect(() => {
+    if (isExternalMode && externalTotalCount !== undefined) {
+      setTotalCount(externalTotalCount);
+    }
+  }, [externalTotalCount, isExternalMode]);
+
+  const totalPages = Math.ceil(currentTotalCount / currentRowsPerPage);
 
   const sortedData = useMemo(() => {
-    if (!sortConfig) return data;
+    if (!sortConfig) return users;
     
-    return [...data].sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
+    return [...users].sort((a, b) => {
+      const aValue = a[sortConfig.key as keyof UserData];
+      const bValue = b[sortConfig.key as keyof UserData];
+      
+      if (aValue === undefined || aValue === null) return 1;
+      if (bValue === undefined || bValue === null) return -1;
       
       if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
       return 0;
     });
-  }, [data, sortConfig]);
+  }, [users, sortConfig]);
 
   const pageRows = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    return sortedData.slice(start, start + rowsPerPage);
-  }, [page, rowsPerPage, sortedData]);
+    return sortedData;
+  }, [sortedData]);
 
-  const handleToggle = useCallback((idx: number) => {
-    toast.success("Status updated successfully!");
-    console.log("toggle row", idx);
-  }, []);
+  const handleToggle = useCallback(async (userId: number, currentState: boolean) => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.patch(
+        `/crm/users/${userId}/`,
+        { is_active: !currentState },
+        {
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      toast.success("Status updated successfully!");
+      fetchUsers();
+    } catch (err) {
+      toast.error("Failed to update status");
+      console.error('Toggle error:', err);
+    }
+  }, [fetchUsers]);
 
-  const handleEdit = useCallback((_idx: number) => {
-    toast.success("Edit mode activated");
-  }, []);
+  const handleEdit = useCallback((user: UserData) => {
+    if (onUserEdit) {
+      onUserEdit(user);
+    } else {
+      toast.success("Edit mode activated for user " + user.id);
+    }
+  }, [onUserEdit]);
 
   const handlePrev = useCallback(() => {
-    setPage((p) => Math.max(1, p - 1));
-  }, []);
+    if (isExternalMode && onPageChange) {
+      onPageChange(Math.max(1, currentPage - 1));
+    } else {
+      setPage((p) => Math.max(1, p - 1));
+    }
+  }, [isExternalMode, onPageChange, currentPage]);
 
   const handleNext = useCallback(() => {
-    setPage((p) => Math.min(totalPages, p + 1));
-  }, [totalPages]);
+    if (isExternalMode && onPageChange) {
+      onPageChange(Math.min(totalPages, currentPage + 1));
+    } else {
+      setPage((p) => Math.min(totalPages, p + 1));
+    }
+  }, [totalPages, isExternalMode, onPageChange, currentPage]);
 
   const handleSort = useCallback((key: string) => {
     setSortConfig(prev => {
@@ -102,42 +244,51 @@ const EntryTable: React.FC = () => {
     });
   }, []);
 
-  // const handleSelectAll = useCallback((checked: boolean) => {
-  //   if (checked) {
-  //     setSelectedRows(pageRows.map((_, idx) => (page - 1) * rowsPerPage + idx));
-  //   } else {
-  //     setSelectedRows([]);
-  //   }
-  // }, [pageRows, page, rowsPerPage]);
-
-  // const handleSelectRow = useCallback((rowIndex: number, checked: boolean) => {
-  //   const globalIndex = (page - 1) * rowsPerPage + rowIndex;
-  //   if (checked) {
-  //     setSelectedRows(prev => [...prev, globalIndex]);
-  //   } else {
-  //     setSelectedRows(prev => prev.filter(idx => idx !== globalIndex));
-  //   }
-  // }, [page, rowsPerPage]);
-
-  // const handleBulkAction = useCallback((action: string) => {
-  //   if (selectedRows.length === 0) {
-  //     toast.error("Please select at least one row");
-  //     return;
-  //   }
-  //   toast.success(`${action} ${selectedRows.length} rows`);
-  // }, [selectedRows.length]);
-
-  if (data.length === 0) {
+  // Loading state
+  if (currentLoading) {
     return (
-      <div className="p-6 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800">
-        <div className="text-center py-12">
+      <div className="py-3 flex justify-center">
+        <div className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800 p-8 text-center w-full max-w-md">
+          <div className="flex justify-center items-center space-x-2">
+            <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-gray-600 dark:text-gray-400">Loading users...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="py-3 flex justify-center">
+        <div className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800 p-8 text-center w-full max-w-md">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Error Loading Users</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={fetchUsers}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (users.length === 0 && !currentLoading) {
+    return (
+      <div className="py-3 flex justify-center">
+        <div className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800 p-8 text-center w-full max-w-md">
           <div className="text-gray-400 dark:text-gray-500 mb-4">
             <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">No data available</h3>
-          <p className="text-gray-500 dark:text-gray-400">Add some entries to get started.</p>
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">No users found</h3>
+          <p className="text-gray-500 dark:text-gray-400">
+            {filters.search || filters.group ? 'Try adjusting your filters.' : 'Add some users to get started.'}
+          </p>
         </div>
       </div>
     );
@@ -175,32 +326,56 @@ const EntryTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-                {pageRows.map((row, idx) => (
+                {pageRows.map((user) => (
                   <tr
-                    key={idx}
+                    key={user.id}
                     className="hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors duration-150"
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
-                        handleEdit(idx);
+                        handleEdit(user);
                       }
                     }}
                   >
-                    {COLUMNS.map((col) => (
-                      <td
-                        key={col.key}
-                        className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm truncate max-w-xs"
-                      >
-                        {row[col.key]}
-                      </td>
-                    ))}
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm font-mono">
+                      {user.id}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {`${user.first_name} ${user.last_name}`}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {user.mobile_number}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm truncate max-w-xs">
+                      {user.email}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm truncate max-w-xs">
+                      {user.company_name}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 rounded-full text-xs bg-indigo-100 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400">
+                        {user.group || '-'}
+                      </span>
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      ₹{user.wallet?.toFixed(2) || '0.00'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        user.is_active 
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400" 
+                          : "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+                      }`}>
+                        {user.is_active ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div className="flex space-x-2">
                         <Action
-                          isActive={true}
-                          onToggle={() => handleToggle(idx)}
-                          onEdit={() => handleEdit(idx)}
-                          onClick={() => handleEdit(idx)}
+                          isActive={user.is_active ?? true}
+                          onToggle={() => handleToggle(user.id, user.is_active ?? true)}
+                          onEdit={() => handleEdit(user)}
+                          onClick={() => handleEdit(user)}
                         />
                       </div>
                     </td>
@@ -218,19 +393,19 @@ const EntryTable: React.FC = () => {
        <div className="flex items-center justify-between px-6 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={handlePrev}
-            disabled={page === 1}
+            disabled={currentPage === 1}
             className="px-4 py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Prev
           </button>
 
           <span className="text-sm text-gray-600 dark:text-gray-300">
-            Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+            Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
           </span>
 
           <button
             onClick={handleNext}
-            disabled={page === totalPages}
+            disabled={currentPage === totalPages}
             className="px-4 py-2 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
@@ -242,3 +417,4 @@ const EntryTable: React.FC = () => {
 };
 
 export default EntryTable;
+

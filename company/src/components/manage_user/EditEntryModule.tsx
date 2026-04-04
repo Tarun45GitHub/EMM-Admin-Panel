@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import api from "../../api/Axios";
 import EntryTableEditModel from "./Entry_table_Edit_model";
 
 interface ParentOption {
@@ -11,19 +12,77 @@ interface EditDetailsModalProps {
   onClose: () => void;
   parents: ParentOption[];
   formData: any;
+  userId: number | string;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  onSave: () => void;
+  onSave: (success: boolean) => void;
 }
 
 const EditEntryModal: React.FC<EditDetailsModalProps> = ({
   show,
   onClose,
-  parents,
   formData,
+  userId,
   onChange,
   onSave,
 }) => {
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   if (!show) return null;
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveError(null);
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setSaveError("Token not found. Please log in again.");
+        setSaving(false);
+        return;
+      }
+
+      // Prepare payload matching the API endpoint structure
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        mobile_number: formData.mobile_number,
+        email: formData.email,
+        password: formData.password,
+        company_name: formData.company_name,
+        gstin: formData.gstin,
+        wallet: parseFloat(formData.wallet) || 0,
+        state_id: parseInt(formData.state_id) || null,
+        city_id: parseInt(formData.city_id) || null,
+        address: formData.address,
+        group: formData.group,
+      };
+
+      const response = await api.put(
+        `/crm/users/${userId}/`,
+        payload,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        onSave(true);
+      }
+    } catch (err: any) {
+      console.error('Update error:', err);
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Failed to update user. Please try again.';
+      setSaveError(errorMessage);
+      onSave(false);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 ">
@@ -56,23 +115,49 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-black">Username</label>
+              <label className="block text-sm font-medium text-black">First Name</label>
               <input
                 type="text"
-                name="userName"
-                value={formData.userName}
+                name="first_name"
+                value={formData.first_name}
                 onChange={onChange}
-                className="w-full text-gray-400 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="Enter username"
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter first name"
               />
             </div>
 
             <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Last Name</label>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={onChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter last name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Mobile Number</label>
+              <input
+                type="tel"
+                name="mobile_number"
+                value={formData.mobile_number}
+                onChange={onChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter mobile number"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
               <label className="block text-sm font-medium text-black">Email</label>
               <input
                 type="email"
-                name="emailid"
-                value={formData.emailid}
+                name="email"
+                value={formData.email}
                 onChange={onChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 placeholder="user@example.com"
@@ -90,46 +175,54 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                 placeholder="••••••••"
               />
             </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Group</label>
+              <select
+                name="group"
+                value={formData.group}
+                onChange={onChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white"
+              >
+                <option value="">Select Group</option>
+                <option value="Distributor">Distributor</option>
+                <option value="Retailer">Retailer</option>
+                <option value="User">User</option>
+              </select>
+            </div>
           </div>
 
-          {/* Name Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {["first_name", "middle_name", "last_name"].map((field, idx) => (
-              <div key={idx} className="space-y-2">
-                <label className="block text-sm font-medium text-black">
-                  {field.replace("_", " ").toUpperCase()}
-                </label>
-                <input
-                  type="text"
-                  name={field}
-                  value={formData[field]}
-                  onChange={onChange}
-                  className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder={`Enter ${field.replace("_", " ")}`}
-                />
-              </div>
-            ))}
-          </div>
 
-          {/* Address Information */}
+          {/* Company & Address Information */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-black">Shop / Company</label>
+              <label className="block text-sm font-medium text-black">Company Name</label>
               <input
                 type="text"
-                name="shop_company"
-                value={formData.shop_company}
+                name="company_name"
+                value={formData.company_name}
                 onChange={onChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="Enter shop/company name"
+                placeholder="Enter company name"
               />
             </div>
-            <div className="md:col-span-2 space-y-2">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">GSTIN</label>
+              <input
+                type="text"
+                name="gstin"
+                value={formData.gstin}
+                onChange={onChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter GSTIN"
+              />
+            </div>
+            <div className="md:col-span-1 space-y-2">
               <label className="block text-sm font-medium text-black">Address</label>
               <input
                 type="text"
-                name="Address"
-                value={formData.Address}
+                name="address"
+                value={formData.address}
                 onChange={onChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 placeholder="Enter complete address"
@@ -139,49 +232,40 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
 
           {/* Location Details */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {["state", "city", "pincode"].map((field, idx) => (
-              <div key={idx} className="space-y-2">
-                <label className="block text-sm font-medium text-black">
-                  {field.charAt(0).toUpperCase() + field.slice(1)}
-                </label>
-                <input
-                  type="text"
-                  name={field}
-                  value={formData[field]}
-                  onChange={onChange}
-                  className="w-full px-3  py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder={`Enter ${field}`}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Financial Information */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-black">iOS Wallet Balance</label>
-              <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
-                <input
-                  type="number"
-                  name="walletIOS"
-                  value={formData.walletIOS}
-                  onChange={onChange}
-                  className="w-full pl-8 pr-3 py-2 border text-gray-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder="0.00"
-                  min="0"
-                  step="0.01"
-                />
-              </div>
+              <label className="block text-sm font-medium text-black">State ID</label>
+              <input
+                type="number"
+                name="state_id"
+                value={formData.state_id}
+                onChange={onChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter state ID"
+              />
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-black">Android Wallet Balance</label>
+              <label className="block text-sm font-medium text-black">City ID</label>
+              <input
+                type="number"
+                name="city_id"
+                value={formData.city_id}
+                onChange={onChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Enter city ID"
+              />
+            </div>
+          </div>
+
+          {/* Wallet Information */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Wallet Balance</label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <span className="absolute left-3 top-2 text-gray-500">₹</span>
                 <input
                   type="number"
-                  name="walletAndroid"
-                  value={formData.walletAndroid}
+                  name="wallet"
+                  value={formData.wallet}
                   onChange={onChange}
                   className="w-full pl-8 pr-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                   placeholder="0.00"
@@ -190,54 +274,33 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-black">PIN</label>
-              <input
-                type="password"
-                name="pin"
-                value={formData.pin}
-                onChange={onChange}
-                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="••••"
-                maxLength={4}
-                pattern="[0-9]{4}"
-              />
-            </div>
           </div>
 
-          {/* Parent Selection */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-black">Parent Node</label>
-            <select
-              name="parent"
-              value={formData.parent}
-              onChange={onChange}
-              className="w-full px-3 py-2 border text-gray-600 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white"
-            >
-              <option value="">Select Parent</option>
-              {parents.map((p) => (
-                <option key={p.id} value={p.id} className="bg-blue text-gray-200">
-                  {p.label}
-                </option>
-              ))}
-            </select>
-          </div>
 
         </div>
+
+        {/* Error Message */}
+        {saveError && (
+          <div className="mx-6 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+            {saveError}
+          </div>
+        )}
 
         {/* Footer */}
         <div className="flex justify-end px-6 py-4 bg-gray-50 space-x-3 rounded-b-xl">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium"
+            disabled={saving}
+            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all duration-200 font-medium disabled:opacity-50"
           >
             Cancel
           </button>
           <button
-            onClick={onSave}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            onClick={handleSave}
+            disabled={saving}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Save Changes
+            {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
         

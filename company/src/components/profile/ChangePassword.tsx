@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Lock } from "lucide-react";
+import api from "../../api/Axios";
 
 const ChangePassword: React.FC = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,7 +14,7 @@ const ChangePassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
+    if (!oldPassword || !newPassword || !confirmPassword) {
       setError("All fields are required.");
       return;
     }
@@ -33,13 +34,35 @@ const ChangePassword: React.FC = () => {
     setLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const token = localStorage.getItem('token');
+      
+      const response = await api.post(
+        '/crm/change-password/',
+        {
+          old_password: oldPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        },
+        {
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('Password changed successfully:', response.data);
       setSuccess("Password updated successfully!");
-      setCurrentPassword("");
+      setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
-    } catch (err) {
-      setError("Failed to change password. Try again.");
+    } catch (err: any) {
+      console.error('Error changing password:', err);
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          err.response?.data?.detail ||
+                          'Failed to change password. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -84,8 +107,8 @@ const ChangePassword: React.FC = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
                 placeholder="Enter current password"
                 className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 
                 focus:outline-none transition dark:text-gray-200"
