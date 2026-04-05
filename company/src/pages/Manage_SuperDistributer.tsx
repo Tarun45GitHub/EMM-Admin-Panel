@@ -6,13 +6,14 @@ import TableHeader, { type FilterState as HeaderFilterState } from "../component
 import api from "../api/Axios"
 
 interface ApiResponse {
-  results: UserData[];
+ data:{
+     total_pages: number; results: UserData[];
   count: number;
   next: string | null;
-  previous: string | null;
+  previous: string | null;}
 }
 
-const NationalDistributer: React.FC = () => {
+const SuperDistributer: React.FC = () => {
     const { showLoader, hideLoader } = useLoader();
     const [filters, setFilters] = useState<HeaderFilterState>({
         search: "",
@@ -37,12 +38,15 @@ const NationalDistributer: React.FC = () => {
         try {
             setLoading(true);
             showLoaderRef.current();
-            const token = localStorage.getItem('token');
-            
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                console.warn("Token missing. Redirecting to login...");
+                return;
+            }
             const params: Record<string, string | number | boolean> = {
                 page: page,
                 page_size: pageSize,
-                group: "National Distributor",
+                group: "Super Distributor",
             };
 
             // Add filters to params
@@ -60,13 +64,13 @@ const NationalDistributer: React.FC = () => {
                     'Content-Type': 'application/json',
                 }
             });
-            console.log(response);
+            console.log(response.data.data.results);
             
-            setData(response.data.results || []);
-            setTotalCount(response.data.count || 0);
+            setData(response.data.data.results || []);
+            setTotalCount(response.data.data.total_pages || 0);
             
         } catch (err) {
-            console.error('Error fetching national distributors:', err);
+            console.error('Error fetching super distributors:', err);
             setData([]);
         } finally {
             setLoading(false);
@@ -93,10 +97,10 @@ const NationalDistributer: React.FC = () => {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">National Distributor</h1>
-                <p className="text-gray-500 dark:text-gray-400">Manage your National Distributor Team</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Super Distributor</h1>
+                <p className="text-gray-500 dark:text-gray-400">Manage your Super Distributor Team</p>
             </div>
-            <AddEntrybutton value={"Add New"} />
+            <AddEntrybutton value={"Add Super Dist."} />
         </div>
 
         {/* Filter and Actions Section */}
@@ -123,4 +127,4 @@ const NationalDistributer: React.FC = () => {
     )
 }
 
-export default NationalDistributer;
+export default SuperDistributer;

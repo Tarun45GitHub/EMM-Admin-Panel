@@ -16,11 +16,10 @@ const COLORS = ["#6366F1", "#22C55E"];
 
 const UserPieChart: React.FC = ({  }) => {
   return (
-    <div>
     <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border">
-      <h2 className="text-black dark:text-gray-200 font-semibold ">User Type</h2>
-     <div className="h-65 w-full">
-        <ResponsiveContainer width="100%" height="100%">
+      <h2 className="text-black dark:text-gray-200 font-semibold mb-4">User Type</h2>
+      <div style={{ width: '100%', height: 300 }}>
+        <ResponsiveContainer>
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" outerRadius={100} label>
               {data.map((_, index) => (
@@ -32,7 +31,6 @@ const UserPieChart: React.FC = ({  }) => {
           </PieChart>
         </ResponsiveContainer>
       </div>
-    </div>
     </div>
   );
 };

@@ -29,10 +29,10 @@ interface CityData {
 }
 
 interface PaginatedResponse<T> {
-  results: T[];
+ data: {results: T[];
   count: number;
   next: string | null;
-  previous: string | null;
+  previous: string | null;}
 }
 
 const TableHeader: React.FC<Props> = ({ 
@@ -68,14 +68,25 @@ const TableHeader: React.FC<Props> = ({
     const fetchStates = async () => {
       try {
         setLoadingStates(true);
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          console.warn("Token missing. Redirecting to login..."); 
+          return;
+        }
         const response = await api.get<PaginatedResponse<StateData>>('/crm/states/', {
+          params: {
+            page: '',
+            page_size: 10,
+            search: ''
+          },
           headers: {
             'Authorization': token ? `Bearer ${token}` : '',
             'Content-Type': 'application/json',
           }
         });
-        setStates(response.data.results || []);
+        // console.log(response.data.data.results);
+        
+        setStates(response.data.data.results || []);
       } catch (err) {
         console.error('Error fetching states:', err);
         setStates([]);
@@ -98,15 +109,23 @@ const TableHeader: React.FC<Props> = ({
 
       try {
         setLoadingCities(true);
-        const token = localStorage.getItem('token');
-        const response = await api.get<PaginatedResponse<CityData>>('/crm/cities/', {
-          params: { state_id: stateId },
+        const token = localStorage.getItem('access_token');
+         if (!token) {
+          console.warn("Token missing. Redirecting to login..."); 
+          return;
+        }
+        const response = await api.get<PaginatedResponse<CityData>>(`/crm/states/${stateId}/cities/`, {
+          params: { 
+            page: '',
+            page_size: 100,
+            search: ''
+          },
           headers: {
             'Authorization': token ? `Bearer ${token}` : '',
             'Content-Type': 'application/json',
           }
         });
-        setCities(response.data.results || []);
+        setCities(response.data.data.results || []);
         setCityId(""); // Reset city when state changes
       } catch (err) {
         console.error('Error fetching cities:', err);

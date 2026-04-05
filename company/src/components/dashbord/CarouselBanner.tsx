@@ -1,45 +1,51 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
-import banner1 from "../banners/banner1.jpg";
-import banner2 from "../banners/banner2.jpg";
-import banner3 from "../banners/banner3.jpg";
-import banner4 from "../banners/banner4.jpg";
+import api from "../../api/Axios";
+
+interface BannerData {
+  id: number;
+  image: string;
+  title?: string;
+  subtitle?: string;
+  redirect_url?: string;
+}
 
 interface Slide {
   img: string;
   title: string;
   subtitle: string;
-  link: string;
+  redirect_url: string;
 }
 
-const slides: Slide[] = [
+// Default fallback slides in case API fails
+const defaultSlides: Slide[] = [
   {
-    img: banner1,
+    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop",
     title: "Welcome to Admin Panel",
     subtitle: "Streamline your business operations with our powerful management tools.",
-    link: "/learn/banner1",
+    redirect_url: "/learn/banner1",
   },
   {
-    img: banner2,
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=400&fit=crop",
     title: "Manage Users & Reports",
     subtitle: "Get detailed insights and manage your team efficiently in one place.",
-    link: "/learn/banner2",
+    redirect_url: "/learn/banner2",
   },
   {
-    img: banner3,
+    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop",
     title: "Track Install Analytics",
     subtitle: "Real-time tracking and deep analytics for all your installations.",
-    link: "/learn/banner3",
+    redirect_url: "/learn/banner3",
   },
   {
-    img: banner4,
+    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=400&fit=crop",
     title: "Fast & Secure System",
     subtitle: "Experience industry-leading security and lightning-fast performance.",
-    link: "/learn/banner4",
+    redirect_url: "/learn/banner4",
   },
 ];
 
@@ -81,10 +87,83 @@ const CarouselStyles = () => (
   </style>
 );
 
+const buttonClasses = `
+  inline-flex items-center gap-2
+  px-5 py-2.5 md:px-8 md:py-3.5
+  rounded-full text-sm md:text-base font-bold
+  text-white bg-orange-600 hover:bg-orange-500
+  transform transition-all duration-300
+  hover:translate-x-1 shadow-lg shadow-orange-900/20
+  active:scale-95
+`;
+
+const GetStartedButton = ({ url }: { url: string }) => {
+  // console.log(url);
+  const isExternal = url;
+  const content = (
+    <>
+      Learn More
+      <ArrowRight size={18} />
+    </>
+  );
+
+  if (!isExternal) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={buttonClasses}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link to={url} className={buttonClasses}>
+      {content}
+    </Link>
+  );
+};
+
 const CarouselBanner: React.FC = memo(() => {
-  useEffect(()=>{
-   
-  },[])
+  const [slides, setSlides] = useState<Slide[]>(defaultSlides);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const response = await api.get("/crm/banners");
+        const data = response.data?.data;
+        
+        if (Array.isArray(data) && data.length > 0) {
+          const bannerSlides: Slide[] = data.map((banner: BannerData, index: number) => ({
+            img: banner.image,
+            title: banner.title || `Banner ${index + 1}`,
+            subtitle: banner.subtitle || "Explore our latest updates and features.",
+            redirect_url: banner.redirect_url || `/learn/banner${index + 1}`,
+          }));
+          setSlides(bannerSlides);
+        }
+      } catch (err) {
+        console.error("Error fetching banners:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-55 sm:h-75 md:h-95 lg:h-105 bg-gray-800 rounded-2xl md:rounded-[32px] flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <CarouselStyles />
@@ -128,21 +207,7 @@ const CarouselBanner: React.FC = memo(() => {
                   </p>
                   
                   <div className="pt-2 md:pt-4 animate-in slide-in-from-left-8 duration-700 delay-200">
-                    <Link
-                      to={slide.link}
-                      className="
-                        inline-flex items-center gap-2
-                        px-5 py-2.5 md:px-8 md:py-3.5
-                        rounded-full text-sm md:text-base font-bold
-                        text-white bg-orange-600 hover:bg-orange-500
-                        transform transition-all duration-300
-                        hover:translate-x-1 shadow-lg shadow-orange-900/20
-                        active:scale-95
-                      "
-                    >
-                      Get Started
-                      <ArrowRight size={18} />
-                    </Link>
+                    <GetStartedButton url={slide.redirect_url} />
                   </div>
                 </div>
               </div>

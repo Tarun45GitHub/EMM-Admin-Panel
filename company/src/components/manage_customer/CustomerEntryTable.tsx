@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import CustomerAction from "./CustomerAction";
 import CustomerToggleButton from "./CustomerToggleButton";

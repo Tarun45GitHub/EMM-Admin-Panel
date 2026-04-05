@@ -3,7 +3,6 @@ import InputBanner from "../components/manage_banner/InputBanner";
 import React,{useEffect,useState} from "react";
 import { useLoader } from "../components/ui/LoaderContext";
 import NotFound from "./NotFound";
-import axios from "axios";
 import api from "../api/Axios";
 
 

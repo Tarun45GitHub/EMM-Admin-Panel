@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
-import TotalCard from "./totalCard";
 import {Headset,ShieldCheck,Users,Briefcase,Store,User } from "lucide-react";
 import { useLoader } from "../ui/LoaderContext";
 import axios from "axios";
 import NotFound from "../../pages/NotFound";
+import TotalCard from "./TotalCard";
+
 
 const TotalNav: React.FC = () => {
     const { showLoader, hideLoader } = useLoader();
@@ -12,7 +13,7 @@ const TotalNav: React.FC = () => {
 
      useEffect(() => {
   if (data !== null) {
-    console.log("SUCCEESS",data);
+    // console.log("SUCCEESS",data);
   }
 }, [data]);
 
@@ -22,7 +23,7 @@ const TotalNav: React.FC = () => {
         showLoader();
 
         // Use .getItem() - it's more reliable
-        const myToken = window.localStorage.token;
+        const myToken = window.localStorage.access_token;
 
         if (!myToken) {
           console.warn("Token missing. Redirecting to login...");
@@ -64,13 +65,13 @@ const TotalNav: React.FC = () => {
             <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-2 ">
                 <TotalCard
                  title="Total No. Support Team" 
-                 value={ "0"} 
+                 value={"000"} 
                  change="28.4" 
                  positive={true} 
                  Icon={Headset} />
-                <TotalCard title="Last Month Support Add" value="jglj" change="28.4" positive={true} Icon={Headset} />
-                <TotalCard title="Last Week Support Add" value="50.8K" change="28.4" positive={true} Icon={Headset} />
-                <TotalCard title="Last Day Support Add" value="50.8K" change="28.4" positive={true} Icon={Headset} />
+                <TotalCard title="Last Month Support Add" value="000" change="28.4" positive={true} Icon={Headset} />
+                <TotalCard title="Last Week Support Add" value="000" change="28.4" positive={true} Icon={Headset} />
+                <TotalCard title="Last Day Support Add" value="000" change="28.4" positive={true} Icon={Headset} />
 
             </div>
             <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-2  ">
@@ -128,10 +129,10 @@ const TotalNav: React.FC = () => {
 
             </div>
             <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-2 ">
-                <TotalCard title="Total No. Customer Team" value="50.8K" change="28.4" positive={true} Icon={User} />
-                <TotalCard title="Last Month Customer Add" value="50.8K" change="28.4" positive={true} Icon={User} />
-                <TotalCard title="Last Week Customer Add" value="50.8K" change="28.4" positive={true} Icon={User} />
-                <TotalCard title="Last Day Customer Add" value="50.8K" change="28.4" positive={true} Icon={User} />
+                <TotalCard title="Total No. Customer Team" value="00" change="28.4" positive={true} Icon={User} />
+                <TotalCard title="Last Month Customer Add" value="00" change="28.4" positive={true} Icon={User} />
+                <TotalCard title="Last Week Customer Add" value="00" change="28.4" positive={true} Icon={User} />
+                <TotalCard title="Last Day Customer Add" value="00" change="28.4" positive={true} Icon={User} />
 
             </div>
            

@@ -107,7 +107,7 @@ const InputBanner: React.FC<InputBannerProps> = ({ value, bannerId, onSuccess })
         ? `/crm/banners/${bannerId}/` 
         : '/crm/banners/';
       
-      const method = bannerId ? 'put' : 'post';
+      const method = bannerId ? 'put' : 'patch';
 
       const response = await api({
         method,

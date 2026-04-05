@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/Axios";
 
 
 
@@ -27,21 +27,22 @@ const Login: React.FC = () => {
     try {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response=await axios.post("https://backend.bharatemm.com/api/crm/login/",{"username":username,"password":password});
-      if(!response) throw new Error('Failed to login');
-      console.log(response.data.data.user.username);
-      // setData(response.data.data);
-      localStorage.setItem("token",response.data.data.access_token);
-      // localStorage.setItem("refresh_token",response.data.data.refresh_token);
-      localStorage.setItem("username",response.data.data.user.username);
-
-
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An unknown error occurred while login');
-    }
-    finally{
+      const response = await api.post("/crm/login/",{ username, password });
+      
+      if (!response?.data?.data?.access_token) {
+        throw new Error('Failed to login: Invalid response from server');
+      }
+      
+      // console.log(response);
+      localStorage.setItem("access_token", response.data.data.access_token);
+      localStorage.setItem("refreassh_token", response.data.data.user.refreash_token);
+      
+      // Navigate to dashboard only on successful login
       navigate("/dashboard");
-
+    } catch (error) {
+      setError("Invalid credentials.");
+    } finally {
+      setLoading(false);
     }
 
   };

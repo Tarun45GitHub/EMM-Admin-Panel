@@ -75,13 +75,12 @@ const Action: React.FC<ActionProps> = ({ isActive, onToggle }) => {
         <button 
         onClick={()=>setModalOpen(true)}>Edit</button>
         <EditEntryModal
-        show={modalOpen}
-        onClose={() => setModalOpen(false)}
-        parents={parentsList} 
-        formData={Appl}
-        onChange={() => {}}
-        onSave={() => handleFormSubmit({})}
-          />
+          show={modalOpen}
+          onClose={() => setModalOpen(false)}
+          parents={parentsList}
+          formData={Appl}
+          onChange={() => { } }
+          onSave={() => handleFormSubmit({})} userId={""}          />
       </div>
     </div>
   );

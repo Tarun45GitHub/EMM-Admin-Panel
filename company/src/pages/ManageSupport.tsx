@@ -6,13 +6,16 @@ import TableHeader, { type FilterState as HeaderFilterState } from "../component
 import api from "../api/Axios"
 
 interface ApiResponse {
- data:{ results: UserData[];
-  count: number;
-  next: string | null;
-  previous: string | null;}
+  data: {
+    total_pages: number;
+    results: UserData[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  }
 }
 
-const SuperDistributer: React.FC = () => {
+const MannageSupport: React.FC = () => {
     const { showLoader, hideLoader } = useLoader();
     const [filters, setFilters] = useState<HeaderFilterState>({
         search: "",
@@ -23,7 +26,6 @@ const SuperDistributer: React.FC = () => {
     const [pageSize] = useState(8);
     const [totalCount, setTotalCount] = useState(0);
     
-    // Use refs to access latest loader functions without causing re-renders
     const showLoaderRef = useRef(showLoader);
     const hideLoaderRef = useRef(hideLoader);
     
@@ -32,20 +34,20 @@ const SuperDistributer: React.FC = () => {
         hideLoaderRef.current = hideLoader;
     }, [showLoader, hideLoader]);
 
-    // Fetch data from backend
     const fetchData = useCallback(async () => {
         try {
             setLoading(true);
             showLoaderRef.current();
-            const token = localStorage.getItem('token');
-            
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+              console.warn("Token missing. Redirecting to login...");
+              return;
+            }
             const params: Record<string, string | number | boolean> = {
                 page: page,
                 page_size: pageSize,
-                group: "Super Distributor",
+                group: "Support",
             };
-
-            // Add filters to params
             if (filters.search) params.search = filters.search;
             if (filters.state_id) params.state_id = filters.state_id;
             if (filters.city_id) params.city_id = filters.city_id;
@@ -61,12 +63,10 @@ const SuperDistributer: React.FC = () => {
                 }
             });
             console.log(response.data.data.results);
-            
             setData(response.data.data.results || []);
-            // setTotalCount(response.data.count || 0);
-            
+            setTotalCount(response.data.data.total_pages || 0);
         } catch (err) {
-            console.error('Error fetching super distributors:', err);
+            console.error('Error fetching support team:', err);
             setData([]);
         } finally {
             setLoading(false);
@@ -74,14 +74,13 @@ const SuperDistributer: React.FC = () => {
         }
     }, [filters, page, pageSize]);
 
-    // Initial load and when filters/page changes
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
     const handleFilterChange = useCallback((newFilters: HeaderFilterState) => {
         setFilters(newFilters);
-        setPage(1); // Reset to first page when filters change
+        setPage(1);
     }, []);
 
     const handlePageChange = (newPage: number) => {
@@ -90,16 +89,13 @@ const SuperDistributer: React.FC = () => {
 
     return (
        <div className="w-full min-h-screen bg-white dark:bg-[#0F172A] p-4 md:p-8 space-y-6">
-        {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Super Distributor</h1>
-                <p className="text-gray-500 dark:text-gray-400">Manage your Super Distributor Team</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Support</h1>
+                <p className="text-gray-500 dark:text-gray-400">Manage your Support Team</p>
             </div>
-            <AddEntrybutton value={"Add Super Dist."} />
+            <AddEntrybutton value={"Add Support"} />
         </div>
-
-        {/* Filter and Actions Section */}
         <div className="w-full">
             <TableHeader 
                 onFilterChange={handleFilterChange} 
@@ -107,8 +103,6 @@ const SuperDistributer: React.FC = () => {
                 showFilters={true}
             />
         </div>
-
-        {/* Table Section */}
         <div className="bg-white dark:bg-[#1E293B] rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800">
             <EntryTable 
                 data={data}
@@ -123,4 +117,4 @@ const SuperDistributer: React.FC = () => {
     )
 }
 
-export default SuperDistributer;
+export default MannageSupport;

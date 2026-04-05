@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import avater from "../banners/defult_avatar.jpg"
+import avater from "../defult_avatar.jpg"
 
 interface Profile {
   firstName: string;

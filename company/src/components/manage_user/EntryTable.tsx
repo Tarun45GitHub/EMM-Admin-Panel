@@ -11,12 +11,18 @@ export interface UserData {
   email: string;
   company_name: string;
   gstin?: string;
-  wallet?: number;
+  wallet?: number | string;
   state_id?: number;
+  state?: string;
   city_id?: number;
+  city?: string;
   address?: string;
   group?: string;
+  username?: string;
+  parent_user?: string;
+  parent_user_id?: number;
   is_active?: boolean;
+  date_joined?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -40,12 +46,18 @@ export interface FilterState {
 
 const COLUMNS = [
   { key: "id", label: "ID" },
+  { key: "username", label: "Username" },
   { key: "first_name", label: "Name" },
   { key: "mobile_number", label: "Mobile" },
   { key: "email", label: "Email" },
   { key: "company_name", label: "Company" },
-  { key: "group", label: "Group" },
+  { key: "gstin", label: "GSTIN" },
+  { key: "state", label: "State" },
+  { key: "city", label: "City" },
+  { key: "address", label: "Address" },
+  { key: "parent_user", label: "Parent User" },
   { key: "wallet", label: "Wallet" },
+  { key: "date_joined", label: "Date Joined" },
   { key: "is_active", label: "Status" },
 ];
 
@@ -341,6 +353,9 @@ const EntryTable: React.FC<EntryTableProps> = ({
                       {user.id}
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {user.username || '-'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
                       {`${user.first_name} ${user.last_name}`}
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
@@ -352,13 +367,26 @@ const EntryTable: React.FC<EntryTableProps> = ({
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm truncate max-w-xs">
                       {user.company_name}
                     </td>
-                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <span className="px-2 py-1 rounded-full text-xs bg-indigo-100 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400">
-                        {user.group || '-'}
-                      </span>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {user.gstin || '-'}
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
-                      ₹{user.wallet?.toFixed(2) || '0.00'}
+                      {user.state || '-'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {user.city || '-'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm truncate max-w-xs">
+                      {user.address || '-'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {user.parent_user || '-'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      ₹{typeof user.wallet === 'number' ? user.wallet.toFixed(2) : user.wallet || '0.00'}
+                    </td>
+                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
+                      {user.date_joined ? new Date(user.date_joined).toLocaleDateString() : '-'}
                     </td>
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 rounded-full text-xs ${
