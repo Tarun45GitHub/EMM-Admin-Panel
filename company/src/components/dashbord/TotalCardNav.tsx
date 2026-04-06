@@ -3,7 +3,7 @@ import {Headset,ShieldCheck,Users,Briefcase,Store,User } from "lucide-react";
 import { useLoader } from "../ui/LoaderContext";
 import axios from "axios";
 import NotFound from "../../pages/NotFound";
-import TotalCard from "./TotalCard";
+import TotalCard from "./TotalCard.tsx";
 
 
 const TotalNav: React.FC = () => {

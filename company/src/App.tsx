@@ -1,6 +1,4 @@
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
-// import './App.css'
-import Login from './pages/Login';
 import Layout from './layout/layout';
 import MannageBanner from './pages/ManageBanner';
 import Dashboard from './pages/dashboard';
@@ -19,6 +17,7 @@ import Settings from './components/settings/settings';
 import CustomerEdit from './components/customerEdit/EditCustomer';
 import NotFound from './pages/NotFound'
 import Transfer from './pages/Transfer';
+import Login from './pages/Login.tsx';
 
 function App() {
   
