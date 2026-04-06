@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { Plus } from "lucide-react";
 
 type ActionProps={
-  value:String
+  value: string
 }
 
 
@@ -25,13 +25,14 @@ const AddEntrybutton: React.FC<ActionProps> = ({ value }) => {
         type="button"
       >
         <Plus size={18} />
-        {value}
+        Add {value}
       </button>
 
       <AddEntryFromModal
         show={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleFormSubmit}
+        group={value}
       />
     </div>
   );

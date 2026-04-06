@@ -24,12 +24,14 @@ interface MultiStepApplicationModalProps {
   show: boolean;
   onClose: () => void;
   onSubmit: (data: ApplicationData) => void;
+  group: string;
 }
 
 const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
   show,
   onClose,
   onSubmit,
+  group
 }) => {
   const [step, setStep] = useState(1);
 
@@ -48,7 +50,7 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
     group: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -70,9 +72,9 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
         state_id: parseInt(formData.state_id) || 1,
         city_id: parseInt(formData.city_id) || 1,
         address: formData.address,
-        group: formData.group,
+        group: group
       };
-      const myToken = window.localStorage.token;
+      const myToken = window.localStorage.access_token;
 
         if (!myToken) {
           console.warn("Token missing. Redirecting to login...");

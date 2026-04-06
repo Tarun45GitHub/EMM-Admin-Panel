@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import api from "../../api/Axios";
 
-interface Transaction {
-  id: string;
+export interface Transaction {
+  id: string | number;
   date: string;
   description: string;
   amount: number;
@@ -14,18 +14,43 @@ interface TransactionTableProps {
   initialPageSize?: number;
   // Optional: Callback when transactions are loaded
   onTransactionsLoaded?: (transactions: Transaction[]) => void;
+  // Optional: Callback when total count changes
+  onTotalCountChange?: (count: number) => void;
 }
 
-interface ApiResponse {
-  results: Transaction[];
+interface ApiResult {
+  id: number;
+  type: string;
+  amount: string;
+  sender_id: number;
+  sender_name: string;
+  sender_mobile_number: string | null;
+  receiver_id: number;
+  receiver_name: string;
+  receiver_mobile_number: string | null;
+  created_at: string;
+}
+
+interface ApiData {
   count: number;
   next: string | null;
   previous: string | null;
+  current_page: number;
+  page_size: number;
+  total_pages: number;
+  results: ApiResult[];
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: ApiData;
+  message: string;
 }
 
 const TransactionTable: React.FC<TransactionTableProps> = ({ 
   initialPageSize = 10,
-  onTransactionsLoaded 
+  onTransactionsLoaded,
+  onTotalCountChange
 }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,11 +59,35 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   const [rowsPerPage, setRowsPerPage] = useState(initialPageSize);
   const [totalCount, setTotalCount] = useState(0);
 
+  // Transform API result to Transaction format
+  const transformTransaction = (result: ApiResult): Transaction => {
+    const isSender = result.sender_id === result.receiver_id;
+    const otherParty = isSender ? result.receiver_name : result.sender_name;
+    const description = `${result.type.charAt(0).toUpperCase() + result.type.slice(1)} ${isSender ? 'to' : 'from'} ${otherParty}`;
+    
+    // Determine status based on type - API doesn't provide explicit status
+    let status = 'Completed';
+    if (result.type === 'revert') {
+      status = 'Reverted';
+    }
+    
+    // Amount is positive for received, negative for sent
+    const amount = parseFloat(result.amount) * (isSender ? -1 : 1);
+
+    return {
+      id: result.id,
+      date: result.created_at,
+      description,
+      amount,
+      status
+    };
+  };
+
   const fetchTransactions = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) {
         setError("Token not found. Please log in again.");
         setLoading(false);
@@ -55,11 +104,17 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
         }
       });
 
-      setTransactions(response.data.results || []);
-      setTotalCount(response.data.count || 0);
+      const transformedTransactions = (response.data.data?.results || []).map(transformTransaction);
+      const newTotalCount = response.data.data?.count || 0;
+      setTransactions(transformedTransactions);
+      setTotalCount(newTotalCount);
       
       if (onTransactionsLoaded) {
-        onTransactionsLoaded(response.data.results);
+        onTransactionsLoaded(transformedTransactions);
+      }
+      
+      if (onTotalCountChange) {
+        onTotalCountChange(newTotalCount);
       }
     } catch (err: any) {
       console.error('Error fetching transactions:', err);
@@ -70,7 +125,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage, onTransactionsLoaded]);
+  }, [page, rowsPerPage, onTransactionsLoaded, onTotalCountChange]);
 
   useEffect(() => {
     fetchTransactions();
@@ -89,12 +144,14 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'paid':
+      case 'completed':
         return 'bg-green-100 text-green-800 border-green-200';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'failed':
         return 'bg-red-100 text-red-800 border-red-200';
       case 'processing':
+      case 'reverted':
         return 'bg-blue-100 text-blue-800 border-blue-200';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -192,8 +249,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Total Transactions</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">{totalCount}</p>
+                <p className="text-m text-gray-600 dark:text-gray-400">Total Transactions:  {totalCount}</p>
+                {/* <p className="text-lg font-semibold text-gray-900 dark:text-white">{totalCount}</p> */}
               </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="rowsPerPage" className="text-sm text-gray-700 dark:text-gray-300">Rows per page:</label>
@@ -268,7 +325,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border-2 ${getStatusColor(tx.status)}`}
                       >
                         <span className={`w-2 h-2 rounded-full mr-1.5 ${
-                          tx.status.toLowerCase() === 'paid' ? 'bg-green-500' :
+                          tx.status.toLowerCase() === 'paid' || tx.status.toLowerCase() === 'completed' ? 'bg-green-500' :
                           tx.status.toLowerCase() === 'pending' ? 'bg-yellow-500' :
                           tx.status.toLowerCase() === 'failed' ? 'bg-red-500' :
                           'bg-blue-500'

@@ -25,7 +25,7 @@ const BusinessDetails: React.FC<Props> = ({ data, handleChange }) => {
         className="w-full border rounded px-3 py-2"
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="">
         <input
           name="wallet"
           placeholder="Wallet Balance"
@@ -34,13 +34,13 @@ const BusinessDetails: React.FC<Props> = ({ data, handleChange }) => {
           className="w-full border rounded px-3 py-2"
         />
 
-        <input
+        {/* <input
           name="group"
           placeholder="Group (e.g., Distributor)"
           value={data.group}
           onChange={handleChange}
           className="w-full border rounded px-3 py-2"
-        />
+        /> */}
       </div>
     </div>
   );

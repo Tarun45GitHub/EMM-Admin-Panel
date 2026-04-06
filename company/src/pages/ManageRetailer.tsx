@@ -62,7 +62,7 @@ const Retailer: React.FC = () => {
                     'Content-Type': 'application/json',
                 }
             });
-            console.log(response.data.data.results);
+            // console.log(response.data.data.results);
             setData(response.data.data.results || []);
             setTotalCount(response.data.data.total_pages || 0);
         } catch (err) {
@@ -94,7 +94,7 @@ const Retailer: React.FC = () => {
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Retailer</h1>
                 <p className="text-gray-500 dark:text-gray-400">Manage your Retailer Team</p>
             </div>
-            <AddEntrybutton value={"Add Retailer"} />
+            <AddEntrybutton value={"Retailer"} />
         </div>
         <div className="w-full">
             <TableHeader 

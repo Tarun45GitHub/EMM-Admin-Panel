@@ -1,102 +1,26 @@
 import TransactionTable from "../components/transfer/Transcationtable";
-import { useEffect, useState } from "react";
-import { useLoader } from "../components/ui/LoaderContext";
-import TableHeader from "../components/transfer/TableHeader";
-
-interface Transaction {
-  id: string;
-  date: string;
-  description: string;
-  amount: number;
-  status: string;
-}
+import type { Transaction } from "../components/transfer/Transcationtable";
+import { useState, useCallback } from "react";
+// import TableHeader from "../components/transfer/TableHeader";
 
 const MyTransaction: React.FC = () => {
-  const { showLoader, hideLoader } = useLoader();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
 
-  // Mock data - in a real app, this would come from an API
-  const mockTransactions: Transaction[] = [
-    {
-      "id": "TRX1001",
-      "date": "2025-02-12",
-      "description": "Subscription Payment",
-      "amount": 59.99,
-      "status": "Paid"
-    },
-    {
-      "id": "TRX1002",
-      "date": "2025-02-10",
-      "description": "Refund Issued",
-      "amount": -20.00,
-      "status": "Paid"
-    },
-    {
-      "id": "TRX1003",
-      "date": "2025-02-09",
-      "description": "Online Purchase",
-      "amount": 120.75,
-      "status": "Pending"
-    },
-    {
-      "id": "TRX1004",
-      "date": "2025-02-08",
-      "description": "Point of Sale Sale",
-      "amount": 45.50,
-      "status": "Failed"
-    },
-    {
-      "id": "TRX1005",
-      "date": "2025-02-05",
-      "description": "Refund Credit",
-      "amount": -10.25,
-      "status": "Paid"
-    },
-    {
-      "id": "TRX1006",
-      "date": "2025-02-14",
-      "description": "Monthly Subscription",
-      "amount": 29.99,
-      "status": "Paid"
-    },
-    {
-      "id": "TRX1007",
-      "date": "2025-02-15",
-      "description": "Service Fee",
-      "amount": 15.00,
-      "status": "Processing"
-    },
-    {
-      "id": "TRX1008",
-      "date": "2025-02-16",
-      "description": "Product Purchase",
-      "amount": 89.99,
-      "status": "Paid"
-    }
-  ];
+  // const handleFilterChange = useCallback((filters: any) => {
+  //   console.log('Filter changed:', filters);
+  // }, []);
 
-  useEffect(() => {
-    showLoader();
-    setLoading(true);
-    
-    // Simulate API call
-    const timer = setTimeout(() => {
-      setTransactions(mockTransactions);
-      setLoading(false);
-      hideLoader();
-    }, 1000);
-
-    return () => clearTimeout(timer);
+  const handleTransactionsLoaded = useCallback((loadedTransactions: Transaction[]) => {
+    setTransactions(loadedTransactions);
   }, []);
 
-  const handleFilterChange = (filters: any) => {
-    // In a real app, this would filter the data
-    console.log('Filter changed:', filters);
-  };
+  const handleTotalCountChange = useCallback((count: number) => {
+    setTotalCount(count);
+  }, []);
 
   const getSummaryStats = () => {
-    const totalTransactions = transactions.length;
+    const totalTransactions = totalCount;
     const totalAmount = transactions.reduce((sum, tx) => sum + tx.amount, 0);
     const paidTransactions = transactions.filter(tx => tx.status.toLowerCase() === 'paid').length;
     const pendingTransactions = transactions.filter(tx => tx.status.toLowerCase() === 'pending').length;
@@ -110,14 +34,6 @@ const MyTransaction: React.FC = () => {
   };
 
   const stats = getSummaryStats();
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8 ">
@@ -197,13 +113,16 @@ const MyTransaction: React.FC = () => {
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Detailed view of all your transactions</p>
           </div> */}
           
-          <div className="px-2">
+          {/* <div className="px-2">
             <TableHeader onFilterChange={handleFilterChange} />
-          </div>
+          </div> */}
 
           <div className="">
             <div className="">
-              <TransactionTable />
+              <TransactionTable 
+                onTransactionsLoaded={handleTransactionsLoaded}
+                onTotalCountChange={handleTotalCountChange}
+              />
             </div>
           </div>
         </div>

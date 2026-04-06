@@ -67,7 +67,7 @@ const NationalDistributer: React.FC = () => {
                     'Content-Type': 'application/json',
                 }
             });
-            console.log(response.data.data.results);
+            // console.log(response.data.data.results);
             setData(response.data.data.results || []);
             setTotalCount(response.data.data.total_pages || 0);
             

@@ -1,4 +1,4 @@
-import React, { useState, type ChangeEvent, type FormEvent } from 'react';
+import React, { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import { ArrowRightLeft, Landmark, IndianRupee } from 'lucide-react';
 import api from '../api/Axios';
 import TransactionTable from '../components/transfer/Transcationtable';
@@ -7,8 +7,11 @@ import TransactionTable from '../components/transfer/Transcationtable';
 type TransactionType = 'transfer' | 'withdraw';
 
 interface User {
+  company_name: ReactNode;
   id: number;
-  name: string;
+  // Add other fields that might be in the API response
+  mobile_number?: string;
+  email?: string;
 }
 
 const Transfer: React.FC = () => {
@@ -27,10 +30,25 @@ const Transfer: React.FC = () => {
   React.useEffect(() => {
     const fetchUsers = async () => {
       try {
-        // Adjust this endpoint based on your actual user list API
-        const response = await api.get('/crm/users/list/');
-        if (response.data && Array.isArray(response.data)) {
-          setUsers(response.data);
+        const token = localStorage.getItem('access_token');
+        const response = await api.get('/crm/users/lower-hierarchy/', {
+          params: { search: '' },
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+          }
+        });
+        console.log(response);
+        
+        // Handle different possible response structures
+        if (response.data) {
+          // If response has a data wrapper (like { success: true, data: [...] })
+          const usersData = response.data.data || response.data.results || response.data;
+          if (Array.isArray(usersData)) {
+            setUsers(usersData);
+          } else if (Array.isArray(response.data)) {
+            setUsers(response.data);
+          }
         }
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -63,7 +81,7 @@ const Transfer: React.FC = () => {
       };
 
       // Get authentication tokens
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
 
       // Set up headers with authentication
       const config = {
@@ -121,7 +139,7 @@ const Transfer: React.FC = () => {
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Type Toggle */}
           <div className="flex p-1 bg-gray-100 rounded-xl">
-            {(['transfer', 'withdraw'] as TransactionType[]).map((t) => (
+            {(['transfer', 'revert'] as TransactionType[]).map((t) => (
               <button
                 key={t}
                 type="button"
@@ -153,7 +171,7 @@ const Transfer: React.FC = () => {
               <option value="">Select a user...</option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
-                  {user.id} - {user.name}
+                  {user.id} - {user.company_name}
                 </option>
               ))}
             </select>
