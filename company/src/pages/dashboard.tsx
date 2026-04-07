@@ -1,9 +1,9 @@
 import React,{Suspense} from "react"
-import TotalNav from "../components/dashbord/TotalCardNav";
-import Chartpannel from "../components/dashbord/Graph_div";
+import TotalNav from "../components/dashboard/TotalCardNav";
+import Chartpannel from "../components/dashboard/Graph_div";
 // import { useLoader } from "../components/ui/LoaderContext";
 // import axios from "axios";
-import CarouselBanner from "../components/dashbord/CarouselBanner";
+import CarouselBanner from "../components/dashboard/CarouselBanner";
 
 const Dashboard:React.FC=()=>{
   // const { showLoader, hideLoader } = useLoader();

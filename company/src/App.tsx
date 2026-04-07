@@ -17,7 +17,7 @@ import Settings from './components/settings/settings';
 import CustomerEdit from './components/customerEdit/EditCustomer';
 import NotFound from './pages/NotFound'
 import Transfer from './pages/Transfer';
-import Login from './pages/Login.tsx';
+import Login from './pages/Login';
 
 function App() {
   

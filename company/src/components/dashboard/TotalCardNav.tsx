@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import {Headset,ShieldCheck,Users,Briefcase,Store,User } from "lucide-react";
-import { useLoader } from "../ui/LoaderContext";
+import { useLoader } from "../ui/LoaderContext.tsx";
 import axios from "axios";
-import NotFound from "../../pages/NotFound";
+import NotFound from "../../pages/NotFound.tsx";
 import TotalCard from "./TotalCard.tsx";
 
 
