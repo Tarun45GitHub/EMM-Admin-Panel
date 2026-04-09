@@ -1,8 +1,8 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useCallback, useRef } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink, Pause, Play } from "lucide-react";
 
 import api from "../../api/Axios";
 
@@ -49,87 +49,14 @@ const defaultSlides: Slide[] = [
   },
 ];
 
-const CarouselStyles = () => (
-  <style>
-    {`
-      .carousel .control-dots {
-        bottom: 20px !important;
-        margin: 0 !important;
-        width: auto !important;
-        left: 24px !important;
-        display: flex;
-        gap: 8px;
-      }
-      .carousel .control-dots .dot {
-        width: 8px;
-        height: 8px;
-        margin: 0;
-        background: rgba(255,255,255,0.4);
-        box-shadow: none;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-      }
-      .carousel .control-dots .dot.selected {
-        background: #fff;
-        width: 24px;
-        opacity: 1;
-      }
-      .carousel .legend {
-        display: none !important;
-      }
-      @media (max-width: 768px) {
-        .carousel .control-dots {
-          left: 50% !important;
-          transform: translateX(-50%);
-        }
-      }
-    `}
-  </style>
-);
-
-const buttonClasses = `
-  inline-flex items-center gap-2
-  px-5 py-2.5 md:px-8 md:py-3.5
-  rounded-full text-sm md:text-base font-bold
-  text-white bg-orange-600 hover:bg-orange-500
-  transform transition-all duration-300
-  hover:translate-x-1 shadow-lg shadow-orange-900/20
-  active:scale-95
-`;
-
-const GetStartedButton = ({ url }: { url: string }) => {
-  // console.log(url);
-  const isExternal = url;
-  const content = (
-    <>
-      Learn More
-      <ArrowRight size={18} />
-    </>
-  );
-
-  if (!isExternal) {
-    return (
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={buttonClasses}
-      >
-        {content}
-      </a>
-    );
-  }
-
-  return (
-    <Link to={url} className={buttonClasses}>
-      {content}
-    </Link>
-  );
-};
-
 const CarouselBanner: React.FC = memo(() => {
   const [slides, setSlides] = useState<Slide[]>(defaultSlides);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(new Array(defaultSlides.length).fill(false));
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -145,9 +72,12 @@ const CarouselBanner: React.FC = memo(() => {
             redirect_url: banner.redirect_url || `/learn/banner${index + 1}`,
           }));
           setSlides(bannerSlides);
+          setImagesLoaded(new Array(bannerSlides.length).fill(false));
+          setError(null);
         }
       } catch (err) {
         console.error("Error fetching banners:", err);
+        setError("Failed to load banners. Showing default content.");
       } finally {
         setLoading(false);
       }
@@ -156,70 +86,368 @@ const CarouselBanner: React.FC = memo(() => {
     fetchBanners();
   }, []);
 
+  const handleImageLoad = useCallback((index: number) => {
+    setImagesLoaded(prev => {
+      const newState = [...prev];
+      newState[index] = true;
+      return newState;
+    });
+  }, []);
+
+  const isExternalUrl = useCallback((url: string): boolean => {
+    return url.startsWith('http://') || url.startsWith('https://');
+  }, []);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+    }
+  }, []);
+
+  const handleSlideChange = useCallback((index: number) => {
+    setActiveSlide(index);
+  }, []);
+
+  const togglePlayPause = useCallback(() => {
+    setIsPlaying(prev => !prev);
+  }, []);
+
   if (loading) {
     return (
-      <div className="w-full h-55 sm:h-75 md:h-95 lg:h-105 bg-gray-800 rounded-2xl md:rounded-[32px] flex items-center justify-center">
-        <div className="text-white text-lg">Loading...</div>
+      <div 
+        className="w-full relative overflow-hidden rounded-2xl md:rounded-[32px] bg-gray-900"
+        role="region"
+        aria-label="Banner carousel loading"
+        aria-busy="true"
+      >
+        {/* Skeleton Loader */}
+        <div className="relative w-full h-55 sm:h-75 md:h-95 lg:h-105 animate-pulse">
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800" />
+          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 md:px-16">
+            <div className="max-w-2xl space-y-4">
+              <div className="h-10 sm:h-12 md:h-14 bg-gray-700 rounded-lg w-3/4" />
+              <div className="h-5 sm:h-6 bg-gray-700 rounded-lg w-full" />
+              <div className="h-5 sm:h-6 bg-gray-700 rounded-lg w-5/6" />
+              <div className="h-12 bg-gray-700 rounded-full w-40 mt-4" />
+            </div>
+          </div>
+        </div>
+        {/* Loading Dots Animation */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
+          <div className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+          <div className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+          <div className="w-2 h-2 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+        </div>
+      </div>
+    );
+  }
+
+  if (error && slides.length === 0) {
+    return (
+      <div 
+        className="w-full h-55 sm:h-75 md:h-95 lg:h-105 bg-gray-900 rounded-2xl md:rounded-[32px] flex flex-col items-center justify-center px-4"
+        role="alert"
+      >
+        <div className="text-gray-400 text-center">
+          <p className="text-lg font-medium mb-2">Unable to load banners</p>
+          <p className="text-sm text-gray-500">{error}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
-      <CarouselStyles />
+    <div 
+      ref={carouselRef}
+      className="w-full relative group"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="region"
+      aria-label="Featured banners carousel"
+      aria-roledescription="carousel"
+    >
+      <style>{`
+        .carousel-banner .control-dots {
+          bottom: 20px !important;
+          margin: 0 !important;
+          width: auto !important;
+          left: 24px !important;
+          display: flex;
+          gap: 8px;
+          z-index: 10;
+        }
+        .carousel-banner .control-dots .dot {
+          width: 8px;
+          height: 8px;
+          margin: 0;
+          background: rgba(255,255,255,0.3);
+          box-shadow: none;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .carousel-banner .control-dots .dot:hover {
+          background: rgba(255,255,255,0.6);
+        }
+        .carousel-banner .control-dots .dot.selected {
+          background: #fff;
+          width: 28px;
+          opacity: 1;
+        }
+        .carousel-banner .legend {
+          display: none !important;
+        }
+        .carousel-banner .control-arrow {
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: 10;
+        }
+        .carousel-banner:hover .control-arrow {
+          opacity: 0.8;
+        }
+        .carousel-banner .control-arrow:hover {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+        .carousel-banner .control-prev {
+          left: 16px;
+        }
+        .carousel-banner .control-next {
+          right: 16px;
+        }
+        @media (max-width: 768px) {
+          .carousel-banner .control-dots {
+            left: 50% !important;
+            transform: translateX(-50%);
+            bottom: 60px !important;
+          }
+          .carousel-banner .control-arrow {
+            opacity: 0.5;
+          }
+        }
+      `}</style>
+
       <Carousel
+        className="carousel-banner"
         showThumbs={false}
-        autoPlay
+        autoPlay={isPlaying}
         infiniteLoop
         showStatus={false}
         showIndicators={true}
-        interval={4000}
+        interval={5000}
+        transitionTime={600}
         swipeable
         emulateTouch
-        stopOnHover
-        renderArrowPrev={(_onClickHandler, _hasPrev) => null}
-        renderArrowNext={(_onClickHandler, _hasNext) => null}
+        stopOnHover={false}
+        selectedItem={activeSlide}
+        onChange={handleSlideChange}
+        renderArrowPrev={(onClickHandler, hasPrev) => (
+          hasPrev && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={24} strokeWidth={2.5} />
+            </button>
+          )
+        )}
+        renderArrowNext={(onClickHandler, hasNext) => (
+          hasNext && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={24} strokeWidth={2.5} />
+            </button>
+          )
+        )}
       >
         {slides.map((slide, index) => (
-          <div key={index} className="relative w-full group">
-            {/* Main Container */}
+          <div key={index} className="relative w-full group/slide">
             <div className="relative w-full h-55 sm:h-75 md:h-95 lg:h-105 overflow-hidden rounded-2xl md:rounded-[32px] bg-gray-900">
-              {/* Background Image with Overlay */}
+              {/* Background Image */}
               <div className="absolute inset-0">
+                {!imagesLoaded[index] && (
+                  <div className="absolute inset-0 bg-gray-800 animate-pulse" />
+                )}
                 <img
                   src={slide.img}
                   alt={slide.title}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="w-full h-full object-cover transform transition-transform duration-[5000ms] group-hover:scale-110"
+                  onLoad={() => handleImageLoad(index)}
+                  className={`w-full h-full object-cover transition-transform duration-[8000ms] ease-out ${
+                    activeSlide === index ? 'scale-105' : 'scale-100'
+                  } group-hover/slide:scale-110`}
                 />
-                <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
-                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent md:hidden" />
+                {/* Enhanced Overlay for better readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent md:hidden" />
+                {/* Subtle vignette effect */}
+                <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/30" />
               </div>
 
-              {/* Content Content */}
-              <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 md:px-16 text-left">
-                <div className="max-w-2xl space-y-2 md:space-y-4">
-                  <h2 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight animate-in slide-in-from-left-4 duration-700">
+              {/* Content */}
+              <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 md:px-16 text-left z-10">
+                <div className="max-w-2xl space-y-3 md:space-y-4">
+                  <h2 
+                    className={`text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight transition-all duration-700 ${
+                      activeSlide === index 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-4'
+                    }`}
+                    style={{ 
+                      textShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                      transitionDelay: activeSlide === index ? '100ms' : '0ms'
+                    }}
+                  >
                     {slide.title}
                   </h2>
-                  <p className="text-gray-200 text-sm sm:text-base md:text-lg max-w-lg line-clamp-2 md:line-clamp-none animate-in slide-in-from-left-6 duration-700 delay-100">
+                  <p 
+                    className={`text-gray-100 text-sm sm:text-base md:text-lg max-w-lg line-clamp-2 md:line-clamp-none leading-relaxed transition-all duration-700 ${
+                      activeSlide === index 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-4'
+                    }`}
+                    style={{ 
+                      textShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                      transitionDelay: activeSlide === index ? '200ms' : '0ms'
+                    }}
+                  >
                     {slide.subtitle}
                   </p>
                   
-                  <div className="pt-2 md:pt-4 animate-in slide-in-from-left-8 duration-700 delay-200">
-                    <GetStartedButton url={slide.redirect_url} />
+                  <div 
+                    className={`pt-2 md:pt-4 transition-all duration-700 ${
+                      activeSlide === index 
+                        ? 'opacity-100 translate-y-0' 
+                        : 'opacity-0 translate-y-4'
+                    }`}
+                    style={{ transitionDelay: activeSlide === index ? '300ms' : '0ms' }}
+                  >
+                    <GetStartedButton url={slide.redirect_url} isExternal={isExternalUrl(slide.redirect_url)} />
                   </div>
                 </div>
               </div>
 
-              {/* Subtle Border Glow */}
-              <div className="absolute inset-0 rounded-2xl md:rounded-[32px] ring-1 ring-white/10" />
+              {/* Subtle Border */}
+              <div className="absolute inset-0 rounded-2xl md:rounded-[32px] ring-1 ring-white/5 pointer-events-none" />
             </div>
           </div>
         ))}
       </Carousel>
+
+      {/* Play/Pause Control */}
+      <button
+        type="button"
+        onClick={togglePlayPause}
+        className="absolute bottom-4 right-4 z-20 bg-black/40 hover:bg-black/60 text-white p-2.5 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+        aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
+        title={isPlaying ? 'Pause' : 'Play'}
+      >
+        {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+      </button>
+
+      {/* Progress Bar */}
+      {isPlaying && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10 rounded-full overflow-hidden">
+          <div 
+            key={activeSlide}
+            className="h-full bg-orange-500 rounded-full animate-progress"
+            style={{ 
+              animation: 'progress 5s linear',
+              animationFillMode: 'forwards'
+            }}
+          />
+        </div>
+      )}
+
+      <style>{`
+        @keyframes progress {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 });
+
+interface GetStartedButtonProps {
+  url: string;
+  isExternal: boolean;
+}
+
+const GetStartedButton: React.FC<GetStartedButtonProps> = ({ url, isExternal }) => {
+  const navigate = useNavigate();
+  
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    if (isExternal) {
+      e.preventDefault();
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }, [isExternal, url]);
+
+  const content = (
+    <>
+      <span>Learn More</span>
+      <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+    </>
+  );
+
+  const baseClasses = `
+    inline-flex items-center gap-2 group/btn
+    px-5 py-2.5 md:px-7 md:py-3
+    rounded-full text-sm md:text-base font-semibold
+    transition-all duration-300
+    focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-black
+    active:scale-95
+  `;
+
+  const primaryClasses = `
+    ${baseClasses}
+    text-white bg-orange-600 hover:bg-orange-500
+    shadow-lg shadow-orange-600/30 hover:shadow-orange-500/40
+    hover:-translate-y-0.5
+  `;
+
+  if (!url) {
+    return (
+      <button 
+        onClick={() => navigate('/learn')}
+        className={primaryClasses}
+        aria-label="Learn more about this feature"
+      >
+        {content}
+      </button>
+    );
+  }
+
+  if (isExternal) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={primaryClasses}
+        onClick={handleClick}
+        aria-label={`Learn more (opens in new tab)`}
+      >
+        {content}
+        <ExternalLink size={14} className="opacity-70" />
+      </a>
+    );
+  }
+
+  return (
+    <Link to={url} className={primaryClasses}>
+      {content}
+    </Link>
+  );
+};
+
+CarouselBanner.displayName = 'CarouselBanner';
 
 export default CarouselBanner;

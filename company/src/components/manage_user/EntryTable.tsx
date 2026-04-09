@@ -27,12 +27,6 @@ export interface UserData {
   updated_at?: string;
 }
 
-interface ApiResponse {
-  results: UserData[];
-  count: number;
-  next: string | null;
-  previous: string | null;
-}
 
 export interface FilterState {
   search?: string;
@@ -58,7 +52,6 @@ const COLUMNS = [
   { key: "parent_user", label: "Parent User" },
   { key: "wallet", label: "Wallet" },
   { key: "date_joined", label: "Date Joined" },
-  { key: "is_active", label: "Status" },
 ];
 
 interface EntryTableProps {
@@ -83,6 +76,8 @@ const EntryTable: React.FC<EntryTableProps> = ({
   pageSize: externalPageSize,
   onPageChange
 }) => {
+ 
+  
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState<UserData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -115,53 +110,54 @@ const EntryTable: React.FC<EntryTableProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const fetchUsers = useCallback(async () => {
-    // Skip fetching if in external mode
-    if (isExternalMode) return;
+  // const fetchUsers = useCallback(async () => {
+  //   // Skip fetching if in external mode
+  //   if (isExternalMode) return;
     
-    try {
-      setLoading(true);
-      setError(null);
-      const token = localStorage.getItem('token');
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+  //     const token = localStorage.getItem('access_token');
       
-      const params: Record<string, string | number | boolean> = {
-        page: page,
-        page_size: rowsPerPage,
-      };
+  //     const params: Record<string, string | number | boolean> = {
+  //       page: page,
+  //       page_size: rowsPerPage,
+  //     };
 
-      // Add filters to params
-      if (filters.search) params.search = filters.search;
-      if (filters.state_id) params.state_id = filters.state_id;
-      if (filters.city_id) params.city_id = filters.city_id;
-      if (filters.is_active !== undefined) params.is_active = filters.is_active;
-      if (filters.from_date) params.from_date = filters.from_date;
-      if (filters.to_date) params.to_date = filters.to_date;
-      if (filters.group) params.group = filters.group;
+  //     // Add filters to params
+  //     if (filters.search) params.search = filters.search;
+  //     if (filters.state_id) params.state_id = filters.state_id;
+  //     if (filters.city_id) params.city_id = filters.city_id;
+  //     if (filters.is_active !== undefined) params.is_active = filters.is_active;
+  //     if (filters.from_date) params.from_date = filters.from_date;
+  //     if (filters.to_date) params.to_date = filters.to_date;
+  //     if (filters.group) params.group = filters.group;
 
-      const response = await api.get<ApiResponse>('/crm/users/', {
-        params,
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'Content-Type': 'application/json',
-        }
-      });
+  //     const response = await api.get<ApiResponse>('/crm/users/', {
+  //       params,
+  //       headers: {
+  //         'Authorization': token ? `Bearer ${token}` : '',
+  //         'Content-Type': 'application/json',
+  //       }
+  //     });
+  //     // console.log(response);
+      
+  //     setUsers(response.data.results || []);
+  //     setTotalCount(response.data.count || 0);
+  //   } catch (err: any) {
+  //     console.error('Error fetching users:', err);
+  //     const errorMessage = err.response?.data?.message || 
+  //                         err.response?.data?.error || 
+  //                         'Failed to fetch users. Please try again.';
+  //     setError(errorMessage);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [page, rowsPerPage, filters, isExternalMode]);
 
-      setUsers(response.data.results || []);
-      setTotalCount(response.data.count || 0);
-    } catch (err: any) {
-      console.error('Error fetching users:', err);
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
-                          'Failed to fetch users. Please try again.';
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, rowsPerPage, filters, isExternalMode]);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, [fetchUsers]);
 
   // Update users when external data changes
   useEffect(() => {
@@ -199,26 +195,7 @@ const EntryTable: React.FC<EntryTableProps> = ({
     return sortedData;
   }, [sortedData]);
 
-  const handleToggle = useCallback(async (userId: number, currentState: boolean) => {
-    try {
-      const token = localStorage.getItem('token');
-      await api.patch(
-        `/crm/users/${userId}/`,
-        { is_active: !currentState },
-        {
-          headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      toast.success("Status updated successfully!");
-      fetchUsers();
-    } catch (err) {
-      toast.error("Failed to update status");
-      console.error('Toggle error:', err);
-    }
-  }, [fetchUsers]);
+ 
 
   const handleEdit = useCallback((user: UserData) => {
     if (onUserEdit) {
@@ -277,12 +254,7 @@ const EntryTable: React.FC<EntryTableProps> = ({
         <div className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800 p-8 text-center w-full max-w-md">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Error Loading Users</h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
-          <button
-            onClick={fetchUsers}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            Retry
-          </button>
+          
         </div>
       </div>
     );
@@ -388,23 +360,14 @@ const EntryTable: React.FC<EntryTableProps> = ({
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-700 dark:text-gray-300 text-sm">
                       {user.date_joined ? new Date(user.date_joined).toLocaleDateString() : '-'}
                     </td>
-                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        user.is_active 
-                          ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400" 
-                          : "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400"
-                      }`}>
-                        {user.is_active ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
+                    
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div className="flex space-x-2">
                         <Action
                           isActive={user.is_active ?? true}
-                          onToggle={() => handleToggle(user.id, user.is_active ?? true)}
                           onEdit={() => handleEdit(user)}
-                          onClick={() => handleEdit(user)}
-                        />
+                          userId={user.id}                      
+                            />
                       </div>
                     </td>
                   </tr>

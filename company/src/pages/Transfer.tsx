@@ -218,9 +218,9 @@ const Transfer: React.FC = () => {
       </div>
 
       {/* Transaction History */}
-      <div className="max-w-6xl mx-auto mt-12">
+      {/* <div className="max-w-6xl mx-auto mt-12">
         <TransactionTable initialPageSize={10} />
-      </div>
+      </div> */}
     </>
   );
 };

@@ -32,22 +32,39 @@ const data: MonthlyData[] = [
 
 
 
-const MonthlyInstallBarChart:React.FC=()=>{
+const MonthlyInstallBarChart: React.FC = () => {
   return (
-    <div className="w-full h-80 bg-white pb-10 rounded-xl shadow-md border dark:bg-gray-800">
-      <h3 className="text-center font-semibold text-lg text-black dark:text-gray-200 mb-4">
-        Monthly Installs
-      </h3>
-
-      {/* Added minWidth and minHeight to satisfy the ResizeObserver */}
+    <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-        <BarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" stroke="#ab0" />
-          <YAxis stroke="#aa0" />
-          <Tooltip />
+        <BarChart data={data} margin={{ top: 10, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <XAxis 
+            dataKey="month" 
+            stroke="#6b7280" 
+            fontSize={12}
+            tickLine={false}
+          />
+          <YAxis 
+            stroke="#6b7280" 
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <Tooltip 
+            contentStyle={{
+              backgroundColor: '#fff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+            cursor={{ fill: '#f3f4f6' }}
+          />
           <Legend />
-          <Bar dataKey="installs" fill="#3b82f6" />
+          <Bar 
+            dataKey="installs" 
+            fill="#3b82f6" 
+            radius={[4, 4, 0, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
