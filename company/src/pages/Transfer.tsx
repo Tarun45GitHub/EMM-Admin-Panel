@@ -1,7 +1,7 @@
 import React, { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import { ArrowRightLeft, Landmark, IndianRupee } from 'lucide-react';
 import api from '../api/Axios';
-import TransactionTable from '../components/transfer/Transcationtable';
+// import TransactionTable from '../components/transfer/Transcationtable';
 
 // --- Types & Interfaces ---
 type TransactionType = 'transfer' | 'withdraw';

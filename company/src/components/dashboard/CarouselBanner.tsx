@@ -55,8 +55,9 @@ const CarouselBanner: React.FC = memo(() => {
   const [error, setError] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(new Array(defaultSlides.length).fill(false));
+  const [imagesLoaded, setImagesLoaded] = useState<Map<number, boolean>>(new Map());
   const carouselRef = useRef<HTMLDivElement>(null);
+  const progressTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -72,7 +73,7 @@ const CarouselBanner: React.FC = memo(() => {
             redirect_url: banner.redirect_url || `/learn/banner${index + 1}`,
           }));
           setSlides(bannerSlides);
-          setImagesLoaded(new Array(bannerSlides.length).fill(false));
+          setImagesLoaded(new Map());
           setError(null);
         }
       } catch (err) {
@@ -88,9 +89,9 @@ const CarouselBanner: React.FC = memo(() => {
 
   const handleImageLoad = useCallback((index: number) => {
     setImagesLoaded(prev => {
-      const newState = [...prev];
-      newState[index] = true;
-      return newState;
+      const newMap = new Map(prev);
+      newMap.set(index, true);
+      return newMap;
     });
   }, []);
 
@@ -111,6 +112,59 @@ const CarouselBanner: React.FC = memo(() => {
   const togglePlayPause = useCallback(() => {
     setIsPlaying(prev => !prev);
   }, []);
+
+  const handleRetry = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get("/crm/banners");
+      const data = response.data?.data;
+      
+      if (Array.isArray(data) && data.length > 0) {
+        const bannerSlides: Slide[] = data.map((banner: BannerData, index: number) => ({
+          img: banner.image,
+          title: banner.title || `Banner ${index + 1}`,
+          subtitle: banner.subtitle || "Explore our latest updates and features.",
+          redirect_url: banner.redirect_url || `/learn/banner${index + 1}`,
+        }));
+        setSlides(bannerSlides);
+        setImagesLoaded(new Map());
+      } else {
+        setError("No banners available. Please try again later.");
+      }
+    } catch (err) {
+      console.error("Retry failed:", err);
+      setError("Failed to load banners. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Keyboard navigation support
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!carouselRef.current || document.activeElement !== carouselRef.current) return;
+      
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setActiveSlide(prev => Math.max(0, prev - 1));
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setActiveSlide(prev => Math.min(slides.length - 1, prev + 1));
+      }
+    };
+
+    const currentRef = carouselRef.current;
+    if (currentRef) {
+      currentRef.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener('keydown', handleKeyDown);
+      }
+    };
+  }, [slides.length]);
 
   if (loading) {
     return (
@@ -145,12 +199,28 @@ const CarouselBanner: React.FC = memo(() => {
   if (error && slides.length === 0) {
     return (
       <div 
-        className="w-full h-55 sm:h-75 md:h-95 lg:h-105 bg-gray-900 rounded-2xl md:rounded-[32px] flex flex-col items-center justify-center px-4"
+        className="w-full h-55 sm:h-75 md:h-95 lg:h-105 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl md:rounded-[32px] flex flex-col items-center justify-center px-4 text-center"
         role="alert"
       >
-        <div className="text-gray-400 text-center">
-          <p className="text-lg font-medium mb-2">Unable to load banners</p>
-          <p className="text-sm text-gray-500">{error}</p>
+        <div className="max-w-md space-y-4">
+          <div className="w-16 h-16 mx-auto bg-gray-700 rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.291-1.1-5.291-2.709M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-2">Unable to load banners</h3>
+            <p className="text-sm text-gray-300 mb-4">{error}</p>
+            <button
+              onClick={handleRetry}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Try Again
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -271,7 +341,7 @@ const CarouselBanner: React.FC = memo(() => {
             <div className="relative w-full h-55 sm:h-75 md:h-95 lg:h-105 overflow-hidden rounded-2xl md:rounded-[32px] bg-gray-900">
               {/* Background Image */}
               <div className="absolute inset-0">
-                {!imagesLoaded[index] && (
+                {!imagesLoaded.get(index) && (
                   <div className="absolute inset-0 bg-gray-800 animate-pulse" />
                 )}
                 <img

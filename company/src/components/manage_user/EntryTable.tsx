@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import Action from "./action";
 import toast from "react-hot-toast";
-import api from "../../api/Axios";
+// import api from "../../api/Axios";
 
 export interface UserData {
   id: number;
@@ -81,8 +81,8 @@ const EntryTable: React.FC<EntryTableProps> = ({
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState<UserData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading] = useState(true);
+  const [error] = useState<string | null>(null);
   const [rowsPerPage, setRowsPerPage] = useState(8);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
