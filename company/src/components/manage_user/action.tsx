@@ -34,20 +34,33 @@ type ActionProps = {
   isActive: boolean;
   onEdit:()=>void;
   userId: number;
+  onToggle?: () => void; // Callback to notify parent about toggle
 };
 
-const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
+const Action: React.FC<ActionProps> = ({ isActive: initialIsActive, userId, onToggle }) => {
       const [modalOpen, setModalOpen] = useState(false);
       const [loading, setLoading] = useState(false);
+      const [localIsActive, setLocalIsActive] = useState(initialIsActive);
+
+  // Sync local state when prop changes
+  React.useEffect(() => {
+    setLocalIsActive(initialIsActive);
+  }, [initialIsActive]);
 
   const handleToggle = async () => {
+    if (loading) return; // Prevent multiple clicks
+    
     try {
       setLoading(true);
       const token = localStorage.getItem('access_token');
       
+      // Optimistic update - update UI immediately
+      const newStatus = !localIsActive;
+      setLocalIsActive(newStatus);
+      
       await api.patch(
         `/crm/users/${userId}/`,
-        { is_active: !isActive },
+        { is_active: newStatus },
         {
           headers: {
             'Authorization': token ? `Bearer ${token}` : '',
@@ -58,8 +71,16 @@ const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
       
       toast.success("Status updated successfully!");
       
+      // Notify parent component to refresh data
+      if (onToggle) {
+        onToggle();
+      }
+      
     } catch (err: any) {
       console.error('Toggle error:', err);
+      // Revert optimistic update on error
+      setLocalIsActive(localIsActive);
+      
       const errorMessage = err.response?.data?.message || 
                           err.response?.data?.error || 
                           'Failed to update status. Please try again.';
@@ -110,13 +131,13 @@ const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
           cursor-pointer px-3 py-1 rounded-full text-sm font-medium
           ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}
           ${
-            isActive
+            localIsActive
               ? "bg-green-500 text-white"
               : "bg-red-500 text-white"
           }
         `}
       >
-          {loading ? "Updating..." : (isActive ? "Active" : "Inactive")}
+          {loading ? "Updating..." : (localIsActive ? "Active" : "Inactive")}
       </button>
 
       {/* Edit Button */}
