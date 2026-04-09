@@ -57,7 +57,7 @@ const CarouselBanner: React.FC = memo(() => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<Map<number, boolean>>(new Map());
   const carouselRef = useRef<HTMLDivElement>(null);
-  const progressTimerRef = useRef<number | null>(null);
+  // const progressTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchBanners = async () => {
