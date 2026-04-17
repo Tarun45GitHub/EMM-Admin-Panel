@@ -1,4 +1,4 @@
-import React, { useState, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { FiEdit, FiUserCheck, FiCalendar, FiMapPin, FiTag, FiSave } from "react-icons/fi";
 
 interface RetailerData {
@@ -9,15 +9,32 @@ interface RetailerData {
   retailerId: string;
 }
 
-const RetailerDetails: React.FC = () => {
-  // example old data (replace with real data from API)
+interface Props {
+  customer: any;
+}
+
+const RetailerDetails: React.FC<Props> = ({ customer }) => {
   const [formData, setFormData] = useState<RetailerData>({
-    activateBy: "Admin",
-    activateOn: "2025-10-01",
-    state: "West Bengal",
-    location: "Kolkata",
-    retailerId: "RT12345",
+    activateBy: "",
+    activateOn: "",
+    state: "",
+    location: "",
+    retailerId: "",
   });
+
+  // Update form data when customer prop is loaded
+  useEffect(() => {
+    if (customer) {
+      setFormData({
+        activateBy: customer.activated_by || "N/A",
+        // Format date string if necessary for the date input (YYYY-MM-DD)
+        activateOn: customer.created_at ? new Date(customer.created_at).toISOString().split('T')[0] : "",
+        state: customer.state || "",
+        location: customer.location || customer.address || "",
+        retailerId: customer.retailer_id || "",
+      });
+    }
+  }, [customer]);
 
   const [isEditing, setIsEditing] = useState<Record<string, boolean>>({
     activateBy: false,

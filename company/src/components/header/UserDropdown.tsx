@@ -2,7 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function UserDropdown() {
+type userData={
+   name?: string|null;
+    rolle?: string|null;
+    wallet_balance?: string|null;
+  
+}
+
+const UserDropdown=({userData}:{userData: userData | null | undefined}) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -36,7 +43,7 @@ export default function UserDropdown() {
           className="h-8 w-8 rounded-full object-cover ring-2 ring-green-200 dark:ring-green-800/60"
         />
         <div className="hidden md:flex items-center gap-1">
-          <span className="text-sm font-semibold">Tarun</span>
+          <span className="text-sm font-semibold">{userData?.name}</span>
           <ChevronDown
             size={15}
             className={`text-gray-400 dark:text-gray-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -54,8 +61,8 @@ export default function UserDropdown() {
 
           {/* User info header */}
           <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">Tarun</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 truncate">Admin</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{userData?.name}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{userData?.rolle}</p>
           </div>
 
           <ul className="py-1 text-sm text-gray-600 dark:text-gray-300">
@@ -112,3 +119,5 @@ export default function UserDropdown() {
     </div>
   );
 }
+
+export default UserDropdown;

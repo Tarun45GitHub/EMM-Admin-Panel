@@ -1,4 +1,4 @@
-import React, { useState, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { FiEdit, FiSmartphone, FiHash, FiWifi, FiShield, FiSettings, FiSave } from "react-icons/fi";
 
 interface DeviceData {
@@ -11,17 +11,36 @@ interface DeviceData {
   actualStatus: string;
 }
 
-const DeviceDetails: React.FC = () => {
-  // Example initial values (replace these with data fetched from API/backend)
+interface Props {
+  customer: any;
+}
+
+const DeviceDetails: React.FC<Props> = ({ customer }) => {
   const [formData, setFormData] = useState<DeviceData>({
-    modelName: "Galaxy S22",
-    imei1: "123456789012345",
-    imei2: "543210987654321",
-    simDetails: "Dual SIM 4G",
-    secretCode: "XYZ123",
-    status: "Active",
-    actualStatus: "In Use",
+    modelName: "",
+    imei1: "",
+    imei2: "",
+    simDetails: "",
+    secretCode: "",
+    status: "",
+    actualStatus: "",
   });
+
+  // Populate device info from backend data
+  useEffect(() => {
+    if (customer) {
+      setFormData({
+        modelName: customer.type || "",
+        imei1: customer.imei_1 || "",
+        imei2: customer.imei_2 || "",
+        // Fallback to N/A or default values for fields not explicitly in top-level object
+        simDetails: customer.sim_details || "Dual SIM 4G",
+        secretCode: customer.secret_code || "****",
+        status: customer.is_active ? "Active" : "Inactive",
+        actualStatus: customer.actual_status || "In Use",
+      });
+    }
+  }, [customer]);
 
   const [isEditing, setIsEditing] = useState<Record<string, boolean>>({
     modelName: false,

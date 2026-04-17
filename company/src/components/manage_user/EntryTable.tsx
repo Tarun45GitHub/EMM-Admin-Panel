@@ -78,6 +78,7 @@ const EntryTable: React.FC<EntryTableProps> = ({
 }) => {
  
   
+  
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState<UserData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -364,19 +365,9 @@ const EntryTable: React.FC<EntryTableProps> = ({
                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
                       <div className="flex space-x-2">
                          <Action
-                           isActive={user.is_active ?? true}
+                           isActive={user.is_active||true}
                            onEdit={() => handleEdit(user)}
-                           userId={user.id}
-                           onToggle={() => {
-                             // Update local state to reflect the change immediately
-                             setUsers(prevUsers => 
-                               prevUsers.map(u => 
-                                 u.id === user.id 
-                                   ? { ...u, is_active: !u.is_active }
-                                   : u
-                               )
-                             );
-                           }}                      
+                           userId={user.id}               
                              />
                       </div>
                     </td>

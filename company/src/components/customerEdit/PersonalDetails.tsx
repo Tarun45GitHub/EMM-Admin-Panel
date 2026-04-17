@@ -1,4 +1,4 @@
-import React, { useState, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { FiEdit, FiUser, FiMail, FiPhone, FiUpload } from "react-icons/fi";
 import { MdOutlinePhotoCamera } from "react-icons/md";
 
@@ -13,18 +13,39 @@ interface ProfileFormData {
   signatureFile: File | null;
 }
 
-const PersonalDetails: React.FC = () => {
-  // Example initial data (replace this with data you fetch from API)
+interface Props {
+  customer: any; // Ideally use the CustomerData interface from EditCustomer.tsx
+}
+
+const PersonalDetails: React.FC<Props> = ({ customer }) => {
   const [formData, setFormData] = useState<ProfileFormData>({
-    firstName: "John",
-    middleName: "K.",
-    lastName: "Doe",
-    email: "[email protected]",
-    phone: "9876543210",
-    altPhone: "9123456780",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    altPhone: "",
     imageFile: null,
     signatureFile: null,
   });
+
+  // Synchronize form data when customer prop changes
+  useEffect(() => {
+    if (customer) {
+      // Note: Backend provides 'name' as a single string, mapping it to firstName
+      // You can split the name if your backend supports specific fields
+      setFormData(prev => ({
+        ...prev,
+        firstName: customer.name || "",
+        email: customer.email || "",
+        phone: customer.mobile_number || "",
+        // Map other fields if they exist in your backend response
+        middleName: customer.middle_name || "",
+        lastName: customer.last_name || "",
+        altPhone: customer.alternate_mobile_number || "",
+      }));
+    }
+  }, [customer]);
 
   const [isEditing, setIsEditing] = useState<Record<string, boolean>>({
     firstName: false,

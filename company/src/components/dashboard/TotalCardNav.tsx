@@ -13,7 +13,7 @@ const TotalNav: React.FC = () => {
 
      useEffect(() => {
   if (data !== null) {
-    // console.log("SUCCEESS",data);
+    // console.log("SUCCEESS",data); 
   }
 }, [data]);
 
@@ -38,8 +38,9 @@ const TotalNav: React.FC = () => {
           }
         });
          if(!response) throw new Error('Failed to data fetch');
+        //  console.log(response);
          setData(response.data.data)
-        // console.log(data);
+        
         
 
       } catch (error: any) {
@@ -121,11 +122,11 @@ const TotalNav: React.FC = () => {
                 <TotalCard title="Total No. Retailer Team" 
                 value={data?.total_retailers} change="28.4" positive={true} Icon={Store} />
                 <TotalCard title="Last Month Retailer Add"
-                 value={data?.total_retailers} change="28.4" positive={true} Icon={Store} />
+                 value={data?.this_month_total_retailers_created} change="28.4" positive={true} Icon={Store} />
                 <TotalCard title="Last Week Retailer Add"
-                 value={data?.total_retailers} change="28" positive={true} Icon={Store} />
+                 value={data?.this_week_total_retailers_created} change="28" positive={true} Icon={Store} />
                 <TotalCard title="Last Day Retailer Add" 
-                value={data?.total_retailers} change="28.4" positive={true} Icon={Store} />
+                value={data?.today_total_retailers_created} change="28.4" positive={true} Icon={Store} />
 
             </div>
             <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-2 ">

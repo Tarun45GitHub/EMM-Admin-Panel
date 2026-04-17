@@ -2,25 +2,20 @@ import React, { useState } from "react";
 import EditEntryModal from "./EditEntryModule";
 import toast from "react-hot-toast";
 import api from "../../api/Axios";
-const Appl={
-   userName: "johnDoe",
-      emailid: "john@example.com",
-      first_name: "John",
-      middle_name: "",
-      last_name: "Doe",
-      password: "dfghjkl;'",
-      shop_company: "JD Co",
-      owner_name: "John Doe",
-      Address: "123 Main St",
-      GST: "",
-      state: "State X",
-      city: "City Y",
-      pincode: "700001",
-      walletIOS: 100,
-      walletAndroid: 150,
-      pin: "1234",
-      parent: "parent1",
 
+const initialFormData = {
+      first_name: "",
+      last_name: "",
+      mobile_number: "",
+      email: "",
+      password: "",
+      company_name: "",
+      gstin: "",
+      state_id: "",
+      city_id: "",
+      address: "",
+      group: "",
+      parent_id: "",
 };
 const parentsList = [
   { id: "parent1", label: "Parent 1" },
@@ -37,59 +32,21 @@ type ActionProps = {
   onToggle?: () => void; // Callback to notify parent about toggle
 };
 
-const Action: React.FC<ActionProps> = ({ isActive: initialIsActive, userId, onToggle }) => {
+const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
       const [modalOpen, setModalOpen] = useState(false);
       const [loading, setLoading] = useState(false);
-      const [localIsActive, setLocalIsActive] = useState(initialIsActive);
+      const [localIsActive, setLocalIsActive] = useState(isActive);
+      const [formData, setFormData] = useState(initialFormData);
 
   // Sync local state when prop changes
   React.useEffect(() => {
-    setLocalIsActive(initialIsActive);
-  }, [initialIsActive]);
+    setLocalIsActive(isActive);
+  }, [isActive]);
 
-  const handleToggle = async () => {
-    if (loading) return; // Prevent multiple clicks
-    
-    try {
-      setLoading(true);
-      const token = localStorage.getItem('access_token');
-      
-      // Optimistic update - update UI immediately
-      const newStatus = !localIsActive;
-      setLocalIsActive(newStatus);
-      
-      await api.patch(
-        `/crm/users/${userId}/`,
-        { is_active: newStatus },
-        {
-          headers: {
-            'Authorization': token ? `Bearer ${token}` : '',
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      
-      toast.success("Status updated successfully!");
-      
-      // Notify parent component to refresh data
-      if (onToggle) {
-        onToggle();
-      }
-      
-    } catch (err: any) {
-      console.error('Toggle error:', err);
-      // Revert optimistic update on error
-      setLocalIsActive(localIsActive);
-      
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
-                          'Failed to update status. Please try again.';
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-      
 
   const handleFormSubmit = async (data: any) => {
     console.log("Form submitted:", data);
@@ -126,7 +83,7 @@ const Action: React.FC<ActionProps> = ({ isActive: initialIsActive, userId, onTo
     <div className="flex justify-items-center space-x-2">
       {/* Active / Inactive Toggle */}
       <button
-        onClick={handleToggle}
+        onClick={handleFormSubmit}
         className={`
           cursor-pointer px-3 py-1 rounded-full text-sm font-medium
           ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}
@@ -154,9 +111,11 @@ const Action: React.FC<ActionProps> = ({ isActive: initialIsActive, userId, onTo
           show={modalOpen}
           onClose={() => setModalOpen(false)}
           parents={parentsList}
-          formData={Appl}
-          onChange={() => { } }
-          onSave={handleFormSubmit} 
+          formData={formData}
+          onChange={handleInputChange}
+          onSave={() => {
+            setModalOpen(false);
+          }} 
           userId={userId.toString()}
         />
       </div>
@@ -164,5 +123,3 @@ const Action: React.FC<ActionProps> = ({ isActive: initialIsActive, userId, onTo
   );
 };
 export default Action;
-
-

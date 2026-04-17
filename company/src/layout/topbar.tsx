@@ -7,9 +7,16 @@ import WalletBalance from "../components/header/WalletBalance";
 type TopbarProps = {
   sidebarOpen: boolean;
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+ userData?: {
+    name?: string|null;
+    rolle?: string|null;
+    wallet_balance?: string|null;
+  } | null;
 };
 
-const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen,userData }) => {
+  console.log(userData);
+  
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -37,7 +44,7 @@ const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
 
           {/* Wallet balance */}
           <div className="">
-            <WalletBalance balance={500} />
+            <WalletBalance balance={userData?.wallet_balance ?? "0"} />
           </div>
 
           {/* Theme toggle */}
@@ -69,7 +76,7 @@ const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
           </button>
 
           {/* User avatar + dropdown */}
-          <UserDropdown />
+          <UserDropdown userData={userData} />
 
         </div>
       </div>

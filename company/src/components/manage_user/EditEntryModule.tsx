@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import api from "../../api/Axios";
 import EntryTableEditModel from "./Entry_table_Edit_model";
 
@@ -16,6 +16,15 @@ interface EditDetailsModalProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSave: (success: boolean) => void;
 }
+interface State {
+  id: number;
+  name: string;
+}
+
+interface City {
+  id: number;
+  name: string;
+}
 
 const EditEntryModal: React.FC<EditDetailsModalProps> = ({
   show,
@@ -27,6 +36,116 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
 }) => {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [states, setStates] = useState<State[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
+  const [parentUsers, setParentUsers] = useState<ParentOption[]>([]);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingParents, setLoadingParents] = useState(false);
+
+
+  useEffect(() => {
+  const fetchStates = async () => {
+    setLoadingStates(true);
+    try {
+      const token = localStorage.getItem("access_token");
+
+      const res = await api.get("/crm/states/", {
+         params: { page: "", page_size: 100, search: "" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(res.data.data.results);
+      setStates(res.data.data.results );
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    } finally {
+      setLoadingStates(false);
+    }
+  };
+
+  fetchStates();
+}, []);
+
+  // Fetch cities when state selection changes
+  useEffect(() => {
+  const fetchCities = async () => {
+    if (!formData.state_id) {
+      setCities([]);
+      return;
+    }
+    setLoadingCities(true);
+    
+    try {
+      const token = localStorage.getItem("access_token");
+
+      const res = await api.get(`/crm/states/${formData.state_id}/cities/`, {
+         params: { page: "", page_size: 100, search: "" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCities(res.data.data.results);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    } finally {
+      setLoadingCities(false);
+    }
+  };
+
+  fetchCities();
+}, [formData.state_id]);
+
+  // Fetch parent hierarchy using the provided API
+  useEffect(() => {
+    const fetchParents = async () => {
+      if (!userId) return;
+      setLoadingParents(true);
+      try {
+        const token = localStorage.getItem("access_token");
+        const res = await api.get("/crm/users/upper-hierarchy/", {
+          params: { user_id: userId, search: "" },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        const results = res.data.data ;
+        console.log(results);
+        
+        const formattedParents = results.map((u: any) => ({
+          id: u.id.toString(),
+          label: u.username || `${u.first_name} ${u.last_name}`.trim() || u.email,
+        }));
+        console.log(formattedParents);
+        
+        setParentUsers(formattedParents);
+      } catch (error) {
+        console.error("Error fetching parent users:", error);
+      } finally {
+        setLoadingParents(false);
+      }
+    };
+
+    if (show) fetchParents();
+  }, [show, userId]);
+
+const handleChange = (e: React.ChangeEvent<any>) => {
+  const { name, value } = e.target;
+
+  onChange(e);
+
+  if (name === "state_id") {
+    // Trigger a synthetic event to reset city_id in parent state
+    const resetEvent = {
+      ...e,
+      target: { ...e.target, name: "city_id", value: "" }
+    };
+    onChange(resetEvent as any);
+  }
+};
 
   if (!show) return null;
 
@@ -35,7 +154,7 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
     setSaveError(null);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) {
         setSaveError("Token not found. Please log in again.");
         setSaving(false);
@@ -51,11 +170,11 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
         password: formData.password,
         company_name: formData.company_name,
         gstin: formData.gstin,
-        wallet: parseFloat(formData.wallet) || 0,
         state_id: parseInt(formData.state_id) || null,
         city_id: parseInt(formData.city_id) || null,
         address: formData.address,
         group: formData.group,
+        parent_id: formData.parent_id || null,
       };
 
       const response = await api.put(
@@ -158,7 +277,7 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={onChange}
+                onChange={handleChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 placeholder="user@example.com"
               />
@@ -170,7 +289,7 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                 type="password"
                 name="password"
                 value={formData.password}
-                onChange={onChange}
+                onChange={handleChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 placeholder="••••••••"
               />
@@ -184,10 +303,9 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
                 onChange={onChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white"
               >
-                <option value="">Select Group</option>
+                <option value="">National Distributer</option>
                 <option value="Distributor">Distributor</option>
                 <option value="Retailer">Retailer</option>
-                <option value="User">User</option>
               </select>
             </div>
           </div>
@@ -234,47 +352,57 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-black">State ID</label>
-              <input
-                type="number"
+              <select
                 name="state_id"
                 value={formData.state_id}
-                onChange={onChange}
-                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="Enter state ID"
-              />
+                onChange={handleChange}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">{loadingStates ? "Loading..." : "Select State"}</option>
+                {states.map((state) => (
+                  <option key={state.id} value={state.id.toString()}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium text-black">City ID</label>
-              <input
-                type="number"
+              <select
                 name="city_id"
                 value={formData.city_id}
+                onChange={handleChange}
+                disabled={!formData.state_id || loadingCities}
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              >
+                <option value="">{loadingCities ? "Loading..." : !formData.state_id ? "Please select a state" : "Select City"}</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id.toString()}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-black">Parent User</label>
+              <select
+                name="parent_id"
+                value={formData.parent_id}
                 onChange={onChange}
-                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                placeholder="Enter city ID"
-              />
+                className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-white"
+              >
+                <option value="">{loadingParents ? "Loading..." : "Select Parent"}</option>
+                {parentUsers.map((parentOption) => (
+                  <option key={parentOption.id} value={parentOption.id}>
+                    {parentOption.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
           {/* Wallet Information */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-black">Wallet Balance</label>
-              <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">₹</span>
-                <input
-                  type="number"
-                  name="wallet"
-                  value={formData.wallet}
-                  onChange={onChange}
-                  className="w-full pl-8 pr-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                  placeholder="0.00"
-                  min="0"
-                  step="0.01"
-                />
-              </div>
-            </div>
-          </div>
+          
 
 
         </div>

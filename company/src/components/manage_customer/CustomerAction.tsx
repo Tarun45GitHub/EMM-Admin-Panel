@@ -10,7 +10,7 @@ type ActionProps = {
 
 const CustomerAction: React.FC<ActionProps> = ({
   onEdit,
-  editUrl = "/customer/edit"
+  editUrl = `/customer/edit/`, // Default URL pattern for editing a customer
 }) => {
   return (
     <div className="flex items-center gap-2">

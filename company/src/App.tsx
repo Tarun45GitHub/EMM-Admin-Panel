@@ -41,7 +41,7 @@ function App() {
         <Route path='/changepassword' element={<Layout><ChangePassword/></Layout>}/>
         <Route path='/profile' element={<Layout><AdminProfile/></Layout>}/>
         <Route path='/settings' element={<Layout><Settings/></Layout>}/>
-        <Route path='/customer/edit' element={<Layout><CustomerEdit/></Layout>}/>
+        <Route path='/customer/edit/:customer_id' element={<Layout><CustomerEdit/></Layout>}/>
         <Route path='/notFound' element={<NotFound/>} />
       </Routes>
    </BrowserRouter>
