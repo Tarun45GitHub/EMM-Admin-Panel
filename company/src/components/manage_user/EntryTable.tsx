@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import Action from "./action";
+import EditEntryModal from "./EditEntryModule";
 import toast from "react-hot-toast";
 // import api from "../../api/Axios";
 
@@ -66,6 +67,11 @@ interface EntryTableProps {
   onPageChange?: (page: number) => void;
 }
 
+interface ParentOption {
+  id: string;
+  label: string;
+}
+
 const EntryTable: React.FC<EntryTableProps> = ({ 
   filters = {}, 
   onUserEdit,
@@ -76,9 +82,9 @@ const EntryTable: React.FC<EntryTableProps> = ({
   pageSize: externalPageSize,
   onPageChange
 }) => {
- 
   
-  
+   
+   
   const [page, setPage] = useState(1);
   const [users, setUsers] = useState<UserData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -89,6 +95,29 @@ const EntryTable: React.FC<EntryTableProps> = ({
     key: string;
     direction: 'asc' | 'desc';
   } | null>(null);
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<UserData | null>(null);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    email: "",
+    password: "",
+    company_name: "",
+    gstin: "",
+    state_id: "",
+    city_id: "",
+    address: "",
+    group: "",
+    parent_id: "",
+  });
+  
+  const parentsList: ParentOption[] = [
+    { id: "parent1", label: "Parent 1" },
+    { id: "parent2", label: "Parent 2" },
+  ];
 
   // Determine if we're in external data mode
   const isExternalMode = data !== undefined;
@@ -199,10 +228,26 @@ const EntryTable: React.FC<EntryTableProps> = ({
  
 
   const handleEdit = useCallback((user: UserData) => {
+    setEditingUser(user);
+    // Pre-populate form with user data
+    setFormData({
+      first_name: user.first_name || "",
+      last_name: user.last_name || "",
+      mobile_number: user.mobile_number || "",
+      email: user.email || "",
+      password: "",
+      company_name: user.company_name || "",
+      gstin: user.gstin || "",
+      state_id: user.state_id?.toString() || "",
+      city_id: user.city_id?.toString() || "",
+      address: user.address || "",
+      group: user.group || "",
+      parent_id: user.parent_user_id?.toString() || "",
+    });
+    setModalOpen(true);
+    
     if (onUserEdit) {
       onUserEdit(user);
-    } else {
-      toast.success("Edit mode activated for user " + user.id);
     }
   }, [onUserEdit]);
 
@@ -280,12 +325,13 @@ const EntryTable: React.FC<EntryTableProps> = ({
   }
 
   return (
-    <div className="py-3 flex justify-center ">
-      <div className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800 overflow-hidden">
+    <div>
+    <div className="py-3 flex justify-center">
+      <div className="bg-white dark:bg-[#1E293B] rounded-2xl shadow-xs border border-gray-100 dark:border-gray-800 overflow-hidden w-full">
 
         {/* ── Desktop / tablet: horizontal scroll table ── */}
-        <div className="w-70 sm:w-130 md:w-150 lg:w-230 xl:w-300 overflow-x-auto scrollbar-custom">
-          <div className="min-w-full">
+        <div className="overflow-x-auto scrollbar-custom">
+          <div className="min-w-[1200px]">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50/50 dark:bg-[#0F172A]/50 text-gray-500 dark:text-gray-400 sticky top-0 z-10">
                 <tr>
@@ -362,15 +408,21 @@ const EntryTable: React.FC<EntryTableProps> = ({
                       {user.date_joined ? new Date(user.date_joined).toLocaleDateString() : '-'}
                     </td>
                     
-                    <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <div className="flex space-x-2">
-                         <Action
-                           isActive={user.is_active||true}
-                           onEdit={() => handleEdit(user)}
-                           userId={user.id}               
-                             />
-                      </div>
-                    </td>
+                     <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 whitespace-nowrap">
+                       <div className="flex space-x-2">
+                          <Action
+                            isActive={user?.is_active}
+                            onEdit={() => handleEdit(user)}
+                            onToggle={() => {
+                              // Refresh the data when toggle happens
+                              if (onPageChange) {
+                                onPageChange(page);
+                              }
+                            }}
+                            userId={user.id}               
+                          />
+                       </div>
+                     </td>
                   </tr>
                 ))}
               </tbody>
@@ -402,9 +454,33 @@ const EntryTable: React.FC<EntryTableProps> = ({
           >
             Next
           </button>
-        </div>
-      </div>
-    </div>
+         </div>
+       </div>
+     </div>
+  
+     {modalOpen && editingUser !== null && (
+       <EditEntryModal
+         show={modalOpen}
+         onClose={() => setModalOpen(false)}
+         parents={parentsList}
+         formData={formData}
+         onChange={(e) => {
+           const { name, value } = e.target;
+           setFormData((prev) => ({ ...prev, [name]: value }));
+         }}
+         onSave={(success) => {
+           setModalOpen(false);
+           if (success) {
+             // Refresh the data after successful save
+             if (onPageChange) {
+               onPageChange(page);
+             }
+           }
+         }}
+          userId={editingUser?.id}
+       /> 
+     )} 
+     </div>
   );
 };
 

@@ -60,7 +60,7 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
   const handleFinish = async () => {
     try {
       // Prepare payload matching the API requirements
-      const payload = {
+      const payload: Record<string, any> = {
         first_name: formData.first_name,
         last_name: formData.last_name,
         mobile_number: formData.mobile_number,
@@ -68,19 +68,26 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
         password: formData.password,
         company_name: formData.company_name,
         gstin: formData.gstin,
-        wallet: parseFloat(formData.wallet) || 0,
-        state_id: parseInt(formData.state_id) || 1,
-        city_id: parseInt(formData.city_id) || 1,
         address: formData.address,
         group: group
       };
+      
+      // Only include state_id and city_id if they have valid values
+      if (formData.state_id && formData.state_id !== "") {
+        payload.state_id = parseInt(formData.state_id);
+      }
+      if (formData.city_id && formData.city_id !== "") {
+        payload.city_id = parseInt(formData.city_id);
+      }
+      
+      console.log('Submitting payload:', payload);
+      
       const myToken = window.localStorage.access_token;
-
-        if (!myToken) {
-          console.warn("Token missing. Redirecting to login...");
-          // window.location.href = "/login"; 
-          return;
-        }
+      
+      if (!myToken) {
+        console.warn("Token missing. Redirecting to login...");
+        return;
+      }
 
       const response = await api.post('/crm/users/add/', payload, {
         headers: {
@@ -92,9 +99,17 @@ const AddEntryFromModal: React.FC<MultiStepApplicationModalProps> = ({
       if (response.status === 200 || response.status === 201) {
         onSubmit(formData);
       }
-    } catch (error) {
-      console.log('Error submitting form:', error);
-      alert('Failed to submit form. Please try again.');
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
+      // Log more detailed error information
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      }
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          'Failed to submit form. Please try again.';
+      alert(errorMessage);
     }
   };
 

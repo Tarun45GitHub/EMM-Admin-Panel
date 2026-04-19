@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { RotateCcw, Loader2 } from "lucide-react";
 
@@ -47,7 +47,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
 
   // 3. Prevent unnecessary re-renders of the sidebar/topbar
-  const memoizedUser = useMemo(() => user, [user]);
+  
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-[#0B0E14] transition-colors duration-300">
@@ -69,7 +69,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <button
           onClick={() => window.location.reload()}
           title="Reload Page"
-          className="fixed bottom-6 right-6 z-50 bg-indigo-600 text-white p-3.5 rounded-full shadow-xl hover:bg-indigo-700 hover:rotate-180 transition-all duration-500 active:scale-90"
+          className="fixed top-18 right-6 z-50 bg-indigo-600 text-white p-3.5 rounded-full shadow-xl hover:bg-indigo-700 hover:rotate-180 transition-all duration-500 active:scale-90"
         >
           <RotateCcw size={22} />
         </button>

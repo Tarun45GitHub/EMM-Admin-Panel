@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import toast from "react-hot-toast";
-// import CustomerAction from "./CustomerAction";
-// import CustomerToggleButton from "./CustomerToggleButton";
+import CustomerToggleButton from "./CustomerToggleButton";
 import api from "../../api/Axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Edit3 } from "lucide-react";
@@ -81,6 +80,11 @@ const CustomerEntryTable: React.FC = () => {
 
   const handleEdit = (id: string) => {
     navigate(`/customer/edit/${id}`);
+  };
+
+  const handleCustomerToggle = () => {
+    // Refresh the customer list after toggle
+    fetchCustomers();
   };
 
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
@@ -186,7 +190,11 @@ const CustomerEntryTable: React.FC = () => {
                           <Edit3 size={14} />
                           Edit
                         </Link>
-                        {/* <CustomerToggleButton isActive={customer.is_active} /> */}
+                        {/* <CustomerToggleButton 
+                          isActive={customer.is_active || false} 
+                          customerId={customer.id}
+                          onToggle={handleCustomerToggle}
+                        /> */}
                       </div>
                     </td>
                   </tr>

@@ -15,7 +15,7 @@ type TopbarProps = {
 };
 
 const Topbar: React.FC<TopbarProps> = ({ sidebarOpen, setSidebarOpen,userData }) => {
-  console.log(userData);
+  // console.log(userData);
   
   const { theme, toggleTheme } = useTheme();
 

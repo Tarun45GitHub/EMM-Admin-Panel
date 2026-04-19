@@ -2,35 +2,90 @@ import type React from "react";
 import { useState } from "react";
 import AddCustomerModal from "./AddCuctomerModel";
 import { Plus } from "lucide-react";
+import api from "../../api/Axios";
 
-
-
-const AddCustomerButton:React.FC = () => {
+const AddCustomerButton: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
-    altPhone: "",
+    mobile_number: "",
+    alternate_mobile_number: "",
     model: "",
-    imei1: "",
-    imei2: "",
+    imei_1: "",
+    imei_2: "",
     image: null,
     signature: null,
   });
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  setFormData({ ...formData, [e.target.name]: e.target.value });
-};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (e.target.files) {
-    setFormData({ ...formData, [e.target.name]: e.target.files[0] });
-  }
-};
+    if (e.target.files) {
+      setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+    }
+  };
 
-  const handleSave = () => {
-    console.log("Customer saved:", formData);
-    setShowModal(false);
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveError(null);
+    
+    try {
+      // Create FormData to handle both text fields and file uploads
+      const formDataToSend = new FormData();
+      console.log(formData);
+      
+      // Add text fields
+      Object.keys(formData).forEach(key => {
+        if (key !== 'image' && key !== 'signature') {
+          formDataToSend.append(key, (formData as any)[key] as string);
+        }
+      });
+      
+      // Add files if they exist
+      if (formData.image) {
+        formDataToSend.append('image', formData.image);
+      }
+      if (formData.signature) {
+        formDataToSend.append('signature', formData.signature);
+      }
+      console.log(formDataToSend);
+      
+      const token = localStorage.getItem('access_token');
+            if (!token) {
+              console.warn("Token missing. Redirecting to login...");
+              return;
+            }
+      // Make POST request
+      await api.post('/crm/customers/add/', formData, {
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      // Success - reset form and close modal
+      setFormData({
+        name: "",
+        mobile_number: "",
+        alternate_mobile_number: "",
+        model: "",
+        imei_1: "",
+        imei_2: "",
+        image: null,
+        signature: null,
+      });
+      setShowModal(false);
+      
+    } catch (error: any) {
+      console.error("Error saving customer:", error);
+      setSaveError(error.response?.data?.message || "Failed to save customer. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -72,4 +127,4 @@ const AddCustomerButton:React.FC = () => {
     </div>
   );
 };
- export default AddCustomerButton;
+export default AddCustomerButton;

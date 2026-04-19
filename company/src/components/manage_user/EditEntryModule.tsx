@@ -12,7 +12,7 @@ interface EditDetailsModalProps {
   onClose: () => void;
   parents: ParentOption[];
   formData: any;
-  userId: number | string;
+  userId: number | string|undefined;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSave: (success: boolean) => void;
 }
@@ -113,13 +113,13 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
         });
         
         const results = res.data.data ;
-        console.log(results);
+        // console.log(results);
         
         const formattedParents = results.map((u: any) => ({
           id: u.id.toString(),
-          label: u.username || `${u.first_name} ${u.last_name}`.trim() || u.email,
+          label: `${u.company_name}-(${u.mobile_number})`,
         }));
-        console.log(formattedParents);
+        // console.log(formattedParents);
         
         setParentUsers(formattedParents);
       } catch (error) {
@@ -176,8 +176,8 @@ const handleChange = (e: React.ChangeEvent<any>) => {
         group: formData.group,
         parent_id: formData.parent_id || null,
       };
-
-      const response = await api.put(
+      console.log(payload);
+      const response = await api.patch(
         `/crm/users/${userId}/`,
         payload,
         {
@@ -187,7 +187,8 @@ const handleChange = (e: React.ChangeEvent<any>) => {
           }
         }
       );
-
+     
+      
       if (response.status === 200) {
         onSave(true);
       }
@@ -277,7 +278,7 @@ const handleChange = (e: React.ChangeEvent<any>) => {
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={onChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 placeholder="user@example.com"
               />
@@ -289,7 +290,7 @@ const handleChange = (e: React.ChangeEvent<any>) => {
                 type="password"
                 name="password"
                 value={formData.password}
-                onChange={handleChange}
+                onChange={onChange}
                 className="w-full px-3 py-2 border text-gray-400 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 placeholder="••••••••"
               />

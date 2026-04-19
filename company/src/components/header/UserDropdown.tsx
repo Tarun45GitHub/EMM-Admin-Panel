@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import userIcon from "../assets/favicon.png"
 
 type userData={
    name?: string|null;
@@ -38,7 +39,7 @@ const UserDropdown=({userData}:{userData: userData | null | undefined}) => {
         aria-haspopup="true"
       >
         <img
-          src="https://i.pravatar.cc/80?img=12"
+          src={userIcon}
           alt="Admin avatar"
           className="h-8 w-8 rounded-full object-cover ring-2 ring-green-200 dark:ring-green-800/60"
         />

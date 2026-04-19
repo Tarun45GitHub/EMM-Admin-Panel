@@ -1,63 +1,40 @@
 import React, { useState } from "react";
-import EditEntryModal from "./EditEntryModule";
+// import EditEntryModal from "./EditEntryModule";
 import toast from "react-hot-toast";
 import api from "../../api/Axios";
-
-const initialFormData = {
-      first_name: "",
-      last_name: "",
-      mobile_number: "",
-      email: "",
-      password: "",
-      company_name: "",
-      gstin: "",
-      state_id: "",
-      city_id: "",
-      address: "",
-      group: "",
-      parent_id: "",
-};
-const parentsList = [
-  { id: "parent1", label: "Parent 1" },
-  { id: "parent2", label: "Parent 2" },
-];
 
 
 
 // Props for the action component
 type ActionProps = {
-  isActive: boolean;
+  isActive: boolean|undefined;
   onEdit:()=>void;
-  userId: number;
   onToggle?: () => void; // Callback to notify parent about toggle
+  userId: number;
 };
 
-const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
-      const [modalOpen, setModalOpen] = useState(false);
+const Action: React.FC<ActionProps> = ({ isActive, onEdit, onToggle, userId }) => {
       const [loading, setLoading] = useState(false);
       const [localIsActive, setLocalIsActive] = useState(isActive);
-      const [formData, setFormData] = useState(initialFormData);
 
   // Sync local state when prop changes
   React.useEffect(() => {
     setLocalIsActive(isActive);
   }, [isActive]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFormSubmit = async (data: any) => {
-    console.log("Form submitted:", data);
-
+  const handleToggle = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('access_token');
       
-      await api.patch(
+      // Toggle the local state immediately for better UX
+      const newIsActive = !localIsActive;
+      setLocalIsActive(newIsActive);
+      
+      // Send the update to the server
+      const response=await api.patch(
         `/crm/users/${userId}/`,
-        data,
+        { is_active: newIsActive },
         {
           headers: {
             'Authorization': token ? `Bearer ${token}` : '',
@@ -65,14 +42,21 @@ const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
           }
         }
       );
+      console.log(response);
       
-      toast.success("User updated successfully!");
-      setModalOpen(false);
+      toast.success(`User ${newIsActive ? 'activated' : 'deactivated'} successfully!`);
+      
+      // Notify parent about toggle
+      if (onToggle) {
+        onToggle();
+      }
     } catch (err: any) {
-      console.error('Update error:', err);
+      console.error('Toggle error:', err);
+      // Revert the local state if the API call fails
+      setLocalIsActive(localIsActive);
       const errorMessage = err.response?.data?.message || 
                           err.response?.data?.error || 
-                          'Failed to update user. Please try again.';
+                          'Failed to toggle user status. Please try again.';
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -83,7 +67,7 @@ const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
     <div className="flex justify-items-center space-x-2">
       {/* Active / Inactive Toggle */}
       <button
-        onClick={handleFormSubmit}
+        onClick={handleToggle}
         className={`
           cursor-pointer px-3 py-1 rounded-full text-sm font-medium
           ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}
@@ -106,18 +90,7 @@ const Action: React.FC<ActionProps> = ({ isActive, userId }) => {
         "
       >
         <button 
-        onClick={()=>setModalOpen(true)}>Edit</button>
-        <EditEntryModal
-          show={modalOpen}
-          onClose={() => setModalOpen(false)}
-          parents={parentsList}
-          formData={formData}
-          onChange={handleInputChange}
-          onSave={() => {
-            setModalOpen(false);
-          }} 
-          userId={userId.toString()}
-        />
+        onClick={onEdit}>Edit</button>
       </div>
     </div>
   );

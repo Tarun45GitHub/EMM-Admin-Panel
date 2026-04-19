@@ -11,6 +11,7 @@ import {
   Search,
   X,
 } from "lucide-react";
+import CompanyLogo from "../components/assets/CompanyLogo.png"
 
 type SidebarProps = {
   sidebarOpen: boolean;
@@ -42,10 +43,7 @@ const MENU: MenuItem[] = [
   {
     label: "Transaction",
     Icon: ReceiptText,
-    children: [
-      { label: "My Transactions", path: "/transaction/my" },
-      { label: "All Transactions", path: "/transaction/all" },
-    ],
+    path: "/transaction/my"
   },
   { label: "Transfer", Icon: ShoppingCart, path: "/transfer" },
   { label: "Settings", Icon: Settings, path: "/settings" },
@@ -101,7 +99,7 @@ function SidebarContent({
       {/* Header */}
       <div className="flex items-center justify-between h-16 px-4 border-b border-green-800/50 shrink-0 dark:border-gray-700/50">
         {sidebarOpen ? (
-          <h1 className="font-bold text-lg tracking-wide truncate">Admin Panel</h1>
+          <img src={CompanyLogo} alt="CompanyLogo" className="h-20 w-40"  />
         ) : (
           <span className="font-bold text-base mx-auto">AP</span>
         )}
