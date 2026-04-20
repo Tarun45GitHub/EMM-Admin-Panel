@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { FiEdit, FiSmartphone, FiHash, FiWifi, FiShield, FiSettings, FiSave } from "react-icons/fi";
+import { useParams } from "react-router-dom";
+import { useLoader } from "../ui/LoaderContext";
+import api from "../../api/Axios";
+import toast from "react-hot-toast";
 
 interface DeviceData {
   modelName: string;
@@ -13,9 +17,10 @@ interface DeviceData {
 
 interface Props {
   customer: any;
+  onSuccess?: () => void; // Callback to refresh customer data after update
 }
 
-const DeviceDetails: React.FC<Props> = ({ customer }) => {
+const DeviceDetails: React.FC<Props> = ({ customer, onSuccess }) => {
   const [formData, setFormData] = useState<DeviceData>({
     modelName: "",
     imei1: "",
@@ -41,6 +46,10 @@ const DeviceDetails: React.FC<Props> = ({ customer }) => {
       });
     }
   }, [customer]);
+
+  const { customer_id } = useParams<{ customer_id: string }>();
+  const { showLoader, hideLoader } = useLoader();
+  const [isSaving, setIsSaving] = useState(false);
 
   const [isEditing, setIsEditing] = useState<Record<string, boolean>>({
     modelName: false,
@@ -71,10 +80,73 @@ const DeviceDetails: React.FC<Props> = ({ customer }) => {
     setIsEditing(prev => ({ ...prev, [field]: true }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Device Data:", formData);
-    // TODO: send to API/backend
+    
+    if (!customer_id) {
+      toast.error("Customer ID is missing");
+      return;
+    }
+
+    setIsSaving(true);
+    showLoader();
+
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        toast.error("Authentication token not found. Please login again.");
+        window.location.href = "/login";
+        return;
+      }
+
+      // Map form data to backend field names
+      const payload = {
+        type: formData.modelName,
+        imei_1: formData.imei1.replace(/\D/g, ''), // Remove formatting for API
+        imei_2: formData.imei2.replace(/\D/g, ''), // Remove formatting for API
+        sim_details: formData.simDetails,
+        secret_code: formData.secretCode,
+        is_active: formData.status === "Active",
+        actual_status: formData.actualStatus,
+      };
+
+      // Send PATCH request to update device details
+      await api.patch(
+        `/crm/customers/${customer_id}/`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success("Device details updated successfully!");
+      
+      // Exit editing mode for all fields
+      setIsEditing({
+        modelName: false,
+        imei1: false,
+        imei2: false,
+        simDetails: false,
+        secretCode: false,
+        status: false,
+        actualStatus: false,
+      });
+
+      // Trigger parent component refresh if callback provided
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error: any) {
+      console.error("Error updating device details:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Failed to update device details";
+      toast.error(errorMessage);
+    } finally {
+      setIsSaving(false);
+      hideLoader();
+    }
   };
 
   const formatIMEI = (imei: string) => {
@@ -316,10 +388,23 @@ const DeviceDetails: React.FC<Props> = ({ customer }) => {
         <div className="flex gap-3 pt-4">
           <button
             type="submit"
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={isSaving}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
           >
-            <FiSave className="w-4 h-4 mr-2 inline" />
-            Save Device Details
+            {isSaving ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              </>
+            ) : (
+              <>
+                <FiSave className="w-4 h-4 mr-2 inline" />
+                Save Device Details
+              </>
+            )}
           </button>
           <button
             type="button"

@@ -10,11 +10,23 @@ const AddCustomerButton: React.FC = () => {
     name: "",
     mobile_number: "",
     alternate_mobile_number: "",
-    model: "",
     imei_1: "",
     imei_2: "",
-    image: null,
-    signature: null,
+    image: null as File | null,
+    signature: null as File | null,
+    product_price: "",
+    down_payment: "",
+    number_of_months: 0,
+    rate_of_interest: "",
+    loan_amount: "",
+    per_month_emi: "",
+    first_emi_date: "",
+    notes: "",
+    auto_lock: false,
+    type: "", 
+    aadhar_card_front: null as File | null,
+    aadhar_card_back: null as File | null, 
+    pan_card: null as File | null,
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -41,7 +53,11 @@ const AddCustomerButton: React.FC = () => {
       // Add text fields
       Object.keys(formData).forEach(key => {
         if (key !== 'image' && key !== 'signature') {
+          
+          
           formDataToSend.append(key, (formData as any)[key] as string);
+          // console.log(formDataToSend);
+          
         }
       });
       
@@ -55,14 +71,18 @@ const AddCustomerButton: React.FC = () => {
       console.log(formDataToSend);
       
       const token = localStorage.getItem('access_token');
+      // console.log(token);
+      
             if (!token) {
               console.warn("Token missing. Redirecting to login...");
               return;
             }
+      // console.log(formData);
+      
       // Make POST request
-      await api.post('/crm/customers/add/', formData, {
+      await api.post('/crm/customers/add/', formDataToSend, {
         headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
+          'Authorization':  `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -72,16 +92,28 @@ const AddCustomerButton: React.FC = () => {
         name: "",
         mobile_number: "",
         alternate_mobile_number: "",
-        model: "",
         imei_1: "",
         imei_2: "",
         image: null,
         signature: null,
+        product_price: "",
+        down_payment: "",
+        number_of_months: 0,
+        rate_of_interest: "",
+        loan_amount: "",
+        per_month_emi: "",
+        first_emi_date: "",
+        notes: "",
+        auto_lock: false,
+        type: "", 
+        aadhar_card_front: null,
+        aadhar_card_back: null, 
+        pan_card: null,
       });
       setShowModal(false);
       
     } catch (error: any) {
-      console.error("Error saving customer:", error);
+      console.error("Error saving customer:", error.response?.data?.message || error.message);
       setSaveError(error.response?.data?.message || "Failed to save customer. Please try again.");
     } finally {
       setIsSaving(false);

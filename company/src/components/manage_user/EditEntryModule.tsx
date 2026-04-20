@@ -133,7 +133,7 @@ const EditEntryModal: React.FC<EditDetailsModalProps> = ({
   }, [show, userId]);
 
 const handleChange = (e: React.ChangeEvent<any>) => {
-  const { name, value } = e.target;
+  const { name} = e.target;
 
   onChange(e);
 
@@ -193,7 +193,7 @@ const handleChange = (e: React.ChangeEvent<any>) => {
         onSave(true);
       }
     } catch (err: any) {
-      console.error('Update error:', err);
+      console.error('Update error:',err.response?.data?.message  || err);
       const errorMessage = err.response?.data?.message || 
                           err.response?.data?.error || 
                           'Failed to update user. Please try again.';
